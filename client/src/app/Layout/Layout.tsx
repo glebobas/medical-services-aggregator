@@ -4,8 +4,6 @@ import { NavBar } from "../../components/NavBar";
 import {Footer} from "../../components/Footer";
 import {DoctorCard} from "../../components/DoctorCard";
 
-// import { Footer } from 'widgets/Footer';
-
 
 interface LayoutProps {
   title?: string

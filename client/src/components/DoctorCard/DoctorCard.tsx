@@ -1,17 +1,28 @@
 import React from 'react';
+import {DayView} from "../DayView/DayView";
+
 
 export const DoctorCard = () => {
   return (
-    <div className="flex flex-col w-1/2 mx-auto border shadow rounded py-2 px-5 mt-4">
-      <div className="flex flex-row justify-between">
-        <div className="flex flex-col">
-          <div className="title font-semibold">Иванов Иван Иванович</div>
-          <div className="special mt-2">врач-терапевт</div>
-          <div className="experience">стаж: <span className="font-semibold">5 лет</span></div>
-          <div className="rate">рейтинг <span className="font-semibold">4.8 / 5</span></div>
+    <div className="doctor__cad flex flex-col w-1/2 mx-auto border rounded py-4 px-6 mt-4 shadow">
+      <div className="doctor__card-row-1 flex flex-row justify-between">
+        <div className="row-1__column-left flex flex-col justify-between">
+          <div className="doctor__card-title font-semibold">Иванов Иван Иванович</div>
+          <div className="params">
+            <div className="doctor__card-special text-sm text-gray-500">врач-терапевт</div>
+            <div className="doctor__card-experience text-sm text-gray-500">стаж: <span
+              className="font-semibold">5 лет</span></div>
+            <div className="doctor__card-rate text-sm text-gray-500">рейтинг: <span className="font-semibold">4.8 / 5</span></div>
+          </div>
         </div>
-        <div className="flex border w-[100px] h-[100px] rounded bg-blue-200 items-center justify-center shadow">foto</div>
+        <div className="row-1__column-right flex border w-[150px] h-[150px] rounded bg-blue-200 items-center justify-center shadow">foto</div>
       </div>
+      <div className="doctor__card-row-2 mt-6">
+        <div className="doctor__card-row-2-clinic text-sm text-gray-500">Клиника: <span className="font-semibold">Беркут</span></div>
+        <div className="doctor__card-row-2-clinic-address text-sm text-gray-500">Адрес: <span className="font-semibold">г.СПБ, Выборгское ш., 17 </span></div>
+        <div className="doctor__card-row-2-doctor-params text-sm text-gray-500 mt-4">О враче: <span className="font-semibold">выполняет все виды помощи по специальности “Терапия”. Имеет соответствующие сертификаты </span></div>
+      </div>
+     <DayView />
     </div>
   );
 };
