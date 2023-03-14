@@ -10,11 +10,15 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Slot.hasMany(models.Schedule, { foreignKey: 'slotId' });
+      // Slot.hasMany(models.Schedule, { foreignKey: 'slotId' });
     }
   }
   Slot.init({
-    id: DataTypes.INTEGER,
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     timeGap: DataTypes.STRING
   }, {
     sequelize,

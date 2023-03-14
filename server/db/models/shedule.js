@@ -16,7 +16,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Shedule.init({
-    id: DataTypes.INTEGER,
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     date: DataTypes.DATE,
     slotId: DataTypes.INTEGER,
     doctorId: DataTypes.INTEGER,
