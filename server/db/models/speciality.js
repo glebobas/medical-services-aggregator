@@ -10,11 +10,15 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      model.hasMany(Doctor, { foreignKey: 'specialityId' });
+      Speciality.hasMany(models.Doctor, { foreignKey: 'specialityId' });
     }
   }
   Speciality.init({
-    id: DataTypes.INTEGER,
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     name: DataTypes.STRING
   }, {
     sequelize,
