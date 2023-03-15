@@ -5,12 +5,14 @@ const express = require('express');
 const authenticate = require("../middleware/auth");
 const router = express.Router();
 
+
 const jwtSecret = process.env.JWT_SECRET
 
 router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
-        const user = await User.findOne({ where: { username } })
+        console.log("-> req.body", req.body);
+        const user = await User.findOne({where: { username }})
         if (!user) {
             return res.status(401).json({ message: 'Authentication failed: Invalid username or password' });
         }
@@ -23,7 +25,8 @@ router.post('/login', async (req, res) => {
             jwtSecret,
             { expiresIn: '1h' }
         );
-        res.json({ token, message: `Welcome, ${req.body.username}!`  });
+        const userReady = await User.findOne({where: { username }, attributes: { exclude: ['password'] },})
+        res.json({ token, userReady, message: `Welcome, ${req.body.username}!`  });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error' });
@@ -37,10 +40,7 @@ router.post('/register', async (req, res) => {
     const truePhrase = process.env.SECRET_ADMIN_PHRASE;
 
     try {
-    const existingUser = await User.findOne({
-        where: { username },
-        attributes: { exclude: ['password'] },
-    });
+    const existingUser = await User.findOne({where: { username }, attributes: { exclude: ['password'] },});
     if (existingUser) {
         return res.status(409).json({ message: 'Username already exists' });
     }

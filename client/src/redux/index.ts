@@ -1,9 +1,7 @@
 import {applyMiddleware, combineReducers, legacy_createStore as createStore} from 'redux';
 import { composeWithDevTools } from '@redux-devtools/extension';
-import thunk from 'redux-thunk';
+import thunkMiddleware from 'redux-thunk';
 import {loginReducer, registerReducer} from './reducers/authReducers';
-
-const middleware = [thunk];
 
 
 const rootReducers = combineReducers({
@@ -11,4 +9,9 @@ const rootReducers = combineReducers({
   register: registerReducer,
 });
 
-export const store = createStore(loginReducer, composeWithDevTools(applyMiddleware(...middleware)));
+const composeEnhancers =
+    process.env.NODE_ENV === 'production'
+        ? applyMiddleware(thunkMiddleware)
+        : composeWithDevTools(applyMiddleware(thunkMiddleware));
+
+export const store = createStore(rootReducers, composeEnhancers);

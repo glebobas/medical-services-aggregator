@@ -6,6 +6,7 @@ export const loginReducer = (state: IGeneralState = initialState, action: IUserA
         case Types.LOGIN_REQUEST:
             return {
                 ...state,
+                loading: true,
                 error: null,
             };
         case Types.LOGIN_SUCCESS:
@@ -20,12 +21,14 @@ export const loginReducer = (state: IGeneralState = initialState, action: IUserA
                     role: action.payload.role,
                     telephone: action.payload.telephone
                 },
+                loading: false,
                 error: null,
             };
         case Types.LOGIN_FAILURE:
             return {
                 ...state,
                 user: null,
+                loading: false,
                 error: action.payload.error,
             };
         default:
