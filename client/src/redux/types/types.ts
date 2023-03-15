@@ -17,14 +17,25 @@ export interface IUser {
     telephone: string;
     role: string;
 }
+
 export interface IGeneralState {
-    user: IUser;
+    user: IUser | null;
     message: string;
     loading: boolean;
     error: null | string;
 }
 
+// export interface IGeneralStateLogin {
+//     user:  | null;
+//
+//     message: string;
+//     loading: boolean;
+//     error: null | string;
+// }
+
 export interface IGeneralStateRegister {
+
+
     message: string;
     loading: boolean;
     error: null | string;
@@ -70,7 +81,8 @@ export interface RegisterFailureAction {
 
 }
 export interface UserActionTypes {
-    type: LoginRequestAction | LoginSuccessAction | LoginFailureAction;
+    type: Types;
+    payload?: { username?: string; token?: string; userReady?: object; error?: string };
 
 }
 

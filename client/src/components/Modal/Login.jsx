@@ -4,11 +4,10 @@ export function Login(props) {
 
   const [userData, setUserData] = useState({});
 
-  const signUp = (event) => {
+  const signIn = (event) => {
     setUserData({ ...userData, [event.target.name]: event.target.value });
   }
 
-  console.log(userData)
 
   return (
     <div>
@@ -24,7 +23,7 @@ export function Login(props) {
                 id="grid_password"
                 type="text"
                 placeholder="Please, type your login"
-                onChange={signUp}
+                onChange={signIn}
                 required />
             </div>
           </div>
@@ -39,7 +38,7 @@ export function Login(props) {
                 id="grid-password"
                 type="password"
                 placeholder="Please, type your login"
-                onChange={signUp}
+                onChange={signIn}
                 required />
             </div>
           </div>
