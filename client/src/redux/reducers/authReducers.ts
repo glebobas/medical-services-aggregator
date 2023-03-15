@@ -1,5 +1,5 @@
-import {IGeneralState, IGeneralStateRegister, IUserAction, Types} from '../types/types';
-import {initialState} from '../store';
+import { IGeneralState, IGeneralStateRegister, IUserAction, Types } from '../types/types';
+import { initialState } from '../store';
 
 export const loginReducer = (state: IGeneralState = initialState, action: IUserAction): IGeneralState => {
     switch (action.type) {
@@ -31,6 +31,11 @@ export const loginReducer = (state: IGeneralState = initialState, action: IUserA
                 loading: false,
                 error: action.payload.error,
             };
+        case Types.LOGOUT:
+            return{
+                ...state,
+                user: null
+            }
         default:
             return state;
     }

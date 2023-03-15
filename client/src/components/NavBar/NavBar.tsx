@@ -1,19 +1,21 @@
-import {Fragment, useCallback, useContext, useState} from 'react'
-import {Disclosure, Menu, Transition} from '@headlessui/react'
-import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
-import {Login} from "../Modal/Login/login";
-import {AuthContext} from "../../context";
-import {Register} from '../Modal/Register/Register'
+import { Fragment, useCallback, useContext, useState } from 'react'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Login } from "../Modal/Login/Login";
+import { AuthContext } from "../../context";
+import { Register } from '../Modal/Register/Register'
+import { useSelector, useDispatch } from 'react-redux';
+import { Types } from '../../redux/types/types';
 
 const navigationUserTrue = [
-  {name: 'Клиенты', href: '#', current: false},
-  {name: 'Врачи', href: '#', current: false},
-  {name: 'Календарь', href: '#', current: false},
+  { name: 'Клиенты', href: '#', current: false },
+  { name: 'Врачи', href: '#', current: false },
+  { name: 'Календарь', href: '#', current: false },
 ]
 
 const navigationUserFalse = [
-  {name: 'Войти', id: 'loginButton', current: false},
-  {name: 'Зарегистироваться', id: 'registerButton', current: false}
+  { name: 'Войти', id: 'loginButton', current: false },
+  { name: 'Зарегистироваться', id: 'registerButton', current: false }
 ]
 
 
@@ -22,11 +24,13 @@ function classNames(...classes: string[]) {
 }
 
 export function NavBar() {
-  const [user, setUser] = useState(false)
+  // const [user, setUser] = useState(false)
+  const user = useSelector((state: any) => state.login?.user);
+  const dispatch = useDispatch();
   // Состояние модального окна передается в модальное окно
   // const [open, setOpen] = useState(false)
-  const {showModalLogin, setShowModalLogin} = useContext(AuthContext)
-  const {showModalRegister, setShowModalRegister} = useContext(AuthContext)
+  const { showModalLogin, setShowModalLogin } = useContext(AuthContext)
+  const { showModalRegister, setShowModalRegister } = useContext(AuthContext)
 
   const handleClick = (event: any) => {
     // TODO: Дописать условия перехода
@@ -34,14 +38,16 @@ export function NavBar() {
     setShowModalLogin(true)
   }
 
+  const logOut = () => {
+    dispatch({ type: Types.LOGOUT })
+  }
+
   return (
-
-
     <>
       <nav className="w-full">
         {!user
           ? (<Disclosure as="nav" className="bg-slate-400">
-            {({open}) => (
+            {({ open }) => (
               <>
                 <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                   <div className="relative flex h-16 items-center justify-between">
@@ -51,9 +57,9 @@ export function NavBar() {
                         className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                         <span className="sr-only">Open main menu</span>
                         {open ? (
-                          <XMarkIcon className="block h-6 w-6" aria-hidden="true"/>
+                          <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
                         ) : (
-                          <Bars3Icon className="block h-6 w-6" aria-hidden="true"/>
+                          <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                         )}
                       </Disclosure.Button>
                     </div>
@@ -78,11 +84,11 @@ export function NavBar() {
                               onClick={handleClick}
                               key={item.name}
                               className={classNames(
-                              item.current ? 'bg-slate-400 text-white' : 'text-gray-700 hover:bg-gray-700' +
-                                ' hover:text-white',
-                              'rounded-md px-3 py-2 text-sm font-medium'
-                            )}
-                                    aria-current={item.current ? 'page' : undefined}
+                                item.current ? 'bg-slate-400 text-white' : 'text-gray-700 hover:bg-gray-700' +
+                                  ' hover:text-white',
+                                'rounded-md px-3 py-2 text-sm font-medium'
+                              )}
+                              aria-current={item.current ? 'page' : undefined}
                             >
                               {item.name}
                             </button>
@@ -127,7 +133,7 @@ export function NavBar() {
             )}
           </Disclosure>)
           : (<Disclosure as="nav" className="bg-slate-400">
-            {({open}) => (
+            {({ open }) => (
               <>
                 <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                   <div className="relative flex h-16 items-center justify-between">
@@ -137,9 +143,9 @@ export function NavBar() {
                         className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                         <span className="sr-only">Open main menu</span>
                         {open ? (
-                          <XMarkIcon className="block h-6 w-6" aria-hidden="true"/>
+                          <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
                         ) : (
-                          <Bars3Icon className="block h-6 w-6" aria-hidden="true"/>
+                          <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                         )}
                       </Disclosure.Button>
                     </div>
@@ -183,7 +189,7 @@ export function NavBar() {
                         className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                       >
                         <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6" aria-hidden="true"/>
+                        <BellIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
 
                       {/* Profile dropdown */}
@@ -211,7 +217,7 @@ export function NavBar() {
                           <Menu.Items
                             className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <Menu.Item>
-                              {({active}) => (
+                              {({ active }) => (
                                 <a
                                   href="#"
                                   className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
@@ -221,7 +227,7 @@ export function NavBar() {
                               )}
                             </Menu.Item>
                             <Menu.Item>
-                              {({active}) => (
+                              {({ active }) => (
                                 <a
                                   href="#"
                                   className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
@@ -231,8 +237,9 @@ export function NavBar() {
                               )}
                             </Menu.Item>
                             <Menu.Item>
-                              {({active}) => (
+                              {({ active }) => (
                                 <a
+                                  onClick={logOut}
                                   href="#"
                                   className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                 >
@@ -270,7 +277,8 @@ export function NavBar() {
           </Disclosure>)
         }
       </nav>
-        <Register/>
-      <Login/></>
+      <Login />
+      {/* <Register/> */}
+    </>
   );
 }

@@ -24,7 +24,7 @@ export function Login(): JSX.Element {
     const [userData, setUserData] = useState<LoginData>({ username: '', password: '' });
 
     // const open = useContext(contextOnClick)
-    // const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false)
 
     const {showModalLogin, setShowModalLogin} = useContext<AuthContextType>(AuthContext)
 
@@ -75,9 +75,8 @@ export function Login(): JSX.Element {
             try {
                 const response = await dispatch(login(userData))
                 if (response.userReady.username) {
-                    setOpen(false)
+                    setShowModalLogin(false)
                 }
-                // if ()
 
             } catch (e) {
                 console.log(e)
