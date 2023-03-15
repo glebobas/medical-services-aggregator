@@ -18,7 +18,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Clinic.init({
-    id: DataTypes.INTEGER,
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     name: DataTypes.STRING,
     addressId: DataTypes.INTEGER,
     phone: DataTypes.STRING,
