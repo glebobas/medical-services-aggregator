@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   UserDoctor.init({
-    id: DataTypes.INTEGER,
     userId: DataTypes.INTEGER,
     doctorId: DataTypes.INTEGER,
     readyToRate: DataTypes.BOOLEAN

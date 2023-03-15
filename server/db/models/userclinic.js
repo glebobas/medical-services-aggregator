@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   UserClinic.init({
-    id: DataTypes.INTEGER,
     userId: DataTypes.INTEGER,
     clinicId: DataTypes.INTEGER
   }, {
