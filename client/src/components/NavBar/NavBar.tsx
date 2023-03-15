@@ -21,7 +21,7 @@ function classNames(...classes: string[]) {
 
 export function NavBar() {
 
-  const [user, setUser] = useState(true)
+  const [user, setUser] = useState(false)
 
   return (
       <>

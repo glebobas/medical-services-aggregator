@@ -2,21 +2,28 @@ import React from 'react'
 import { CommonInput } from '../../components/CommonInput/CommonInput'
 import { SelectLocation } from '../../components/SelectLocation/SelectLocation'
 import { CheckBoxes } from '../../components/CheckBoxes/CheckBoxes'
-import { CheckBoxes2 } from '../../components/CheckBoxes/CheckBoxes2'
 import { SelectSpecialization } from '../../components/SelectSpecialization/SelectSpecialization'
-// import {MainImage} from '../../components/MainImage/MainImage'
+import {MainImage} from '../../components/MainImage/MainImage'
 
 export function MainPage() {
   return (
+    <div className="flex flex-col w-full h-[780px]" >
+      <div className="flex flex-row">
+        <CommonInput />
+      </div>
+      <div className="flex flex-row h-3/5 mt-8 bg-[url('https://source.unsplash.com/random/?medicine')]">
+        <div className="main-col-left flex flex-col w-2/5 px-8 pt-4 bg-white">
+          <SelectSpecialization />
+          <div className="flex flex-row justify-around">
+            <div className="flex flex-col w-full"><CheckBoxes label={"Детский"}/></div>
+            <div className="flex flex-col w-full"><CheckBoxes label={"Взрослый"} /></div>
+          </div>
+          <br />
+          <SelectLocation />
+        </div>
+        {/*<div className="main-col-right w-full h-full"><MainImage /></div>*/}
+      </div>
 
-    <div >
-      <CommonInput />
-      <SelectSpecialization />
-      <CheckBoxes />
-      <br />
-      <CheckBoxes2 />
-      <br />
-      <SelectLocation />
     </div>
 
   )
