@@ -89,7 +89,7 @@ export interface UserActionTypes {
 export interface IUserAction {
     type: string;
     payload: {
-        userid: number;
+        id: number;
         username: string;
         email: string;
         firstName: string;

@@ -11,7 +11,6 @@ const jwtSecret = process.env.JWT_SECRET
 router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
-        console.log("-> req.body", req.body);
         const user = await User.findOne({where: { username }})
         if (!user) {
             return res.status(401).json({ message: 'Authentication failed: Invalid username or password' });

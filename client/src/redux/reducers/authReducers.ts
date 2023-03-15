@@ -13,7 +13,7 @@ export const loginReducer = (state: IGeneralState = initialState, action: IUserA
             return {
                 ...state,
                 user: {
-                    id: action.payload.userid,
+                    id: action.payload.id,
                     username: action.payload.username,
                     firstName: action.payload.firstName,
                     lastName: action.payload.lastName,

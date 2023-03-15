@@ -1,7 +1,7 @@
-import {Dispatch} from 'redux';
-import {ThunkAction, ThunkDispatch} from 'redux-thunk';
-import {useDispatch} from 'react-redux';
-import {UserActionTypes, Types, IGeneralState, IUser} from '../../../redux/types/types';
+import { Dispatch } from 'redux';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { useDispatch, useSelector } from 'react-redux';
+import { UserActionTypes, Types, IGeneralState, IUser } from '../../../redux/types/types';
 import React, { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
@@ -21,16 +21,18 @@ export function Login(): JSX.Element {
     const dispatch = useDispatch<ThunkDispatch<IGeneralState, unknown, UserActionTypes>>()
     // const dispatch = useDispatch()
 
-    const [userData, setUserData] = useState<LoginData>({username: '', password: ''});
+    const [userData, setUserData] = useState<LoginData>({ username: '', password: '' });
 
     const [open, setOpen] = useState(false)
 
+    const [error, setError] = useState('');
+
     const signIn = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUserData({...userData, [event.target.name]: event.target.value});
+        setUserData({ ...userData, [event.target.name]: event.target.value });
     }
 
     const login = (data: LoginData): ThunkAction<Promise<ResponseData>, IGeneralState, unknown, UserActionTypes> => async (dispatch: Dispatch<UserActionTypes>): Promise<ResponseData> => {
-        const {username, password} = data;
+        const { username, password } = data;
 
         try {
 
@@ -42,24 +44,27 @@ export function Login(): JSX.Element {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({username, password}),
+                body: JSON.stringify({ username, password }),
             });
-            const data = await response.json();
-            const { token, userReady } = data
+            const responseData = await response.json();
+            const { token, userReady } = responseData
 
-            if (data.token) {
-                localStorage.setItem('jwtToken', data.token);
-                dispatch({type: Types.LOGIN_SUCCESS, payload: userReady});
+            if (responseData.token) {
+                localStorage.setItem('jwtToken', responseData.token);
+                dispatch({ type: Types.LOGIN_SUCCESS, payload: userReady });
             } else {
-                dispatch({type: Types.LOGIN_FAILURE, payload: {error: 'Invalid username or password'}});
+                setError('Invalid username or password')
+                dispatch({ type: Types.LOGIN_FAILURE, payload: { error: 'Invalid username or password' } });
             }
             return { token, userReady };
         } catch (error: any) {
-            const errorMessage = error.response?.data?.error || 'An error occurred';
+            const errorMessage = error.response?.responseData?.error || 'An error occurred';
+            setError(errorMessage);
             dispatch({ type: Types.LOGIN_FAILURE, payload: { error: errorMessage } });
             return Promise.reject(errorMessage);
         }
     };
+    // const checkIsUser = useSelector((state: any) => state.login?.user);
 
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -67,8 +72,9 @@ export function Login(): JSX.Element {
             try {
                 const response = await dispatch(login(userData))
                 if (response.userReady.username) {
-
+                    setOpen(false)
                 }
+                // if ()
 
             } catch (e) {
                 console.log(e)
@@ -79,7 +85,6 @@ export function Login(): JSX.Element {
     }
 
     const cancelButtonRef = useRef(null)
-
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -122,7 +127,7 @@ export function Login(): JSX.Element {
                                                     type="text"
                                                     placeholder="Please, type your login"
                                                     onChange={signIn}
-                                                    required/>
+                                                    required />
                                             </div>
                                         </div>
 
@@ -138,15 +143,24 @@ export function Login(): JSX.Element {
                                                     type="password"
                                                     placeholder="Please, type your login"
                                                     onChange={signIn}
-                                                    required/>
+                                                    required />
+                                                    {error &&
+                                                <div className='flex flex-column justify-center align-items-center'>
+                                                    <span className="top-0 right-0 py-3 px-4 text-sm text-red-600">
+                                                        {error}
+                                                    </span>
+                                                </div>
+                                                    }
                                             </div>
+
                                         </div>
 
                                         <div className='flex flex-column justify-center align-items-center'>
                                             <button type="submit"
-                                                    className=' left-20 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5'>Sign
+                                                className=' left-20 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5'>Sign
                                                 In
                                             </button>
+
                                         </div>
                                     </form>
                                 </div>

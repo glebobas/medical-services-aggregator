@@ -2,6 +2,7 @@ import {Fragment, useState} from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import {Login} from "../Modal/Login/login";
+import {Register} from '../Modal/Register/Register'
 
 const navigationUserTrue = [
   { name: 'Клиенты', href: '#', current: false },
@@ -243,6 +244,7 @@ export function NavBar() {
               </Disclosure>)
           }
         </nav>
+        <Register/>
         <Login/></>
   );
 }
