@@ -7,6 +7,7 @@ import {MainPage} from "../pages/MainPage/MainPage";
 import {AuthProvider} from '../context';
 
 
+
 function App() {
   return (
     <AuthProvider>
