@@ -2,9 +2,9 @@ import { Dispatch } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserActionTypes, Types, IGeneralState, IUser } from '../../../redux/types/types';
-import React, { Fragment, useRef, useState } from 'react'
+import React, {Fragment, useContext, useRef, useState} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import {AuthContext, AuthContextType} from "../../../context";
 
 
 interface LoginData {
@@ -23,7 +23,10 @@ export function Login(): JSX.Element {
 
     const [userData, setUserData] = useState<LoginData>({ username: '', password: '' });
 
-    const [open, setOpen] = useState(false)
+    // const open = useContext(contextOnClick)
+    // const [open, setOpen] = useState(false)
+
+    const {showModalLogin, setShowModalLogin} = useContext<AuthContextType>(AuthContext)
 
     const [error, setError] = useState('');
 
@@ -87,8 +90,8 @@ export function Login(): JSX.Element {
     const cancelButtonRef = useRef(null)
 
     return (
-        <Transition.Root show={open} as={Fragment}>
-            <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+        <Transition.Root show={showModalLogin} as={Fragment}>
+            <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setShowModalLogin}>
                 <Transition.Child
                     as={Fragment}
                     enter="ease-out duration-300"
