@@ -4,6 +4,7 @@ import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
 import {Login} from "../Modal/Login/login";
 import {AuthContext} from "../../context";
 import {Register} from '../Modal/Register/Register'
+import {MiniModal} from "../Modal/Confirm/MiniModal";
 
 const navigationUserTrue = [
   {name: 'Клиенты', href: '#', current: false},
@@ -29,13 +30,16 @@ export function NavBar() {
   const {showModalRegister, setShowModalRegister} = useContext(AuthContext)
 
   const handleClick = (event: any) => {
-    // TODO: Дописать условия перехода
-    console.log(event.target.id)
-    setShowModalLogin(true)
+    if (event.target.id === 'loginButton') {
+      setShowModalLogin(true)
+    }
+    if (event.target.id === 'registerButton') {
+      setShowModalRegister(true)
+    }
+
   }
 
   return (
-
 
     <>
       <nav className="w-full">
@@ -271,6 +275,6 @@ export function NavBar() {
         }
       </nav>
         <Register/>
-      <Login/></>
+      <Login/><MiniModal/></>
   );
 }

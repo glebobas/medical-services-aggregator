@@ -82,7 +82,7 @@ export interface RegisterFailureAction {
 }
 export interface UserActionTypes {
     type: Types;
-    payload?: { username?: string; token?: string; userReady?: object; error?: string };
+    payload?: { username?: string; token?: string; userReady?: object; error?: string, message?: string };
 
 }
 

@@ -26,7 +26,7 @@ export function Login(): JSX.Element {
     // const open = useContext(contextOnClick)
     // const [open, setOpen] = useState(false)
 
-    const {showModalLogin, setShowModalLogin} = useContext<AuthContextType>(AuthContext)
+    const {showModalLogin, setShowModalLogin, setShowModalMiniText, setShowModalMini} = useContext<AuthContextType>(AuthContext)
 
     const [error, setError] = useState('');
 
@@ -67,7 +67,6 @@ export function Login(): JSX.Element {
             return Promise.reject(errorMessage);
         }
     };
-    // const checkIsUser = useSelector((state: any) => state.login?.user);
 
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -75,15 +74,18 @@ export function Login(): JSX.Element {
             try {
                 const response = await dispatch(login(userData))
                 if (response.userReady.username) {
-                    setOpen(false)
+                    setShowModalLogin(false)
+                    setShowModalMiniText('Login successful!')
+                    setShowModalMini(true)
                 }
-                // if ()
+                else setError("Couldn't enter on site")
+
 
             } catch (e) {
                 console.log(e)
             }
-
         }
+        else setError('Fill all fields')
 
     }
 
