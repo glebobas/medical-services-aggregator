@@ -31,6 +31,25 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        date: new Date(),
+        slotId: 2,
+        doctorId: 2,
+        userId: 1,
+        statusAppointment: 'pending',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        date: new Date(),
+        slotId: 3,
+        doctorId: 3,
+        userId: 1,
+        statusAppointment: 'done',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+
     ];
 
 
