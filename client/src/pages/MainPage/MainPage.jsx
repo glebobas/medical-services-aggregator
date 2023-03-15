@@ -11,7 +11,7 @@ export function MainPage() {
       <div className="flex flex-row">
         <CommonInput />
       </div>
-      <div className="flex flex-row h-3/5 mt-8 bg-[url('https://source.unsplash.com/random/?medicine')]">
+      <div className="flex flex-row h-3/5 mt-8 bg-[url('https://source.unsplash.com/random/?hospitals')]">
         <div className="main-col-left flex flex-col w-2/5 px-8 pt-4 bg-white">
           <SelectSpecialization />
           <div className="flex flex-row justify-around">

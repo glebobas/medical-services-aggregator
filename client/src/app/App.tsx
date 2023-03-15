@@ -4,15 +4,18 @@ import './App.css';
 import {Register} from "../components/Modal/Register";
 import {Layout} from "./Layout";
 import {MainPage} from "../pages/MainPage/MainPage";
+import {AuthProvider} from '../context';
 
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout/>}>
-        <Route index element={<MainPage />} />
-      </Route>
-    </Routes>
+    <AuthProvider>
+      <Routes>
+        <Route path="/" element={<Layout/>}>
+          <Route index element={<MainPage/>}/>
+        </Route>
+      </Routes>
+    </AuthProvider>
   );
 }
 
