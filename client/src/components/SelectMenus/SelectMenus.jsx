@@ -17,11 +17,11 @@ function classNames(...classes) {
 
 export default function SelectMenus() {
   const [selected, setSelected] = useState(people[3]);
-
+  console.log(selected)
   return (
     <div className="container">
     <div className="select">
-      <Listbox value={selected} onChange={setSelected}>
+      <Listbox value={selected} onChange={setSelected} >
         {({ open }) => (
           <>
             <Listbox.Label className="block text-sm font-medium text-gray-700">

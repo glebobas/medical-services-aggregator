@@ -1,10 +1,12 @@
 import React from "react";
 import styles from "./clinical.css";
-import SelectMenus from "./SelectMenus/SelectMenus";
-import DoctorsTable from "./DoctorsTable/DoctorsTable";
-import YandexMap from "./Map/Map";
+import SelectMenus from "../../components/SelectMenus/SelectMenus";
+import DoctorsTable from "../../components/DoctorsTable/DoctorsTable";
+import YandexMap from "../../components/Map/Map";
+import Rating from "../../components/Rating/Rating";
 
 export default function ClinicalCard() {
+    
   return (
     <>
       <div className="bg-white">
@@ -36,73 +38,7 @@ export default function ClinicalCard() {
                 <div className="mt-6">
                   <h3 className="sr-only">Reviews</h3>
                   <div className="flex items-center">
-                    <div className="flex items-center">
-                      {/* <!-- Active: "text-gray-900", Default: "text-gray-200" --> */}
-                      <svg
-                        className="text-gray-900 h-5 w-5 flex-shrink-0"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-
-                      <svg
-                        className="text-gray-900 h-5 w-5 flex-shrink-0"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-
-                      <svg
-                        className="text-gray-900 h-5 w-5 flex-shrink-0"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-
-                      <svg
-                        className="text-gray-900 h-5 w-5 flex-shrink-0"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-
-                      <svg
-                        className="text-gray-200 h-5 w-5 flex-shrink-0"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                    </div>
+                    <Rating />
                     <p className="sr-only">4 out of 5 stars</p>
                     <a
                       href="#"
@@ -132,7 +68,7 @@ export default function ClinicalCard() {
           {/* <!-- Product info --> */}
         </div>
         <div className="tableDoctors">
-          <div >
+          <div>
             <SelectMenus />
           </div>
           <div>
@@ -140,9 +76,9 @@ export default function ClinicalCard() {
           </div>
         </div>
         <div className="ymaps">
-        <div className="ymap" >
-       <YandexMap />
-        </div> 
+          <div className="ymap">
+            <YandexMap />
+          </div>
         </div>
       </div>
     </>
