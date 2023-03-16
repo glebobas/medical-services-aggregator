@@ -7,6 +7,7 @@ import {AuthProvider} from '../context';
 import {useDispatch, useSelector} from "react-redux";
 import {store} from './../redux'
 import {IGeneralState, IUser, Types} from "../redux/types/types";
+import { ProfileEditing } from '../components/ProfileEditing';
 
 
 
@@ -41,6 +42,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout/>}>
           <Route index element={<MainPage/>}/>
+          <Route path='profileEditing' element={<ProfileEditing/>}/>
         </Route>
       </Routes>
     </AuthProvider>
