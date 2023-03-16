@@ -1,6 +1,6 @@
 import {Dispatch} from 'redux';
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {UserActionTypes, Types, IGeneralState, IUser} from '../../../redux/types/types';
 import React, {Fragment, useContext, useRef, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
@@ -8,13 +8,13 @@ import {AuthContext, AuthContextType} from "../../../context";
 
 
 interface LoginData {
-    username: string;
-    password: string;
+  username: string;
+  password: string;
 }
 
 interface ResponseData {
-    token: string;
-    userReady: IUser;
+  token: string;
+  userReady: IUser;
 }
 
 export function Login(): JSX.Element {
@@ -29,7 +29,7 @@ export function Login(): JSX.Element {
         setShowModalMini
     } = useContext<AuthContextType>(AuthContext)
 
-    const [error, setError] = useState('');
+  const [error, setError] = useState('');
 
     const signIn = (event: React.ChangeEvent<HTMLInputElement>) => {
         setUserData({...userData, [event.target.name]: event.target.value});
@@ -38,7 +38,7 @@ export function Login(): JSX.Element {
     const login = (data: LoginData): ThunkAction<Promise<ResponseData>, IGeneralState, unknown, UserActionTypes> => async (dispatch: Dispatch<UserActionTypes>): Promise<ResponseData> => {
         const {username, password} = data;
 
-        try {
+    try {
 
             dispatch({
                 type: Types.LOGIN_REQUEST,
@@ -86,9 +86,9 @@ export function Login(): JSX.Element {
             }
         } else setError('Fill all fields')
 
-    }
+  }
 
-    const cancelButtonRef = useRef(null)
+  const cancelButtonRef = useRef(null)
 
     return (
         <Transition.Root show={showModalLogin} as={Fragment}>
@@ -139,8 +139,7 @@ export function Login(): JSX.Element {
 
                                         <div className="flex flex-wrap -mx-3 mb-6">
                                             <div className="w-full px-3">
-                                                <label
-                                                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                                                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                                                     Password
                                                 </label>
                                                 <input
@@ -150,21 +149,21 @@ export function Login(): JSX.Element {
                                                     type="password"
                                                     placeholder="Please, type your login"
                                                     onChange={signIn}
-                                                    required/>
-                                                {error &&
-                                                    <div className='flex flex-column justify-center align-items-center'>
+                                                    required />
+                                                    {error &&
+                                                <div className='flex flex-column justify-center align-items-center'>
                                                     <span className="top-0 right-0 py-3 px-4 text-sm text-red-600">
                                                         {error}
                                                     </span>
-                                                    </div>
-                                                }
+                                                </div>
+                                                    }
                                             </div>
 
                                         </div>
 
                                         <div className='flex flex-column justify-center align-items-center'>
                                             <button type="submit"
-                                                    className=' left-20 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5'>Sign
+                                                className=' left-20 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5'>Sign
                                                 In
                                             </button>
 
@@ -178,5 +177,5 @@ export function Login(): JSX.Element {
             </Dialog>
         </Transition.Root>
 
-    );
+  );
 }

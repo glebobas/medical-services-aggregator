@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const {User} = require('../../db/models')
 const express = require('express');
+const authenticate = require("../middleware/auth");
 const router = express.Router();
 
 
@@ -74,6 +75,28 @@ router.post('/register', async (req, res) => {
         console.error(err);
         res.status(500).json({message: 'Failed to register user'});
     }
+});
+
+
+router.post('/user', async (req, res) => {
+  try {
+    const {token} = req.body;
+    console.log("-> req.body", req.body);
+
+    jwt.verify(token, jwtSecret, async (err, decodedToken) => {
+      if (err) {
+        return res.status(401).json({message: 'Authentication failed: Invalid token'});
+      }
+      const { username } = decodedToken
+      // console.log("-> decodedToken", decodedToken);
+
+      const userReady = await User.findOne({where: {username}, attributes: {exclude: ['password']},})
+      res.json(userReady);
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({message: 'Server error'});
+  }
 });
 
 module.exports = router;
