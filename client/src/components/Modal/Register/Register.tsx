@@ -88,7 +88,7 @@ export function Register(): JSX.Element {
     event.preventDefault();
     try {
       if (userData.username && userData.password && userData.email && userData.firstName && userData.lastName && userData.telephone) {
-        const response = await dispatch(register(userData))
+        await dispatch(register(userData))
         setShowModalRegister(false)
         setShowModalMiniText('Registration successful!')
         setShowModalMini(true)

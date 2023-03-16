@@ -1,4 +1,4 @@
-import {Fragment, useCallback, useContext, useEffect, useState} from 'react'
+import {Fragment, useContext, useEffect, useState} from 'react'
 import {Disclosure, Menu, Transition} from '@headlessui/react'
 import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
 import {Login} from "../Modal/Login/login";
@@ -6,7 +6,7 @@ import {AuthContext} from "../../context";
 import {Register} from '../Modal/Register/Register'
 import {MiniModal} from "../Modal/Confirm/MiniModal";
 import {useDispatch, useSelector} from "react-redux";
-import {IGeneralState, Types} from "../../redux/types/types";
+import {Types} from "../../redux/types/types";
 
 const navigationUserTrue = [
   {name: 'Клиенты', href: '#', current: false},
@@ -39,21 +39,17 @@ export function NavBar() {
           method: 'POST',
           headers: {
             'Content-Type': 'Application/json',
+            'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify({token})
         })
         const user = await response.json()
          dispatch({type: Types.LOGIN_SUCCESS, payload: user});
        })()
     }
     setUser(getUser)
-  }, [token, getUser])
+  }, [token, getUser, dispatch])
 
 
-  // const getUser = useSelector((store: IGeneralState) => store)
-  // console.log("-> getUser", getUser);
-  //
-  // setUser(getUser)
 
   // Состояние модального окна передается в модальное окно
 
