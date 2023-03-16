@@ -38,7 +38,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     const [showModalMiniText, setShowModalMiniText] = React.useState('')
 
     return (
-        <AuthContext.Provider value={{showModalLogin, setShowModalLogin, showModalRegister, setShowModalRegister, showModalMini, setShowModalMini: setShowModalMini, showModalMiniText, setShowModalMiniText: setShowModalMiniText}}>
+        <AuthContext.Provider value={{
+            showModalLogin,
+            setShowModalLogin,
+            showModalRegister,
+            setShowModalRegister,
+            showModalMini,
+            setShowModalMini: setShowModalMini,
+            showModalMiniText,
+            setShowModalMiniText: setShowModalMiniText
+        }}>
             {children}
         </AuthContext.Provider>
     );
