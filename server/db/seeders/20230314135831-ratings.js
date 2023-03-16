@@ -16,6 +16,24 @@ module.exports = {
       {
         userId: 2,
         clinicRating: 3,
+        doctorRating: 5,
+        doctorId: 1,
+        clinicId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        userId: 1,
+        clinicRating: 4,
+        doctorRating: 4,
+        doctorId: 1,
+        clinicId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        userId: 2,
+        clinicRating: 3,
         doctorRating: 2,
         doctorId: 2,
         clinicId: 2,

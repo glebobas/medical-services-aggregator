@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Fragment, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -13,12 +14,34 @@ const navigationUserFalse = [
   { name: "Войти", href: "#", current: false },
   { name: "Зарегистироваться", href: "#", current: false },
 ];
+=======
+import {Fragment, useCallback, useContext, useState} from 'react'
+import {Disclosure, Menu, Transition} from '@headlessui/react'
+import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
+import {Login} from "../Modal/Login/login";
+import {AuthContext} from "../../context";
+import {Register} from '../Modal/Register/Register'
+import {MiniModal} from "../Modal/Confirm/MiniModal";
+
+const navigationUserTrue = [
+  {name: 'Клиенты', href: '#', current: false},
+  {name: 'Врачи', href: '#', current: false},
+  {name: 'Календарь', href: '#', current: false},
+]
+
+const navigationUserFalse = [
+  {name: 'Войти', id: 'loginButton', current: false},
+  {name: 'Зарегистироваться', id: 'registerButton', current: false}
+]
+
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export function NavBar() {
+<<<<<<< HEAD
   const [user, setUser] = useState(true);
 
   return (
@@ -27,11 +50,37 @@ export function NavBar() {
         {!user ? (
           <Disclosure as="nav" className="bg-slate-400">
             {({ open }) => (
+=======
+  const [user, setUser] = useState(false)
+  // Состояние модального окна передается в модальное окно
+  // const [open, setOpen] = useState(false)
+  const {showModalLogin, setShowModalLogin} = useContext(AuthContext)
+  const {showModalRegister, setShowModalRegister} = useContext(AuthContext)
+
+  const handleClick = (event: any) => {
+    if (event.target.id === 'loginButton') {
+      setShowModalLogin(true)
+    }
+    if (event.target.id === 'registerButton') {
+      setShowModalRegister(true)
+    }
+
+  }
+
+  return (
+
+    <>
+      <nav className="w-full">
+        {!user
+          ? (<Disclosure as="nav" className="bg-slate-400">
+            {({open}) => (
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
               <>
                 <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                   <div className="relative flex h-16 items-center justify-between">
                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                       {/* Mobile menu button*/}
+<<<<<<< HEAD
                       <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                         <span className="sr-only">Open main menu</span>
                         {open ? (
@@ -44,6 +93,15 @@ export function NavBar() {
                             className="block h-6 w-6"
                             aria-hidden="true"
                           />
+=======
+                      <Disclosure.Button
+                        className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        <span className="sr-only">Open main menu</span>
+                        {open ? (
+                          <XMarkIcon className="block h-6 w-6" aria-hidden="true"/>
+                        ) : (
+                          <Bars3Icon className="block h-6 w-6" aria-hidden="true"/>
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
                         )}
                       </Disclosure.Button>
                     </div>
@@ -63,6 +121,7 @@ export function NavBar() {
                       <div className="hidden sm:ml-6 sm:block">
                         <div className="flex space-x-4">
                           {navigationUserFalse.map((item) => (
+<<<<<<< HEAD
                             <a
                               key={item.name}
                               href={item.href}
@@ -77,6 +136,33 @@ export function NavBar() {
                             >
                               {item.name}
                             </a>
+=======
+                            <button
+                              id={item.id}
+                              onClick={handleClick}
+                              key={item.name}
+                              className={classNames(
+                              item.current ? 'bg-slate-400 text-white' : 'text-gray-700 hover:bg-gray-700' +
+                                ' hover:text-white',
+                              'rounded-md px-3 py-2 text-sm font-medium'
+                            )}
+                                    aria-current={item.current ? 'page' : undefined}
+                            >
+                              {item.name}
+                            </button>
+                            // <a
+                            //   key={item.name}
+                            //   href={item.href}
+                            //   className={classNames(
+                            //     item.current ? 'bg-slate-400 text-white' : 'text-gray-700 hover:bg-gray-700' +
+                            //       ' hover:text-white',
+                            //     'rounded-md px-3 py-2 text-sm font-medium'
+                            //   )}
+                            //   aria-current={item.current ? 'page' : undefined}
+                            // >
+                            //   {item.name}
+                            // </a>
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
                           ))}
                         </div>
                       </div>
@@ -90,6 +176,7 @@ export function NavBar() {
                       <Disclosure.Button
                         key={item.name}
                         as="a"
+<<<<<<< HEAD
                         href={item.href}
                         className={classNames(
                           item.current
@@ -98,6 +185,14 @@ export function NavBar() {
                           "block rounded-md px-3 py-2 text-base font-medium"
                         )}
                         aria-current={item.current ? "page" : undefined}
+=======
+
+                        className={classNames(
+                          item.current ? 'bg-slate-400 text-white' : 'text-gray-700 hover:bg-gray-700 hover:text-white',
+                          'block rounded-md px-3 py-2 text-base font-medium'
+                        )}
+                        aria-current={item.current ? 'page' : undefined}
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
                       >
                         {item.name}
                       </Disclosure.Button>
@@ -106,15 +201,22 @@ export function NavBar() {
                 </Disclosure.Panel>
               </>
             )}
+<<<<<<< HEAD
           </Disclosure>
         ) : (
           <Disclosure as="nav" className="bg-slate-400">
             {({ open }) => (
+=======
+          </Disclosure>)
+          : (<Disclosure as="nav" className="bg-slate-400">
+            {({open}) => (
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
               <>
                 <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                   <div className="relative flex h-16 items-center justify-between">
                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                       {/* Mobile menu button*/}
+<<<<<<< HEAD
                       <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                         <span className="sr-only">Open main menu</span>
                         {open ? (
@@ -127,6 +229,15 @@ export function NavBar() {
                             className="block h-6 w-6"
                             aria-hidden="true"
                           />
+=======
+                      <Disclosure.Button
+                        className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        <span className="sr-only">Open main menu</span>
+                        {open ? (
+                          <XMarkIcon className="block h-6 w-6" aria-hidden="true"/>
+                        ) : (
+                          <Bars3Icon className="block h-6 w-6" aria-hidden="true"/>
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
                         )}
                       </Disclosure.Button>
                     </div>
@@ -146,10 +257,15 @@ export function NavBar() {
                       <div className="hidden sm:ml-6 sm:block">
                         <div className="flex space-x-4">
                           {navigationUserTrue.map((item) => (
+<<<<<<< HEAD
+=======
+
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
                             <a
                               key={item.name}
                               href={item.href}
                               className={classNames(
+<<<<<<< HEAD
                                 item.current
                                   ? "bg-slate-400 text-white"
                                   : "text-gray-700 hover:bg-gray-700" +
@@ -157,6 +273,13 @@ export function NavBar() {
                                 "rounded-md px-3 py-2 text-sm font-medium"
                               )}
                               aria-current={item.current ? "page" : undefined}
+=======
+                                item.current ? 'bg-slate-400 text-white' : 'text-gray-700 hover:bg-gray-700' +
+                                  ' hover:text-white',
+                                'rounded-md px-3 py-2 text-sm font-medium'
+                              )}
+                              aria-current={item.current ? 'page' : undefined}
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
                             >
                               {item.name}
                             </a>
@@ -164,19 +287,33 @@ export function NavBar() {
                         </div>
                       </div>
                     </div>
+<<<<<<< HEAD
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+=======
+                    <div
+                      className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
                       <button
                         type="button"
                         className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                       >
                         <span className="sr-only">View notifications</span>
+<<<<<<< HEAD
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
+=======
+                        <BellIcon className="h-6 w-6" aria-hidden="true"/>
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
                       </button>
 
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
                         <div>
+<<<<<<< HEAD
                           <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+=======
+                          <Menu.Button
+                            className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
@@ -194,6 +331,7 @@ export function NavBar() {
                           leaveFrom="transform opacity-100 scale-100"
                           leaveTo="transform opacity-0 scale-95"
                         >
+<<<<<<< HEAD
                           <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <Menu.Item>
                               {({ active }) => (
@@ -203,12 +341,22 @@ export function NavBar() {
                                     active ? "bg-gray-100" : "",
                                     "block px-4 py-2 text-sm text-gray-700"
                                   )}
+=======
+                          <Menu.Items
+                            className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <Menu.Item>
+                              {({active}) => (
+                                <a
+                                  href="#"
+                                  className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
                                 >
                                   Профиль
                                 </a>
                               )}
                             </Menu.Item>
                             <Menu.Item>
+<<<<<<< HEAD
                               {({ active }) => (
                                 <a
                                   href="#"
@@ -216,12 +364,19 @@ export function NavBar() {
                                     active ? "bg-gray-100" : "",
                                     "block px-4 py-2 text-sm text-gray-700"
                                   )}
+=======
+                              {({active}) => (
+                                <a
+                                  href="#"
+                                  className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
                                 >
                                   Редактирование
                                 </a>
                               )}
                             </Menu.Item>
                             <Menu.Item>
+<<<<<<< HEAD
                               {({ active }) => (
                                 <a
                                   href="#"
@@ -229,6 +384,12 @@ export function NavBar() {
                                     active ? "bg-gray-100" : "",
                                     "block px-4 py-2 text-sm text-gray-700"
                                   )}
+=======
+                              {({active}) => (
+                                <a
+                                  href="#"
+                                  className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
                                 >
                                   Выход
                                 </a>
@@ -249,12 +410,19 @@ export function NavBar() {
                         as="a"
                         href={item.href}
                         className={classNames(
+<<<<<<< HEAD
                           item.current
                             ? "bg-gray-900 text-white"
                             : "text-gray-700 hover:bg-gray-700 hover:text-white",
                           "block rounded-md px-3 py-2 text-base font-medium"
                         )}
                         aria-current={item.current ? "page" : undefined}
+=======
+                          item.current ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-700 hover:text-white',
+                          'block rounded-md px-3 py-2 text-base font-medium'
+                        )}
+                        aria-current={item.current ? 'page' : undefined}
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
                       >
                         {item.name}
                       </Disclosure.Button>
@@ -263,10 +431,18 @@ export function NavBar() {
                 </Disclosure.Panel>
               </>
             )}
+<<<<<<< HEAD
           </Disclosure>
         )}
       </nav>
       <Login />
     </>
+=======
+          </Disclosure>)
+        }
+      </nav>
+        <Register/>
+      <Login/><MiniModal/></>
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
   );
 }

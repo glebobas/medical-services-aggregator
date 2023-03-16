@@ -4,7 +4,11 @@ const app = express();
 const cors = require('cors');
 
 const AuthRoutes = require('./routes/auth.Routes')
+<<<<<<< HEAD
 const ClinicRoutes = require('./routes/clinic.Routes')
+=======
+const UserRoutes = require('./routes/user.Routes')
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -18,7 +22,12 @@ app.use(
 const PORT = process.env.PORT || 4002;
 
 app.use('/auth', AuthRoutes)
+<<<<<<< HEAD
 app.use('/clinical',ClinicRoutes)
+=======
+app.use('/profile', UserRoutes)
+
+>>>>>>> f2875e1a759343be83995e0bce51ef15a5982dfa
 app.get("/", (req, res) => {
   res.send(`Hello world!`)
 })
