@@ -34,6 +34,7 @@ export const loginReducer = (state: IGeneralState = initialState, action: IUserA
         case Types.LOGOUT:
             return {
                 ...state,
+                user: null,
             };
         default:
             return state;
