@@ -32,7 +32,8 @@ module.exports = (sequelize, DataTypes) => {
     generalTiming: DataTypes.STRING,
     adultPatients: DataTypes.BOOLEAN,
     childrenPatients: DataTypes.BOOLEAN,
-    generalInfo: DataTypes.TEXT
+    generalInfo: DataTypes.TEXT,
+    avatar: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Doctor',

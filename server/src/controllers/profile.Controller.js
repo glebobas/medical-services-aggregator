@@ -199,7 +199,7 @@ exports.EditRecordsInProfile = async (req, res) => {
                 }
             );
             if (numUpdated === 0) {
-                return res.status(404).json({ message: 'Rating not found' });
+                return res.status(404).json({message: 'Update error'});
             }
             res.status(200).json({ rating: updatedRating });
         }
@@ -231,7 +231,7 @@ exports.EditRecordsInProfile = async (req, res) => {
                     slotId: newslotid
                 },
                 {
-                    where: { id: scheduleId },
+                    where: {id: scheduleId, userId},
                     returning: true
                 }
             );
@@ -252,14 +252,14 @@ exports.EditRecordsInProfile = async (req, res) => {
 
 exports.DeleteRecordsFromProfile = async (req, res) => {
     try {
-        const { scheduleId } = req.body;
+        const {scheduleId, userId} = req.body;
 
         //* удаляем запись из расписания (как один из прошедших приёмов, так и будущие)
 
         if (scheduleId) {
             const deletedShedule = await Shedule.destroy(
                 {
-                    where: { id: scheduleId },
+                    where: {id: scheduleId, userId},
                 }
             );
 
@@ -293,14 +293,14 @@ exports.EditProfile = async (req, res) => {
         if (!passwordMatch) {
             return res.status(401).json({message: 'Authentication failed: Invalid password'});
         }
-    
+
         const updateData = {
             firstName: firstName,
             lastName: lastName,
             email: email,
             telephone: telephone,
         };
-    
+
         if (newPassword) {
             const saltRounds = 10;
             const passwordHash = await bcrypt.hash(newPassword, saltRounds);

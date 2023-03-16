@@ -1,11 +1,15 @@
 const {Doctor, Clinic, Address, Speciality, Rating} = require("../../db/models");
 const {Op} = require("sequelize");
+const express = require('express');
+const app = express();
 
 
 exports.GetAllClinicAndDoctors = async (req, res) => { //* ПО ИНПУТУ получаем все клиники и докторов с подробной инфой и рейтингами
+
     try {
         const {inputText} = req.params
-        // console.log('12123123', res.locals.user);
+
+
         const doctors = await Doctor.findAll({
             where: {
                 [Op.or]: [
@@ -51,6 +55,8 @@ exports.GetAllClinicAndDoctors = async (req, res) => { //* ПО ИНПУТУ п�
             nest: true
         });
 
+
+
         const doctorRating = await Rating.findAll({attributes: ['doctorRating', 'doctorId']})
         const clinicRating = await Rating.findAll({attributes: ['clinicRating', 'clinicId']})
 
@@ -114,6 +120,7 @@ exports.GetAllClinicAndDoctors = async (req, res) => { //* ПО ИНПУТУ п�
                 email: clinic.email,
                 generalinfo: clinic.generalnfo,
                 clinicRating: clinicRate,
+                avatar: clinic.avatar
             }
         })
 
@@ -140,6 +147,7 @@ exports.GetAllClinicAndDoctors = async (req, res) => { //* ПО ИНПУТУ п�
                     childrenPatients: doctor.childrenPatients,
                     generalInfo: doctor.generalInfo,
                     doctorRating: docRate,
+                    avatar: doctor.avatar
                 }
             }
         )
@@ -161,6 +169,7 @@ exports.GetAllClinicAndDoctors = async (req, res) => { //* ПО ИНПУТУ п�
 ;
 
 exports.GetAllClinicAndDoctorsQuery = async (req, res) => { //* получаем все клиники и докторов с подробной инфой и рейтингами
+
     try {
         const doctors = await Doctor.findAll({
             include: [
@@ -178,6 +187,7 @@ exports.GetAllClinicAndDoctorsQuery = async (req, res) => { //* получаем
             nest: true
         });
 
+
         const clinics = await Clinic.findAll({
             include: [
                 {
@@ -187,6 +197,10 @@ exports.GetAllClinicAndDoctorsQuery = async (req, res) => { //* получаем
             raw: true,
             nest: true
         });
+
+        const ratingToUser = await Rating.findAll({where: {userId: res.locals.user.id}})
+
+
 
         const doctorRating = await Rating.findAll({attributes: ['doctorRating', 'doctorId']})
         const clinicRating = await Rating.findAll({attributes: ['clinicRating', 'clinicId']})
@@ -238,7 +252,13 @@ exports.GetAllClinicAndDoctorsQuery = async (req, res) => { //* получаем
         const readyClinicList = clinics.map(clinic => {
             const fulladdress = `${clinic.Address.streetName}, ${clinic.Address.cityName}, ${clinic.Address.countryName}`;
             let clinicRate;
-            arrClinic.forEach(el => {
+            let ownRatingUser;
+            ratingToUser?.forEach(element => {
+                if(element.userId === res.locals.user.id && clinic.id === element.clinicId) {
+                    ownRatingUser = element.clinicRating
+                }
+            })
+            arrClinic?.forEach(el => {
                 if (Number(el[0]) === clinic.id) {
                     clinicRate = el[1]
                 }
@@ -251,6 +271,8 @@ exports.GetAllClinicAndDoctorsQuery = async (req, res) => { //* получаем
                 email: clinic.email,
                 generalinfo: clinic.generalnfo,
                 clinicRating: clinicRate,
+                alreadyScoredPoints: ownRatingUser,
+                avatar: clinic.avatar
             }
         })
 
@@ -262,6 +284,12 @@ exports.GetAllClinicAndDoctorsQuery = async (req, res) => { //* получаем
                 arrDoc.forEach(el => {
                     if (Number(el[0]) === doctor.id) {
                         docRate = el[1]
+                    }
+                })
+                let ownRatingUserDoc;
+                ratingToUser?.forEach(element => {
+                    if(element.userId === res.locals.user.id && doctor.id === element.doctorId) {
+                        ownRatingUserDoc = element.doctorRating
                     }
                 })
                 return {
@@ -277,6 +305,8 @@ exports.GetAllClinicAndDoctorsQuery = async (req, res) => { //* получаем
                     childrenPatients: doctor.childrenPatients,
                     generalInfo: doctor.generalInfo,
                     doctorRating: docRate,
+                    alreadyScoredPoints: ownRatingUserDoc,
+                    avatar: doctor.avatar,
                 }
             }
         )
@@ -296,3 +326,22 @@ exports.GetAllClinicAndDoctorsQuery = async (req, res) => { //* получаем
     }
 }
 ;
+
+exports.GetAllSpecialities = async (req, res) => {
+    try {
+        const allSpecialities = await Speciality.findAll();
+        res.json(allSpecialities)
+    } catch (e) {
+        console.error(e);
+    }
+
+}
+
+exports.GetAllAddresses = async (req, res) => {
+    try {
+        const allAddresses = await Address.findAll();
+        res.json(allAddresses)
+    } catch (e) {
+        console.error(e);
+    }
+}
