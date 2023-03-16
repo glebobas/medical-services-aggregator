@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {Route, Routes} from "react-router-dom";
 import './App.css';
-import {Register} from "../components/Modal/Register";
 import {Layout} from "./Layout";
 import ClinicalCard from '../pages/ClinicalCard/ClinicalCard';
 import ErrorPage from '../pages/ErrorPage/ErrorPage';

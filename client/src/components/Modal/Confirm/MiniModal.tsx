@@ -1,7 +1,3 @@
-import { Dispatch } from 'redux';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { useDispatch, useSelector } from 'react-redux';
-import { UserActionTypes, Types, IGeneralState, IUser } from '../../../redux/types/types';
 import React, {Fragment, useContext, useRef, useState} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import {AuthContext, AuthContextType} from "../../../context";
@@ -10,10 +6,6 @@ import {AuthContext, AuthContextType} from "../../../context";
 
 
 export function MiniModal(): JSX.Element {
-
-
-    // const open = useContext(contextOnClick)
-    // const [open, setOpen] = useState(false)
 
     const {showModalMini, setShowModalMini, showModalMiniText} = useContext<AuthContextType>(AuthContext)
 
