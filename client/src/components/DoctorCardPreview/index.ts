@@ -1,0 +1,1 @@
+export {DoctorCardPreview} from './DoctorCardPreview'

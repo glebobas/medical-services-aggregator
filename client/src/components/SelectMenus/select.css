@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+
+  justify-content: end;
+}
+.select {
+  width: 50%;
+  margin-right: 10px;
+}
