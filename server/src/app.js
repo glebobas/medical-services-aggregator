@@ -5,6 +5,7 @@ const cors = require('cors');
 const path = require('path');
 app.use(express.static(path.join(__dirname, '../public/')));
 const AuthRoutes = require('./routes/auth.Routes')
+const ClinicRoutes = require('./routes/clinic.Routes')
 const UserRoutes = require('./routes/user.Routes')
 const MainRoutes = require('./routes/main.Routes')
 const jwt = require("jsonwebtoken");
@@ -38,6 +39,7 @@ app.use(
 const PORT = process.env.PORT || 4002;
 
 app.use('/auth', AuthRoutes)
+app.use('/clinical',ClinicRoutes)
 app.use('/profile', UserRoutes)
 app.use('/main', MainRoutes)
 
