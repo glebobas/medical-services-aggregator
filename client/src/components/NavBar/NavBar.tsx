@@ -21,7 +21,7 @@ const navigationUserFalse = [
 
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export function NavBar() {
@@ -199,7 +199,6 @@ export function NavBar() {
                       <div className="hidden sm:ml-6 sm:block">
                         <div className="flex space-x-4">
                           {navigationUserTrue.map((item) => (
-
                             <a
                               key={item.name}
                               href={item.href}
