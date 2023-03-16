@@ -42,7 +42,6 @@ app.use('/auth', AuthRoutes)
 app.use('/clinical',ClinicRoutes)
 app.use('/profile', UserRoutes)
 app.use('/main', MainRoutes)
-
 // app.get("/", (req, res) => {
 //
 //   res.send(`Hello world!`)
