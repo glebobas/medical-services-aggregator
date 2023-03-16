@@ -1,4 +1,4 @@
-import {Fragment, useCallback, useContext, useState} from 'react'
+import {Fragment, useContext, useState} from 'react'
 import {Disclosure, Menu, Transition} from '@headlessui/react'
 import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
 import {Login} from "../Modal/Login/login";
@@ -25,9 +25,9 @@ function classNames(...classes: string[]) {
 export function NavBar() {
   const [user, setUser] = useState(false)
   // Состояние модального окна передается в модальное окно
-  // const [open, setOpen] = useState(false)
-  const {showModalLogin, setShowModalLogin} = useContext(AuthContext)
-  const {showModalRegister, setShowModalRegister} = useContext(AuthContext)
+
+  const {setShowModalLogin} = useContext(AuthContext)
+  const {setShowModalRegister} = useContext(AuthContext)
 
   const handleClick = (event: any) => {
     if (event.target.id === 'loginButton') {

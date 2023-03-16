@@ -131,18 +131,18 @@ router.get('/:userId', authenticate, async (req, res) => {
         const resultArrayDone = visitsDone?.map(appointment => {
                 const fullname = `${appointment.Doctor.firstName} ${appointment.Doctor.lastName}`
                 const fulladdress = `${appointment.Doctor.Clinic.Address.streetName}, ${appointment.Doctor.Clinic.Address.cityName}, ${appointment.Doctor.Clinic.Address.countryName}`
-            let docRate;
-            let clinicRate;
-            arrDoc.forEach(el => {
+                let docRate;
+                let clinicRate;
+                arrDoc.forEach(el => {
                     if (Number(el[0]) === appointment.doctorId) {
                         docRate = el[1]
                     }
                 })
-            arrClinic.forEach(el => {
-                if (Number(el[0]) === appointment.Doctor.clinicId) {
-                    clinicRate = el[1]
-                }
-            })
+                arrClinic.forEach(el => {
+                    if (Number(el[0]) === appointment.Doctor.clinicId) {
+                        clinicRate = el[1]
+                    }
+                })
                 return {
                     sheduleid: appointment.id,
                     userid: appointment.userId,
@@ -161,18 +161,21 @@ router.get('/:userId', authenticate, async (req, res) => {
         );
 
 
-        if(!resultArrayDone.length && !resultArrayPending.length) {
-            res.json({messageDone:'Вы ещё не посещали врачей этого портала', messagePending:'Нет запланированных приёмов к врачу'});
+        if (!resultArrayDone.length && !resultArrayPending.length) {
+            res.json({
+                messageDone: 'Вы ещё не посещали врачей этого портала',
+                messagePending: 'Нет запланированных приёмов к врачу'
+            });
         }
 
-        if(!resultArrayDone.length && resultArrayPending.length) {
-            res.json({messageDone:'Вы ещё не посещали врачей этого портала', resultArrayPending});
+        if (!resultArrayDone.length && resultArrayPending.length) {
+            res.json({messageDone: 'Вы ещё не посещали врачей этого портала', resultArrayPending});
         }
-        if(!resultArrayPending.length && resultArrayDone.length) {
-            res.json({messagePending:'Нет запланированных приёмов к врачу', resultArrayDone})
+        if (!resultArrayPending.length && resultArrayDone.length) {
+            res.json({messagePending: 'Нет запланированных приёмов к врачу', resultArrayDone})
         }
 
-        if(resultArrayPending.length && resultArrayDone.length) {
+        if (resultArrayPending.length && resultArrayDone.length) {
             res.json({resultArrayDone, resultArrayPending})
         }
     } catch
@@ -183,5 +186,90 @@ router.get('/:userId', authenticate, async (req, res) => {
 })
 ;
 
+router.patch('/edit', authenticate, async (req, res) => {
+    try {
+        const {scheduleId, clinicRating, doctorRating, newdate, newslotid, userId, clinicId, doctorId} = req.body;
+
+        //* апдейтим рейтинг определенного врача или клиники, за которые когда-то голосовал юзер
+        const whereClause = {
+            userId: userId
+        };
+
+        if (clinicId) {
+            whereClause.clinicId = clinicId;
+        }
+
+        if (doctorId) {
+            whereClause.doctorId = doctorId;
+        }
+        if (clinicRating || doctorRating) { // обновляем рейтинг докторов и клиник
+            const [numUpdated, [updatedRating]] = await Rating.update(
+                {
+                    clinicRating,
+                    doctorRating
+                },
+                {
+                    where: whereClause,
+                    returning: true
+                }
+            );
+            if (numUpdated === 0) {
+                return res.status(404).json({message: 'Rating not found'});
+            }
+            res.status(200).json({rating: updatedRating});
+        }
+
+
+        //* обновляем расписание юзера
+        const [numUpdated, [updatedSchedule]] = await Schedule.update(
+            {
+                date: newdate,
+                slot: newslotid
+            },
+            {
+                where: {id: scheduleId},
+                returning: true // Return the updated record from the database
+            }
+        );
+
+        if (numUpdated === 0) {
+            // If no record was updated, return a not found error
+            return res.status(404).json({message: 'Schedule not found'});
+        }
+        res.status(200).json({schedule: updatedSchedule});
+
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+})
+
+
+router.delete('/delete', authenticate, async (req, res) => {
+    try {
+        const {scheduleId} = req.body;
+
+        //* удаляем запись из расписания (как один из прошедших приёмов, так и будущие)
+
+        if (scheduleId) {
+            const deletedShedule = await Shedule.destroy(
+                {
+                    where: {id: scheduleId},
+                }
+            );
+
+            if (deletedShedule === 0) {
+                return res.status(404).json({message: 'Error while deleting'});
+            }
+            res.status(200).json({message: 'Deleting was successful'});
+        }
+
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+})
 
 module.exports = router;

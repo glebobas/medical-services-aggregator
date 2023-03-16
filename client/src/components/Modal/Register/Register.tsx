@@ -1,10 +1,9 @@
 import {Dispatch} from 'redux';
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
-import {useDispatch, useSelector} from 'react-redux';
-import {UserActionTypes, Types, IGeneralState, IUser} from '../../../redux/types/types';
+import {useDispatch} from 'react-redux';
+import {UserActionTypes, Types, IGeneralState} from '../../../redux/types/types';
 import React, {Fragment, useContext, useRef, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
-import {ExclamationTriangleIcon} from '@heroicons/react/24/outline'
 import {AuthContext, AuthContextType} from "../../../context";
 
 interface RegData {

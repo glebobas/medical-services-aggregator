@@ -1,9 +1,9 @@
-import { Dispatch } from 'redux';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { useDispatch, useSelector } from 'react-redux';
-import { UserActionTypes, Types, IGeneralState, IUser } from '../../../redux/types/types';
+import {Dispatch} from 'redux';
+import {ThunkAction, ThunkDispatch} from 'redux-thunk';
+import {useDispatch} from 'react-redux';
+import {UserActionTypes, Types, IGeneralState, IUser} from '../../../redux/types/types';
 import React, {Fragment, useContext, useRef, useState} from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import {Dialog, Transition} from '@headlessui/react'
 import {AuthContext, AuthContextType} from "../../../context";
 
 
@@ -19,23 +19,24 @@ interface ResponseData {
 
 export function Login(): JSX.Element {
     const dispatch = useDispatch<ThunkDispatch<IGeneralState, unknown, UserActionTypes>>()
-    // const dispatch = useDispatch()
 
-    const [userData, setUserData] = useState<LoginData>({ username: '', password: '' });
+    const [userData, setUserData] = useState<LoginData>({username: '', password: ''});
 
-    // const open = useContext(contextOnClick)
-    // const [open, setOpen] = useState(false)
-
-    const {showModalLogin, setShowModalLogin, setShowModalMiniText, setShowModalMini} = useContext<AuthContextType>(AuthContext)
+    const {
+        showModalLogin,
+        setShowModalLogin,
+        setShowModalMiniText,
+        setShowModalMini
+    } = useContext<AuthContextType>(AuthContext)
 
     const [error, setError] = useState('');
 
     const signIn = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUserData({ ...userData, [event.target.name]: event.target.value });
+        setUserData({...userData, [event.target.name]: event.target.value});
     }
 
     const login = (data: LoginData): ThunkAction<Promise<ResponseData>, IGeneralState, unknown, UserActionTypes> => async (dispatch: Dispatch<UserActionTypes>): Promise<ResponseData> => {
-        const { username, password } = data;
+        const {username, password} = data;
 
         try {
 
@@ -47,23 +48,23 @@ export function Login(): JSX.Element {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({username, password}),
             });
             const responseData = await response.json();
-            const { token, userReady } = responseData
+            const {token, userReady} = responseData
 
             if (responseData.token) {
                 localStorage.setItem('jwtToken', responseData.token);
-                dispatch({ type: Types.LOGIN_SUCCESS, payload: userReady });
+                dispatch({type: Types.LOGIN_SUCCESS, payload: userReady});
             } else {
                 setError('Invalid username or password')
-                dispatch({ type: Types.LOGIN_FAILURE, payload: { error: 'Invalid username or password' } });
+                dispatch({type: Types.LOGIN_FAILURE, payload: {error: 'Invalid username or password'}});
             }
-            return { token, userReady };
+            return {token, userReady};
         } catch (error: any) {
             const errorMessage = error.response?.responseData?.error || 'An error occurred';
             setError(errorMessage);
-            dispatch({ type: Types.LOGIN_FAILURE, payload: { error: errorMessage } });
+            dispatch({type: Types.LOGIN_FAILURE, payload: {error: errorMessage}});
             return Promise.reject(errorMessage);
         }
     };
@@ -77,15 +78,13 @@ export function Login(): JSX.Element {
                     setShowModalLogin(false)
                     setShowModalMiniText('Login successful!')
                     setShowModalMini(true)
-                }
-                else setError("Couldn't enter on site")
+                } else setError("Couldn't enter on site")
 
 
             } catch (e) {
                 console.log(e)
             }
-        }
-        else setError('Fill all fields')
+        } else setError('Fill all fields')
 
     }
 
@@ -103,7 +102,7 @@ export function Login(): JSX.Element {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"/>
                 </Transition.Child>
 
                 <div className="fixed inset-0 z-10 overflow-y-auto">
@@ -117,12 +116,14 @@ export function Login(): JSX.Element {
                             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
-                            <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                            <Dialog.Panel
+                                className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                                 <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
                                     <form onSubmit={onSubmit} className="w-full max-w-lg">
                                         <div className="flex flex-wrap -mx-3 mb-6">
                                             <div className="w-full px-3">
-                                                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                                                <label
+                                                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                                                     User name
                                                 </label>
                                                 <input
@@ -132,13 +133,14 @@ export function Login(): JSX.Element {
                                                     type="text"
                                                     placeholder="Please, type your login"
                                                     onChange={signIn}
-                                                    required />
+                                                    required/>
                                             </div>
                                         </div>
 
                                         <div className="flex flex-wrap -mx-3 mb-6">
                                             <div className="w-full px-3">
-                                                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                                                <label
+                                                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                                                     Password
                                                 </label>
                                                 <input
@@ -148,21 +150,21 @@ export function Login(): JSX.Element {
                                                     type="password"
                                                     placeholder="Please, type your login"
                                                     onChange={signIn}
-                                                    required />
-                                                    {error &&
-                                                <div className='flex flex-column justify-center align-items-center'>
+                                                    required/>
+                                                {error &&
+                                                    <div className='flex flex-column justify-center align-items-center'>
                                                     <span className="top-0 right-0 py-3 px-4 text-sm text-red-600">
                                                         {error}
                                                     </span>
-                                                </div>
-                                                    }
+                                                    </div>
+                                                }
                                             </div>
 
                                         </div>
 
                                         <div className='flex flex-column justify-center align-items-center'>
                                             <button type="submit"
-                                                className=' left-20 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5'>Sign
+                                                    className=' left-20 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5'>Sign
                                                 In
                                             </button>
 
