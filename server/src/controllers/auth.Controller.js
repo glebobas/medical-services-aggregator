@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const {User} = require('../../db/models')
 const express = require('express');
+const app = express();
 
 
 
@@ -88,10 +89,6 @@ exports.VerifyUser = async (req, res) => {
                 return res.status(401).json({message: 'Authentication failed: Invalid token'});
             }
             const { username } = decodedToken
-            res.locals.user = decodedToken
-            console.log("-> res.locals.user", res.locals.user);
-
-
 
             const userReady = await User.findOne({where: {username}, attributes: {exclude: ['password']},})
             res.json(userReady);
