@@ -56,9 +56,9 @@ export function NavBar() {
   // setUser(getUser)
 
   // Состояние модального окна передается в модальное окно
-  // const [open, setOpen] = useState(false)
-  const {showModalLogin, setShowModalLogin} = useContext(AuthContext)
-  const {showModalRegister, setShowModalRegister} = useContext(AuthContext)
+
+  const {setShowModalLogin} = useContext(AuthContext)
+  const {setShowModalRegister} = useContext(AuthContext)
 
   const handleClick = (event: any) => {
     if (event.target.id === 'loginButton') {
