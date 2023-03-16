@@ -1,1 +1,0 @@
-export {DoctorCardPreview} from './DoctorCardPreview'

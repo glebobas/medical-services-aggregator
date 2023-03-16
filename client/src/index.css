@@ -1,16 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 html,
 body,
 #root,
 .app,
 .content {
-  margin: 0;
-  padding: 0;
   height: 100%;
   width: 100%;
   font-family: 'Source Sans Pro', sans-serif;
@@ -39,52 +33,4 @@ body,
 /*Handle on Hover*/
 ::-webkit-scrollbar-track:hover {
   background: #555;
-}
-
-
-.DateTimePicker {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.DateTimePicker-time {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.DateTimePicker-hours,
-.DateTimePicker-minutes {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.DateTimePicker-hours button,
-.DateTimePicker-minutes button {
-  padding: 0.5rem;
-  border: none;
-  border-radius: 0.5rem;
-  background-color: #eee;
-  cursor: pointer;
-}
-
-.DateTimePicker-hours .selected,
-.DateTimePicker-minutes .selected {
-  background-color: #6699cc;
-  color: #fff;
-}
-
-.DateTimePicker-selected {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.DateTimePicker-button {
-  padding: 0.5rem;
-  border: none;
-  border-radius: 0.5rem;
-  background-color: #6699cc;
-  color: #fff;
-  cursor: pointer;
 }

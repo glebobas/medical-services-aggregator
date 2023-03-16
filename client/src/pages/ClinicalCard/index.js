@@ -1,1 +1,0 @@
-import ClinicalCard from "./ClinicalCard";
