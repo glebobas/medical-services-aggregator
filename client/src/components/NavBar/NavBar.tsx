@@ -1,10 +1,12 @@
-import {Fragment, useCallback, useContext, useState} from 'react'
+import {Fragment, useCallback, useContext, useEffect, useState} from 'react'
 import {Disclosure, Menu, Transition} from '@headlessui/react'
 import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
 import {Login} from "../Modal/Login/login";
 import {AuthContext} from "../../context";
 import {Register} from '../Modal/Register/Register'
 import {MiniModal} from "../Modal/Confirm/MiniModal";
+import {useDispatch, useSelector} from "react-redux";
+import {IGeneralState, Types} from "../../redux/types/types";
 
 const navigationUserTrue = [
   {name: 'Клиенты', href: '#', current: false},
@@ -23,7 +25,36 @@ function classNames(...classes: string[]) {
 }
 
 export function NavBar() {
-  const [user, setUser] = useState(false)
+  const getUser = useSelector((store: any) => store?.login?.user?.username)
+  const token = localStorage.getItem("jwtToken")
+  const dispatch = useDispatch()
+  const [user, setUser] = useState<string | undefined>('')
+
+  useEffect(() => {
+    // Обновляет информацию в хранилище после того как юзер залогинился
+
+    if (!getUser && token) {
+      (async () => {
+        const response = await fetch('/auth/user', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'Application/json',
+          },
+          body: JSON.stringify({token})
+        })
+        const user = await response.json()
+         dispatch({type: Types.LOGIN_SUCCESS, payload: user});
+       })()
+    }
+    setUser(getUser)
+  }, [token, getUser])
+
+
+  // const getUser = useSelector((store: IGeneralState) => store)
+  // console.log("-> getUser", getUser);
+  //
+  // setUser(getUser)
+
   // Состояние модального окна передается в модальное окно
   // const [open, setOpen] = useState(false)
   const {showModalLogin, setShowModalLogin} = useContext(AuthContext)
@@ -82,11 +113,11 @@ export function NavBar() {
                               onClick={handleClick}
                               key={item.name}
                               className={classNames(
-                              item.current ? 'bg-slate-400 text-white' : 'text-gray-700 hover:bg-gray-700' +
-                                ' hover:text-white',
-                              'rounded-md px-3 py-2 text-sm font-medium'
-                            )}
-                                    aria-current={item.current ? 'page' : undefined}
+                                item.current ? 'bg-slate-400 text-white' : 'text-gray-700 hover:bg-gray-700' +
+                                  ' hover:text-white',
+                                'rounded-md px-3 py-2 text-sm font-medium'
+                              )}
+                              aria-current={item.current ? 'page' : undefined}
                             >
                               {item.name}
                             </button>
@@ -274,7 +305,7 @@ export function NavBar() {
           </Disclosure>)
         }
       </nav>
-        <Register/>
+      <Register/>
       <Login/><MiniModal/></>
   );
 }
