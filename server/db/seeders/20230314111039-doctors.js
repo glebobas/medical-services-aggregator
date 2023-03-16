@@ -15,6 +15,7 @@ module.exports = {
       adultPatients: true,
       childrenPatients: true,
       generalInfo: 'Dr. John Doe is a licensed physician with over 10 years of experience in general medicine.',
+      avatar: 'https://cdn-icons-png.flaticon.com/512/607/607414.png',
       createdAt: new Date(),
       updatedAt: new Date()
     },{
@@ -28,6 +29,7 @@ module.exports = {
       adultPatients: true,
       childrenPatients: false,
       generalInfo: 'Dr. Jane Smith is a board-certified pediatrician with a focus on adolescent health.',
+      avatar: 'https://cdn-icons-png.flaticon.com/512/3304/3304567.png',
       createdAt: new Date(),
       updatedAt: new Date()
     },{
@@ -41,6 +43,7 @@ module.exports = {
       adultPatients: false,
       childrenPatients: true,
       generalInfo: 'Dr. Bob Johnson is a dermatologist with a special interest in skin cancer prevention.',
+      avatar: 'https://cdn-icons-png.flaticon.com/512/607/607414.png',
       createdAt: new Date(),
       updatedAt: new Date()
     }], {});
