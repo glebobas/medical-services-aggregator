@@ -4,8 +4,7 @@ import './App.css';
 import {Register} from "../components/Modal/Register";
 import {Layout} from "./Layout";
 import ClinicalCard from '../pages/ClinicalCard/ClinicalCard';
-import { Register } from "../components/Modal/Register";
-import { Layout } from "./Layout";
+
 
 
 

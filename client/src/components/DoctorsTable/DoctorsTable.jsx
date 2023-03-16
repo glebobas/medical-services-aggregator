@@ -1,11 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import SelectMenus from "../SelectMenus/SelectMenus";
 import Rating from "../Rating/Rating";
+
 
 const people = [
   {
     name: "Insta Samka",
-    title: "Front-end Developer",
+    title: "Хирург",
     department: "Optimization",
     email: "instasamka@example.com",
     role: "Member",
@@ -14,7 +15,7 @@ const people = [
   },
   {
     name: "Korol Shut",
-    title: "Front-end Developer",
+    title: "Терапевт",
     department: "Optimization",
     email: "kish@example.com",
     role: "Member",
@@ -23,7 +24,7 @@ const people = [
   },
   {
     name: "Alisher Morhenstern",
-    title: "Front-end Developer",
+    title: "Отоларинголок",
     department: "Optimization",
     email: "morgen@example.com",
     role: "Member",
@@ -32,9 +33,18 @@ const people = [
   },
   {
     name: "Volodya Putin",
-    title: "Front-end Developer",
+    title: "Дерматолог",
     department: "Optimization",
     email: "punya@example.com",
+    role: "Member",
+    image:
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+  },
+  {
+    name: "Olga Buzova",
+    title: "Терапевт",
+    department: "Optimization",
+    email: "buzova@example.com",
     role: "Member",
     image:
       "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
@@ -42,6 +52,7 @@ const people = [
 ];
 
 export default function DoctorsTable() {
+  const [doc, setDoc] = useState(people)
   return (
     <div className="tableDoctors">
       <div className="px-4 sm:px-6 lg:px-8 ">
@@ -97,7 +108,7 @@ export default function DoctorsTable() {
                             <div className="h-10 w-10 flex-shrink-0">
                               <img
                                 className="h-10 w-10 rounded-full"
-                                src={person.image}
+                                src="https://cdn-icons-png.flaticon.com/512/194/194915.png"
                                 alt=""
                               />
                             </div>
@@ -121,7 +132,7 @@ export default function DoctorsTable() {
                           {/* <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
                             Active
                           </span> */}
-                          <Rating />
+                          <Rating rat={4.7}/>
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {person.role}

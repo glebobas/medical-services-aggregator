@@ -4,6 +4,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import styles from "./select.css";
 
 const people = [
+  { id: 6, name: "Профиль" },
   { id: 1, name: "Терапевт" },
   { id: 2, name: "Хирург" },
   { id: 3, name: "Дерматолог" },
@@ -16,7 +17,7 @@ function classNames(...classes) {
 }
 
 export default function SelectMenus() {
-  const [selected, setSelected] = useState(people[3]);
+  const [selected, setSelected] = useState(people[0]);
   console.log(selected)
   return (
     <div className="container">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./clinical.css";
 import SelectMenus from "../../components/SelectMenus/SelectMenus";
 import DoctorsTable from "../../components/DoctorsTable/DoctorsTable";
@@ -6,7 +6,19 @@ import YandexMap from "../../components/Map/Map";
 import Rating from "../../components/Rating/Rating";
 
 export default function ClinicalCard() {
-    
+  const [clinic, setClinic] = useState({});
+  const data = { id: 1 };
+  useEffect(() => {
+    (async () => {
+      const response = await fetch("/clinical", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const res = await response.json();
+      setClinic(res);
+    })();
+  }, []);
   return (
     <>
       <div className="bg-white">
@@ -23,7 +35,7 @@ export default function ClinicalCard() {
             <div className="mx-auto max-w-2xl px-4 pt-10 pb-16 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pt-16 lg:pb-24">
               <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
                 <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-                  Клиника "Здоровье"
+                  {clinic.name}
                 </h1>
               </div>
 
@@ -31,15 +43,14 @@ export default function ClinicalCard() {
               <div className="mt-4 lg:row-span-3 lg:mt-0">
                 <h2 className="sr-only">Product information</h2>
                 <p className="text-3xl tracking-tight text-gray-600">
-                  Частная многопрофильная клиника
+                  {clinic.generalnfo}
                 </p>
 
                 {/* <!-- Reviews --> */}
                 <div className="mt-6">
                   <h3 className="sr-only">Reviews</h3>
                   <div className="flex items-center">
-                    <Rating />
-                    <p className="sr-only">4 out of 5 stars</p>
+                    <Rating rat={clinic.clinicRating} />
                     <a
                       href="#"
                       className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
@@ -52,17 +63,16 @@ export default function ClinicalCard() {
 
               <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pt-6 lg:pb-16 lg:pr-8">
                 {/* <!-- Description and details --> */}
-                <div>
-                  <h3 className="sr-only">Клиника "Здоровье"</h3>
-                </div>
               </div>
             </div>
           </div>
           <div className="space-y-6 infoClinic">
             <p className="text-base text-gray-900">
-              О клинике: клиника "Здоровье" предоставляет все виды медицинских
-              услуг
+              Address: {clinic["Address.streetName"]},{" "}
+              {clinic["Address.cityName"]}, {clinic["Address.countryName"]}
             </p>
+            <p className="text-base text-gray-900">Phone: {clinic.phone}</p>
+            <p className="text-base text-gray-900">Email: {clinic.email}</p>
           </div>
 
           {/* <!-- Product info --> */}

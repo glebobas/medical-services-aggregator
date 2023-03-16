@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "./rating.css"
 
-export default function Rating() {
-  const rat = 4.5;
+export default function Rating(props) {
+const {rat} = props
   function stars(rat) {
     const ratMin = Math.floor(rat);
     const ratFloat = rat - ratMin;
@@ -14,7 +14,6 @@ export default function Rating() {
     return arr;
   }
   const a = stars(rat);
-  console.log(a);
   
   return (
     <>

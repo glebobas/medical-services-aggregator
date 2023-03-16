@@ -2,7 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
+
 const AuthRoutes = require('./routes/auth.Routes')
+const ClinicRoutes = require('./routes/clinic.Routes')
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -16,7 +18,7 @@ app.use(
 const PORT = process.env.PORT || 4002;
 
 app.use('/auth', AuthRoutes)
-
+app.use('/clinical',ClinicRoutes)
 app.get("/", (req, res) => {
   res.send(`Hello world!`)
 })
