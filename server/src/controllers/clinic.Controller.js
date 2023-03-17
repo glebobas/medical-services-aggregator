@@ -6,6 +6,7 @@ exports.ExactClinic = async (req, res) => {
     try {
         const {clinicId} = req.params;
         const clinic = await Clinic.findOne({where: {id: clinicId}, include: [{model: Address}]})
+        const doctors = await Doctor.findAll({where: {clinicId}})
 
         const responseRating = await Rating.findAll({where: {clinicId}})
 
@@ -29,7 +30,7 @@ exports.ExactClinic = async (req, res) => {
             }
         })
         if (clinic) {
-            res.json({readyClinic})
+            res.json({readyClinic, doctors})
         } else res.json({message: "Couldn't find doctor"})
     } catch (e) {
         console.error(e)
