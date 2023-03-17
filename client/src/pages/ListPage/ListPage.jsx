@@ -4,12 +4,11 @@ import {SearchResultsContext} from "../../context/context";
 
 export function ListPage(props) {
   const {data} = useContext(SearchResultsContext)
-  console.log("ListPage-> data", data);
+  console.log("ListPage-> data", data.readyClinicList, data.readyDoctorList);
 
   return (
     <div className="flex flex-col pt-4">
-      <div className="header text-lg font-semibold">Клиники и доктора</div>
-        <ClinicsAndDoctorsTable />
+      <ClinicsAndDoctorsTable  data={data.readyClinicList}/>
     </div>
   );
 }

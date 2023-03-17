@@ -60,7 +60,7 @@ export function CommonInput({setData}) {
 
 
   return (
-    <div className="w-full flex flex-row" ref={wrapperRef}>
+    <div className="w-full flex flex-row pt-6" ref={wrapperRef}>
       <div className="relative w-full">
         <input
           type="text"

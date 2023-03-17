@@ -30,7 +30,7 @@ function App() {
   return (
     <AuthProvider>
         <Routes>
-          <Route path="/" element={<Layout title={"Агрегатор"}/>}>
+          <Route path="/" element={<Layout title={"Агрегатор медицинских услуг"}/>}>
             <Route index element={<MainPage/>}/>
             <Route path='/clients' element={<h1>Страница клиентов</h1>} />
             <Route path='/doctors' element={<h1>Страница врачей</h1>}></Route>
