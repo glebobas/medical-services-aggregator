@@ -1,11 +1,14 @@
-import {useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 import {Select} from 'antd';
+import {SearchResultsContext} from "../../context/context";
 
-export function CommonInput() {
+export function CommonInput({setData}) {
+
+  const navigate = useNavigate();
 
   const getClinicsAndDoctors = useSelector((state) => state?.clinicsAndDoctors?.clinicsAndDoctors?.map(item => item.name))
-  console.log("-> getClinicsAndDoctors", getClinicsAndDoctors);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
@@ -40,6 +43,22 @@ export function CommonInput() {
     setResults(limitedResults);
   };
 
+  const handleButtonClick = async () => {
+    // console.log(searchTerm)
+    try {
+      const response =  await fetch(`/main/alldata/${searchTerm}`)
+      const results = await response.json();
+      // console.log("-> results", results);
+      // const getClinicsAndDoctors = [...results.readyClinicList, ...results.readyDoctorList]
+      // console.log("-> getClinicsAndDoctors", getClinicsAndDoctors);
+      setData(results)
+      navigate("/listpage")
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+
   return (
     <div className="w-full flex flex-row" ref={wrapperRef}>
       <div className="relative w-full">
@@ -60,7 +79,7 @@ export function CommonInput() {
           </ul>
         )}
       </div>
-      <button className="border rounded ml-2 px-8 py-2 bg-green-700 text-white hover:bg-green-800">Search</button>
+      <button className="border rounded ml-2 px-8 py-2 bg-green-700 text-white hover:bg-green-800" onClick={handleButtonClick}>Search</button>
     </div>
   )
 
