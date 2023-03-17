@@ -15,8 +15,3 @@ export const getClinicReducer = (state: IClinicState = initialClinicState, actio
             return state;
     }
 };
-// export const initialClinicState: IClinicState = {
-//     clinicInfo: { id: 0, name: '', address: '', phone: '', email: '', generalInfo: '', role: '' },
-//     addressClinic: {country:'', city:'', street:'' },
-//     doctors: {},
-//   };

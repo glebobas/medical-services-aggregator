@@ -3,17 +3,17 @@ import styles from "./rating.css"
 
 export default function Rating(props) {
 const {rat} = props
-  function stars(rat) {
+const a = [0,0,0,0,0]
+  function stars() {
     const ratMin = Math.floor(rat);
     const ratFloat = rat - ratMin;
     const arr = [];
-    for (let i = 1; i <= ratMin; i++) {
-      arr.push(100);
+    for (let i = 0; i < ratMin; i++) {
+      a[i]= 100;
     }
-    arr.push(Math.floor(ratFloat * 100));
-    return arr;
+    a[ratMin] = Math.floor(ratFloat * 100);
   }
-  const a = stars(rat);
+  stars();
   
   return (
     <>

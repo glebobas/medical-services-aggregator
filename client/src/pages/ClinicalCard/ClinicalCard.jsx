@@ -8,7 +8,7 @@ import Rating from "../../components/Rating/Rating";
 import { TypesClinic } from "../../redux/types/typesClinic";
 
 export default function ClinicalCard() {
-  const [clinic, setClinic] = useState({});
+  const [clinic, setClinic] = useState({getDocs:[], infoClinic: {}});
   const [doc, setDoc] = useState()
   const dispatch = useDispatch()
   const data = { id: 1 };
@@ -19,35 +19,28 @@ export default function ClinicalCard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      const res = await response.json();
-     setClinic(res);
-     
+     response.json().then((r) => (setClinic(r)))
     })();
    
   }, []);
- useEffect(() => {
+ 
+if (clinic.infoClinic.id) {
   const clinicData = {
-    clinicInfo: {
-    id: clinic.id,
-    name: clinic.name,
-    phone: clinic.phone,
-    email: clinic.email,
-    generalInfo: clinic.generalInfo
+      clinicInfo: {
+      id: clinic.infoClinic.id,
+      name: clinic.infoClinic.name,
+      phone: clinic.infoClinic.phone,
+      email: clinic.infoClinic.email,
+      generalInfo: clinic.infoClinic.generalInfo
+    },
+    addressClinic: {
+      country:clinic.infoClinic["Address.countryName"],
+      city: clinic.infoClinic['Address.cityName'],
+      street: clinic.infoClinic['Address.streetName'],
   },
-  addressClinic: {
-    country:clinic['Address.countryName'],
-    city: clinic['Address.cityName'],
-    street: clinic['Address.streetName'],
-},
-}
-
-dispatch({type: TypesClinic.GET_CLINIC, payload: clinicData})
-//console.log("диспатч отправлен")
- }, [clinic, dispatch])
- const result = useSelector((state) => state.getClinic.clinicInfo)
-// if (clinic.name) {
-//   console.log(result)
-// }  
+  }
+  dispatch({type: TypesClinic.GET_CLINIC, payload: clinicData})
+}  
 
   return (
     <>

@@ -25,6 +25,5 @@ export interface IClinicState {
     addressClinic: IAdressClinic | null
 }
 
-  //ACTION =======>
 
  
