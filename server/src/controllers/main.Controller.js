@@ -14,14 +14,32 @@ exports.GetAllClinicAndDoctors = async (req, res) => { //* ПО ИНПУТУ п�
             where: {
                 [Op.or]: [
                     {
-                        firstName: {
-                            [Op.iLike]: `%${inputText}%`
-                        }
+                        [Op.and]: [
+                            {
+                                firstName: {
+                                    [Op.iLike]: `%${inputText.split(' ')[0]}%`
+                                }
+                            },
+                            {
+                                lastName: {
+                                    [Op.iLike]: `%${inputText.split(' ')[1]}%`
+                                }
+                            }
+                        ]
                     },
                     {
-                        lastName: {
-                            [Op.iLike]: `%${inputText}%`
-                        }
+                        [Op.or]: [
+                            {
+                                firstName: {
+                                    [Op.iLike]: `%${inputText}%`
+                                }
+                            },
+                            {
+                                lastName: {
+                                    [Op.iLike]: `%${inputText}%`
+                                }
+                            }
+                        ]
                     }
                 ]
             },
