@@ -6,14 +6,21 @@ const OPTIONS = ['Иванов Иван Иванович', 'Петров Пет�
 export function CommonInput() {
   // Выпадающее меню
   const [originalList, setOriginalList] = useState([])
+  console.log("-> originalList", originalList);
   const [filteredList, setFilteredList] = useState([]);
-  const [searchInput, setSearchInput] = useState();
+  console.log("-> filteredList", filteredList);
+  const [searchInput, setSearchInput] = useState("");
+  console.log("-> searchInput", searchInput);
+
 
   useEffect(() => {
-    fetch('/main/alldata/query')
-      .then(response => {
-        setOriginalList(response.data);
-        setFilteredList(response.data.slice(0, 8));
+    fetch('/main/alldataquery')
+      .then(response => response.json())
+      .then(response => [...response.readyClinicList, ...response.readyDoctorList])
+      .then(data => {
+        const newArray = data.map(item => item.name);
+        setOriginalList((prevState) => [...prevState, ...newArray])
+        setFilteredList(newArray.slice(0, 8))
       })
       .catch(error => {
         console.error(error);
@@ -23,20 +30,28 @@ export function CommonInput() {
   const handleSearchInput = (event) => {
     setSearchInput(event.target.value);
 
-    fetch(`/api/search?query=${event.target.value}`)
-      .then(response => {
-        setFilteredList(response.data);
+    fetch(`main/alldata/${event.target.value}`)
+      .then(response => response.json())
+      .then(data => [...data.readyClinicList, ...data.readyDoctorList])
+      .then(data => {
+        const newArray = data.map(item => item.name);
+        setFilteredList(newArray)
       })
       .catch(error => {
         console.error(error);
       })
-  };
+  }
 
   return (
     <div className="flex flex-col w-full mx-auto">
-      <input className="rounded-lg border py-1 px-5"  type="text" value={searchInput} onChange={handleSearchInput}/>
+      <input list="options" className="rounded-lg border py-1 px-5" type="text" value={searchInput} onChange={handleSearchInput}/>
+      <datalist id="options" className="w-[420px]">
+        {originalList.map((option) => (
+          <option key={option.id} value={option} />
+        ))}
+      </datalist>
       <ul>
-        {filteredList.map(item => <li key={item.id}>{item.name}</li>)}
+        {filteredList.map(item => (<li key={item.id}>{item.name}</li>))}
       </ul>
     </div>
   )

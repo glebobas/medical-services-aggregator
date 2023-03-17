@@ -20,7 +20,7 @@ const {
 } = require("../controllers/doctor.Controller");
 
 router.get("/alldata/:inputText", GetAllClinicAndDoctors);
-router.get("/alldata/query", GetAllClinicAndDoctorsQuery);
+router.get("/alldataquery", GetAllClinicAndDoctorsQuery);
 
 // router.post("/someclinics", SomeClinicsFromSearch);
 //
