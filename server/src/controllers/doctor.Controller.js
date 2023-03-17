@@ -1,4 +1,4 @@
-const {Doctor, Clinic, Address, Speciality, Rating} = require("../../db/models");
+const {Doctor, Clinic, Address, Shedule, Speciality, Slot, Rating} = require("../../db/models");
 const {Op} = require("sequelize");
 
 
@@ -130,8 +130,43 @@ exports.ExactDoctor = async (req, res) => {
                 avatar: el.avatar
             }
         })
-        if (doctor) {
-            res.json({readyDoc})
+        const shedulesAdUser = await Shedule.findAll({
+            where: {userId: res.locals.user.id, doctorId},
+            include: [{model: Slot}]
+        })
+
+        const shedulesDoctor = await Shedule.findAll({
+            where: {
+                doctorId,
+                statusAppointment: {
+                    [Op.or]: ['vacant', 'pending'],
+                },
+            },
+            include: [{ model: Slot }],
+        })
+
+        const readyUserOwnShedule = shedulesAdUser.map((record) => {
+            return {
+                date: record.date,
+                time: record.Slot.timeGap,
+                status: record.statusAppointment,
+                userId: record.userId,
+                sheduleId: record.id
+            }
+        })
+
+        const doctorShedule = shedulesDoctor.map((record) => {
+            return {
+                date: record.date,
+                time: record.Slot.timeGap,
+                status: record.statusAppointment,
+                userId: record.userId,
+                sheduleId: record.id
+            }
+        })
+
+        if (doctor.id) {
+            res.json({readyDoc, readyUserOwnShedule, doctorShedule})
         } else res.json({message: "Couldn't find doctor"})
     } catch (e) {
         console.error(e)
