@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import {useDispatch, useSelector} from 'react-redux';
 import styles from "./clinical.css";
 import SelectMenus from "../../components/SelectMenus/SelectMenus";
 import DoctorsTable from "../../components/DoctorsTable/DoctorsTable";
 import YandexMap from "../../components/Map/Map";
 import Rating from "../../components/Rating/Rating";
+import { TypesClinic } from "../../redux/types/typesClinic";
 
 export default function ClinicalCard() {
   const [clinic, setClinic] = useState({});
+  const [doc, setDoc] = useState()
+  const dispatch = useDispatch()
   const data = { id: 1 };
   useEffect(() => {
     (async () => {
@@ -16,9 +20,35 @@ export default function ClinicalCard() {
         body: JSON.stringify(data),
       });
       const res = await response.json();
-      setClinic(res);
+     setClinic(res);
+     
     })();
+   
   }, []);
+ useEffect(() => {
+  const clinicData = {
+    clinicInfo: {
+    id: clinic.id,
+    name: clinic.name,
+    phone: clinic.phone,
+    email: clinic.email,
+    generalInfo: clinic.generalInfo
+  },
+  addressClinic: {
+    country:clinic['Address.countryName'],
+    city: clinic['Address.cityName'],
+    street: clinic['Address.streetName'],
+},
+}
+
+dispatch({type: TypesClinic.GET_CLINIC, payload: clinicData})
+//console.log("диспатч отправлен")
+ }, [clinic, dispatch])
+ const result = useSelector((state) => state.getClinic.clinicInfo)
+// if (clinic.name) {
+//   console.log(result)
+// }  
+
   return (
     <>
       <div className="bg-white">
@@ -42,7 +72,7 @@ export default function ClinicalCard() {
               {/* <!-- Options --> */}
               <div className="mt-4 lg:row-span-3 lg:mt-0">
                 <h2 className="sr-only">Product information</h2>
-                <p className="text-3xl tracking-tight text-gray-600">
+                <p className="text-3xs tracking-tight text-gray-600">
                   {clinic.generalnfo}
                 </p>
 
