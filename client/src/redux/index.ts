@@ -4,6 +4,7 @@ import thunkMiddleware from 'redux-thunk';
 import {loginReducer, registerReducer} from './reducers/authReducers';
 
 
+
 const rootReducers = combineReducers({
   login: loginReducer,
   register: registerReducer,

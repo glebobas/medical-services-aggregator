@@ -13,6 +13,8 @@ export enum Types {
     UPDATE_USERDATA_SUCCESS = 'UPDATE_USERDATA_SUCCESS',
     UPDATE_USERDATA_FAILURE = 'UPDATE_USERDATA_FAILURE',
 
+    CLEAR_STORE_ACTION = 'CLEAR_STORE_ACTION'
+
 }
 export interface IUser {
     id: number;

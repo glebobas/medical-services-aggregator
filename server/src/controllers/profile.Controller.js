@@ -1,5 +1,8 @@
 const { Shedule, Doctor, Clinic, Address, Speciality, Rating, Slot, User } = require("../../db/models");
 const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+
+const jwtSecret = process.env.JWT_SECRET
 
 exports.GetProfileArrays = async (req, res) => {
     try {
@@ -288,39 +291,49 @@ exports.EditProfile = async (req, res) => {
             oldPassword,
         } = req.body;
 
-        const user = await User.findOne({where: { id }});
-        const passwordMatch = await bcrypt.compare(oldPassword, user.password);
-        if (!passwordMatch) {
-            return res.status(401).json({message: 'Authentication failed: Invalid password'});
-        }
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
 
-        const updateData = {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            telephone: telephone,
-        };
+        jwt.verify(token, jwtSecret, async (err, decodedToken) => {
+            if (err) {
+                return res.status(401).json({message: 'Access denied: Invalid token. Please, relogin'});
+            }
+            const user = await User.findOne({where: { id }});
+            const passwordMatch = await bcrypt.compare(oldPassword, user.password);
+            if (!passwordMatch) {
+                return res.status(401).json({message: 'Authentication failed: Invalid password'});
+            }
 
-        if (newPassword) {
-            const saltRounds = 10;
-            const passwordHash = await bcrypt.hash(newPassword, saltRounds);
-            updateData.password = passwordHash;
-        }
+            const updateData = {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                telephone: telephone,
+            };
 
-        const [nmbOfUpdatedRows, [updatedUser]] = await User.update(updateData,
-        {
-            where: {
-                id,
-            },
-            returning: true,
+            if (newPassword) {
+                const saltRounds = 10;
+                updateData.password = await bcrypt.hash(newPassword, saltRounds);
+            }
+
+            const [nmbOfUpdatedRows, [updatedUser]] = await User.update(updateData,
+                {
+                    where: {
+                        id,
+                    },
+                    returning: true,
+                });
+
+            if (nmbOfUpdatedRows === 0) {
+                return res.status(404).json({ message: 'Error while updating user' });
+            }
+
+            delete updatedUser.dataValues.password;
+
+            res.status(200).json({ user: updatedUser })
         });
 
-        if (nmbOfUpdatedRows === 0) {
-            return res.status(404).json({ message: 'Error while updating user' });
-        }
 
-        delete updatedUser.dataValues.password;
-        res.status(200).json({ user: updatedUser })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: 'Internal server error' })
