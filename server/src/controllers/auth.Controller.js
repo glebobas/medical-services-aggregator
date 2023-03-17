@@ -12,7 +12,8 @@ exports.CheckUserAndCreateToken = async (req, res) => {
     try {
         const {username, password} = req.body;
         const user = await User.findOne({where: {username}})
-        if (!user) {
+
+        if (!user.username) {
             return res.status(401).json({message: 'Authentication failed: Invalid username or password'});
         }
         const passwordMatch = await bcrypt.compare(password, user.password);
