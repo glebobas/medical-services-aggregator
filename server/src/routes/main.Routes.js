@@ -22,7 +22,6 @@ router.post("/somedoctors", DoctorsFromSearch); //* получаем списо�
 
 router.get('/doctor/:doctorId', ExactDoctor); //* получаем доктора после выбора из поисковой выдачи
 
-
 router.get("/clinic/:clinicId", ExactClinic); //* получаем клинику после выбора из поисковой выдачи
 
 // router.post('/shedule/new', NewEntry);
