@@ -381,7 +381,7 @@ exports.GetAllClinicAndDoctorsQuery = async (req, res) => { //* получаем
         console.log("-> readyClinicList", readyClinicList);
         console.log("-> readyDoctorList", readyDoctorList);
 
-        res.json({readyClinicList, readyDoctorList})
+        res.json({readyClinicList, readyDoctorList, doctors})
 
 
     } catch
