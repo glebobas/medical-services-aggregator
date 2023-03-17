@@ -12,6 +12,7 @@ module.exports = {
          phone: '+1 555-1234',
          email: 'info@healthylifeclinic.com',
          generalnfo: 'We provide high-quality medical care.',
+         avatar: 'https://cdn-icons-png.flaticon.com/512/4320/4320371.png',
          createdAt: new Date(),
          updatedAt: new Date()
        },
@@ -21,6 +22,7 @@ module.exports = {
          phone: '+1 555-5678',
          email: 'info@sunrisemedical.com',
          generalnfo: 'Your health is our top priority.',
+         avatar: 'https://cdn-icons-png.flaticon.com/512/9874/9874871.png',
          createdAt: new Date(),
          updatedAt: new Date()
        },
@@ -30,6 +32,7 @@ module.exports = {
          phone: '+1 555-9012',
          email: 'info@cityhospital.com',
          generalnfo: 'Compassionate care, advanced medicine.',
+         avatar: 'https://cdn-icons-png.flaticon.com/512/9434/9434725.png',
          createdAt: new Date(),
          updatedAt: new Date()
        }

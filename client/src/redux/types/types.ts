@@ -9,6 +9,10 @@ export enum Types {
     REGISTER_SUCCESS = 'REGISTER_SUCCESS',
     REGISTER_FAILURE = 'REGISTER_FAILURE',
 
+    UPDATE_USERDATA_REQUEST = 'UPDATE_USERDATA_REQUEST',
+    UPDATE_USERDATA_SUCCESS = 'UPDATE_USERDATA_SUCCESS',
+    UPDATE_USERDATA_FAILURE = 'UPDATE_USERDATA_FAILURE',
+
 }
 export interface IUser {
     id: number;
@@ -43,26 +47,26 @@ export interface IGeneralStateRegister {
     error: null | string;
 }
 export interface LoginRequestAction {
-  type: Types.LOGIN_REQUEST;
+    type: Types.LOGIN_REQUEST;
 }
 export interface LoginSuccessAction {
-  type: Types.LOGIN_SUCCESS;
-  payload: {
-      id: number;
-      username: string;
-      email: string;
-      firstName: string;
-      lastName: string;
-      telephone: string;
-      role: string;
+    type: Types.LOGIN_SUCCESS;
+    payload: {
+        id: number;
+        username: string;
+        email: string;
+        firstName: string;
+        lastName: string;
+        telephone: string;
+        role: string;
 
-  };
+    };
 }
 export interface LoginFailureAction {
-  type: Types.LOGIN_FAILURE;
-  payload: {
-    error: string;
-  };
+    type: Types.LOGIN_FAILURE;
+    payload: {
+        error: string;
+    };
 
 }
 
