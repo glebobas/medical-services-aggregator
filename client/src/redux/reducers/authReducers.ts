@@ -2,7 +2,6 @@ import { IGeneralState, IGeneralStateRegister, IUserAction, Types } from '../typ
 import { initialState } from '../store';
 
 export const loginReducer = (state: IGeneralState = initialState, action: IUserAction): IGeneralState => {
-    console.log(action);
     switch (action.type) {
         case Types.LOGIN_REQUEST:
         case Types.UPDATE_USERDATA_REQUEST:

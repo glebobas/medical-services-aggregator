@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import {useSelector} from "react-redux"
 import SelectMenus from "../SelectMenus/SelectMenus";
 import Rating from "../Rating/Rating";
 
@@ -51,8 +52,21 @@ const people = [
   },
 ];
 
-export default function DoctorsTable() {
+function DoctorsTable() {
   const [doc, setDoc] = useState(people)
+  // console.log("table render")
+  // const data = useSelector((state) => state.getClinic.clinicInfo.id)
+  // console.log(data);
+  // (async() => {
+  // const responseDoc = await await fetch("/clinical/doc", {
+  // method: "POST",
+  // headers: { "Content-Type": "application/json" },
+  // body: JSON.stringify({id:data}),
+  // });
+  // const resDoc = await responseDoc.json()
+  // setDoc(resDoc)
+  // // console.log(resDoc)
+  // })()
   return (
     <div className="tableDoctors">
       <div className="px-4 sm:px-6 lg:px-8 ">
@@ -158,3 +172,4 @@ export default function DoctorsTable() {
     </div>
   );
 }
+export default React.memo(DoctorsTable)

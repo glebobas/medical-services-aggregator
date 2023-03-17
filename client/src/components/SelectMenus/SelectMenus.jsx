@@ -1,7 +1,8 @@
+import React from "react";
 import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import styles from "./select.css";
+import styles from "./select.module.css";
 
 const people = [
   { id: 6, name: "Профиль" },
@@ -16,12 +17,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function SelectMenus() {
+function SelectMenus() {
   const [selected, setSelected] = useState(people[0]);
-  console.log(selected)
+  
   return (
-    <div className="container">
-    <div className="select">
+    <div className={styles.container}>
+    <div className={styles.select }>
       <Listbox value={selected} onChange={setSelected} >
         {({ open }) => (
           <>
@@ -96,3 +97,4 @@ export default function SelectMenus() {
     </div>
   );
 }
+export default React.memo(SelectMenus)

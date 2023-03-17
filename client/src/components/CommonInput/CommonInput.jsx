@@ -1,85 +1,67 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
+import {useSelector} from "react-redux";
 import {Select} from 'antd';
 
-const OPTIONS = ['Иванов Иван Иванович', 'Петров Петр Петрович', 'Сидоров Сидор Сидорович', 'Клиника Беркут'];
-
 export function CommonInput() {
-  // Выпадающее меню
-  const [originalList, setOriginalList] = useState([])
-  console.log("-> originalList", originalList);
-  const [filteredList, setFilteredList] = useState([]);
-  console.log("-> filteredList", filteredList);
-  const [searchInput, setSearchInput] = useState("");
-  console.log("-> searchInput", searchInput);
 
+  const getClinicsAndDoctors = useSelector((state) => state?.clinicsAndDoctors?.clinicsAndDoctors?.map(item => item.name))
+  console.log("-> getClinicsAndDoctors", getClinicsAndDoctors);
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [results, setResults] = useState([]);
+  const wrapperRef = useRef(null);
 
   useEffect(() => {
-    fetch('/main/alldataquery')
-      .then(response => response.json())
-      .then(response => [...response.readyClinicList, ...response.readyDoctorList])
-      .then(data => {
-        const newArray = data.map(item => item.name);
-        setOriginalList((prevState) => [...prevState, ...newArray])
-        setFilteredList(newArray.slice(0, 8))
-      })
-      .catch(error => {
-        console.error(error);
-      })
-  }, [])
+    function handleClickOutside(event) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setResults([]);
+      }
+    }
 
-  const handleSearchInput = (event) => {
-    setSearchInput(event.target.value);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [wrapperRef]);
 
-    fetch(`main/alldata/${event.target.value}`)
-      .then(response => response.json())
-      .then(data => [...data.readyClinicList, ...data.readyDoctorList])
-      .then(data => {
-        const newArray = data.map(item => item.name);
-        setFilteredList(newArray)
-      })
-      .catch(error => {
-        console.error(error);
-      })
+
+  const handleResultClick = (item) => {
+    setSearchTerm(item);
+    setResults([])
   }
 
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+    const filteredResults = getClinicsAndDoctors.filter((item) =>
+      item.toLowerCase().includes(value.toLowerCase())
+    );
+    const limitedResults = filteredResults.slice(0, 6);
+    setResults(limitedResults);
+  };
+
   return (
-    <div className="flex flex-col w-full mx-auto">
-      <input list="options" className="rounded-lg border py-1 px-5" type="text" value={searchInput} onChange={handleSearchInput}/>
-      <datalist id="options" className="w-[420px]">
-        {originalList.map((option) => (
-          <option key={option.id} value={option} />
-        ))}
-      </datalist>
-      <ul>
-        {filteredList.map(item => (<li key={item.id}>{item.name}</li>))}
-      </ul>
+    <div className="w-full flex flex-row" ref={wrapperRef}>
+      <div className="relative w-full">
+        <input
+          type="text"
+          placeholder="Search"
+          className="px-4 py-2 w-full border border-gray-300 rounded-md inline-block"
+          value={searchTerm}
+          onChange={handleInputChange}
+        />
+        {results.length > 0 && (
+          <ul className="absolute w-full bg-white border border-gray-300 rounded-md mt-1 z-10">
+            {results.map((item) => (
+              <li key={item} className="px-4 py-2 hover:bg-gray-100" onClick={() => handleResultClick(item)}>
+                {item}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <button className="border rounded ml-2 px-8 py-2 bg-green-700 text-white hover:bg-green-800">Search</button>
     </div>
   )
 
-
-  // const [selectedItems, setSelectedItems] = useState([]);
-  // const filteredOptions = OPTIONS.filter((o) => !selectedItems.includes(o));
-  //
-  // return (
-  //   <div className="flex flex-col w-full mx-auto">
-  //     <label htmlFor="request" className="flex text-lg font-bold leading-20 dark:text-blue-100">
-  //        Найти клинику или врача
-  //     </label>
-  //     <div className=" mt-2 rounded-md shadow-sm">
-  //       <Select
-  //         mode="multiple"
-  //         placeholder="Найти врача | Клинику | Записаться на прием"
-  //         value={selectedItems}
-  //         onChange={setSelectedItems}
-  //         style={{ width: '100%' }}
-  //         options={filteredOptions.map((item) => ({
-  //           value: item,
-  //           label: item,
-  //         }))}
-  //       />
-  //
-  //     </div>
-  //   </div>
-  // )
 }
-
