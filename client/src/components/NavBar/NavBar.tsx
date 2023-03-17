@@ -1,22 +1,24 @@
-import {Fragment, useContext, useEffect, useState} from 'react'
-import {Disclosure, Menu, Transition} from '@headlessui/react'
-import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
-import {Login} from "../Modal/Login/login";
-import {AuthContext} from "../../context";
-import {Register} from '../Modal/Register/Register'
-import {MiniModal} from "../Modal/Confirm/MiniModal";
-import {useDispatch, useSelector} from "react-redux";
-import {Types} from "../../redux/types/types";
+import { Fragment, useContext, useEffect, useState } from 'react'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Login } from "../Modal/Login/login";
+import { AuthContext } from "../../context";
+import { Register } from '../Modal/Register/Register'
+import { MiniModal } from "../Modal/Confirm/MiniModal";
+import { useDispatch, useSelector } from "react-redux";
+import { Types } from "../../redux/types/types";
+import { Link } from 'react-router-dom';
+
 
 const navigationUserTrue = [
-  {name: 'Клиенты', href: '#', current: false},
-  {name: 'Врачи', href: '#', current: false},
-  {name: 'Календарь', href: '#', current: false},
+  { name: 'Клиенты', href: '#', current: false },
+  { name: 'Врачи', href: '#', current: false },
+  { name: 'Календарь', href: '#', current: false },
 ]
 
 const navigationUserFalse = [
-  {name: 'Войти', id: 'loginButton', current: false},
-  {name: 'Зарегистироваться', id: 'registerButton', current: false}
+  { name: 'Войти', id: 'loginButton', current: false },
+  { name: 'Зарегистироваться', id: 'registerButton', current: false }
 ]
 
 
@@ -43,8 +45,8 @@ export function NavBar() {
           },
         })
         const user = await response.json()
-         dispatch({type: Types.LOGIN_SUCCESS, payload: user});
-       })()
+        dispatch({ type: Types.LOGIN_SUCCESS, payload: user });
+      })()
     }
     setUser(getUser)
   }, [token, getUser, dispatch])
@@ -53,8 +55,8 @@ export function NavBar() {
 
   // Состояние модального окна передается в модальное окно
 
-  const {setShowModalLogin} = useContext(AuthContext)
-  const {setShowModalRegister} = useContext(AuthContext)
+  const { setShowModalLogin } = useContext(AuthContext)
+  const { setShowModalRegister } = useContext(AuthContext)
 
   const handleClick = (event: any) => {
     if (event.target.id === 'loginButton') {
@@ -77,7 +79,7 @@ export function NavBar() {
       <nav className="w-full">
         {!user
           ? (<Disclosure as="nav" className="bg-slate-400">
-            {({open}) => (
+            {({ open }) => (
               <>
                 <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                   <div className="relative flex h-16 items-center justify-between">
@@ -87,9 +89,9 @@ export function NavBar() {
                         className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                         <span className="sr-only">Open main menu</span>
                         {open ? (
-                          <XMarkIcon className="block h-6 w-6" aria-hidden="true"/>
+                          <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
                         ) : (
-                          <Bars3Icon className="block h-6 w-6" aria-hidden="true"/>
+                          <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                         )}
                       </Disclosure.Button>
                     </div>
@@ -163,7 +165,7 @@ export function NavBar() {
             )}
           </Disclosure>)
           : (<Disclosure as="nav" className="bg-slate-400">
-            {({open}) => (
+            {({ open }) => (
               <>
                 <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                   <div className="relative flex h-16 items-center justify-between">
@@ -173,9 +175,9 @@ export function NavBar() {
                         className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                         <span className="sr-only">Open main menu</span>
                         {open ? (
-                          <XMarkIcon className="block h-6 w-6" aria-hidden="true"/>
+                          <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
                         ) : (
-                          <Bars3Icon className="block h-6 w-6" aria-hidden="true"/>
+                          <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                         )}
                       </Disclosure.Button>
                     </div>
@@ -218,7 +220,7 @@ export function NavBar() {
                         className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                       >
                         <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6" aria-hidden="true"/>
+                        <BellIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
 
                       {/* Profile dropdown */}
@@ -246,7 +248,7 @@ export function NavBar() {
                           <Menu.Items
                             className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <Menu.Item>
-                              {({active}) => (
+                              {({ active }) => (
                                 <div
                                   className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 cursor-pointer')}
                                 >
@@ -255,18 +257,20 @@ export function NavBar() {
                               )}
                             </Menu.Item>
                             <Menu.Item>
-                              {({active}) => (
-                                <div
-                                  className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 cursor-pointer')}
-                                >
-                                  Редактирование
-                                </div>
+                              {({ active }) => (
+                                <Link to ='/profileEditing'>
+                                  <div
+                                    className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 cursor-pointer')}
+                                  >
+                                    Редактирование
+                                  </div>
+                                </Link>
                               )}
                             </Menu.Item>
                             <Menu.Item>
-                              {({active}) => (
+                              {({ active }) => (
                                 <div
-                                onClick={logOut}
+                                  onClick={logOut}
                                   className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 cursor-pointer')}
                                 >
                                   Выход
@@ -303,7 +307,7 @@ export function NavBar() {
           </Disclosure>)
         }
       </nav>
-      <Register/>
-      <Login/><MiniModal/></>
+      <Register />
+      <Login /><MiniModal /></>
   );
 }

@@ -31,17 +31,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
     cors({
-      origin: 'http://localhost:3000',
-      credentials: true,
+        origin: 'http://localhost:3000',
+        credentials: true,
     })
 );
 
 const PORT = process.env.PORT || 4002;
 
-app.use('/auth', AuthRoutes)
-app.use('/clinical',ClinicRoutes)
-app.use('/profile', UserRoutes)
 app.use('/main', MainRoutes)
+app.use('/auth', AuthRoutes)
+app.use('/clinical', ClinicRoutes)
+app.use('/profile', UserRoutes)
+
 
 // app.get("/", (req, res) => {
 //
@@ -51,9 +52,9 @@ app.use('/main', MainRoutes)
 
 
 app.listen(PORT, () => {
-  try {
-    console.log(`Listening on port: ${PORT}`);
-  } catch (error) {
-    console.log('!!! ERROR ->>> Server not started', error);
-  }
+    try {
+        console.log(`Listening on port: ${PORT}`);
+    } catch (error) {
+        console.log('!!! ERROR ->>> Server not started', error);
+    }
 });

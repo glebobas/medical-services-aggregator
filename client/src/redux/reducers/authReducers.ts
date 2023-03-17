@@ -2,14 +2,17 @@ import { IGeneralState, IGeneralStateRegister, IUserAction, Types } from '../typ
 import { initialState } from '../store';
 
 export const loginReducer = (state: IGeneralState = initialState, action: IUserAction): IGeneralState => {
+    console.log(action);
     switch (action.type) {
         case Types.LOGIN_REQUEST:
+        case Types.UPDATE_USERDATA_REQUEST:
             return {
                 ...state,
                 loading: true,
                 error: null,
             };
         case Types.LOGIN_SUCCESS:
+        case Types.UPDATE_USERDATA_SUCCESS:
             return {
                 ...state,
                 user: {
@@ -25,6 +28,7 @@ export const loginReducer = (state: IGeneralState = initialState, action: IUserA
                 error: null,
             };
         case Types.LOGIN_FAILURE:
+        case Types.UPDATE_USERDATA_FAILURE:
             return {
                 ...state,
                 user: null,
