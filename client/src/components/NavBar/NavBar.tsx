@@ -11,9 +11,9 @@ import { Link } from 'react-router-dom';
 
 
 const navigationUserTrue = [
-  { name: 'Клиенты', href: '#', current: false },
-  { name: 'Врачи', href: '#', current: false },
-  { name: 'Календарь', href: '#', current: false },
+  { name: 'Клиенты', href: '/clients', current: false },
+  { name: 'Врачи', href: '/doctors', current: false },
+  { name: 'Календарь', href: '/calendar', current: false },
 ]
 
 const navigationUserFalse = [

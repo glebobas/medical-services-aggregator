@@ -110,7 +110,7 @@ export function ProfileEditing() {
               type="email"
               placeholder="Please, type your email"
               onChange={getUserData}
-              value={userData.firstName}
+              value={userData.email}
             />
           </div>
         </div>
