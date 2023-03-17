@@ -7,13 +7,13 @@ import { Register } from '../Modal/Register/Register'
 import { MiniModal } from "../Modal/Confirm/MiniModal";
 import { useDispatch, useSelector } from "react-redux";
 import { Types } from "../../redux/types/types";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const navigationUserTrue = [
-  { name: 'Клиенты', href: '#', current: false },
-  { name: 'Врачи', href: '#', current: false },
-  { name: 'Календарь', href: '#', current: false },
+  { name: 'Клиенты', href: '/clients', current: false },
+  { name: 'Врачи', href: '/doctors', current: false },
+  { name: 'Календарь', href: '/calendar', current: false },
 ]
 
 const navigationUserFalse = [
@@ -31,6 +31,7 @@ export function NavBar() {
   const token = localStorage.getItem("jwtToken")
   const dispatch = useDispatch()
   const [user, setUser] = useState<string | undefined>('')
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Обновляет информацию в хранилище после того как юзер залогинился
@@ -73,6 +74,12 @@ export function NavBar() {
     localStorage.clear();
   }
 
+  const nav = (event: any) => {
+    event.preventDefault();
+    console.log('>>>>>>>>>>>>>>>>>>>>>')
+    navigate('/');
+  }
+
   return (
 
     <>
@@ -96,16 +103,20 @@ export function NavBar() {
                       </Disclosure.Button>
                     </div>
                     <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-between">
-                      <div className="flex flex-shrink-0 items-center">
+                      <div
+                        className="flex flex-shrink-0 items-center"
+                      >
                         <img
                           className="block h-8 w-auto lg:hidden"
                           src="https://cdn-icons-png.flaticon.com/64/1052/1052784.png"
                           alt="Your Company"
+                          onClick={nav}
                         />
                         <img
                           className="hidden h-8 w-auto lg:block"
                           src="https://cdn-icons-png.flaticon.com/64/1052/1052784.png"
                           alt="Your Company"
+                          onClick={nav}
                         />
                       </div>
                       <div className="hidden sm:ml-6 sm:block">
@@ -187,11 +198,14 @@ export function NavBar() {
                           className="block h-8 w-auto lg:hidden"
                           src="https://cdn-icons-png.flaticon.com/64/1052/1052784.png"
                           alt="Medical"
+                          onClick={nav}
+
                         />
                         <img
                           className="hidden h-8 w-auto lg:block"
                           src="https://cdn-icons-png.flaticon.com/64/1052/1052784.png"
                           alt="Medical"
+                          onClick={nav}
                         />
                       </div>
                       <div className="hidden sm:ml-6 sm:block">
@@ -258,7 +272,7 @@ export function NavBar() {
                             </Menu.Item>
                             <Menu.Item>
                               {({ active }) => (
-                                <Link to ='/profileEditing'>
+                                <Link to='/profileEditing'>
                                   <div
                                     className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 cursor-pointer')}
                                   >

@@ -29,10 +29,12 @@ function App() {
 
   return (
     <AuthProvider>
-
         <Routes>
           <Route path="/" element={<Layout title={"Агрегатор"}/>}>
             <Route index element={<MainPage/>}/>
+            <Route path='/clients' element={<h1>Страница клиентов</h1>} />
+            <Route path='/doctors' element={<h1>Страница врачей</h1>}></Route>
+            <Route path='/calendar' element={<h1>Календарь</h1>} />
             <Route path='/profileEditing' element={<ProfileEditing/>}/>
             <Route path='/listpage' element={<ListPage/>}/>
             <Route path='/clinical' element={<ClinicalCard/>}/>
@@ -40,7 +42,6 @@ function App() {
             <Route path='*' element={<ErrorPage/>}/>
           </Route>
         </Routes>
-
     </AuthProvider>
   );
 }

@@ -12,7 +12,6 @@ exports.CheckUserAndCreateToken = async (req, res) => {
     try {
         const {username, password} = req.body;
         const user = await User.findOne({where: {username}})
-
         if (!user.username) {
             return res.status(401).json({message: 'Authentication failed: Invalid username or password'});
         }
@@ -23,7 +22,7 @@ exports.CheckUserAndCreateToken = async (req, res) => {
         const token = jwt.sign(
             {id: user.id, username: user.username},
             jwtSecret,
-            {expiresIn: '1h'}
+            {expiresIn: '5h'}
         );
         const userReady = await User.findOne({where: {username}, attributes: {exclude: ['password']},})
         if (userReady.username) {

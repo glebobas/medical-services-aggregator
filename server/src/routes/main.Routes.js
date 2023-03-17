@@ -20,9 +20,9 @@ router.get('/addresses', GetAllAddresses) //* получаем все адрес
 
 router.post("/somedoctors", DoctorsFromSearch); //* получаем список врачей после ввода необходимых данных в поиске
 
-router.get('/doctor/:doctorId', ExactDoctor); //* получаем доктора после выбора из поисковой выдачи
+router.get('/doctor/:doctorId', tokenToLocals, ExactDoctor); //* получаем доктора после выбора из поисковой выдачи, его расписание, включая приёмы юзера, если последний залогинен
 
-router.get("/clinic/:clinicId", ExactClinic); //* получаем клинику после выбора из поисковой выдачи
+router.get("/clinic/:clinicId", tokenToLocals, ExactClinic); //* получаем клинику после выбора из поисковой выдачи
 
 // router.post('/shedule/new', NewEntry);
 
