@@ -2,11 +2,13 @@ import {applyMiddleware, combineReducers, legacy_createStore as createStore} fro
 import { composeWithDevTools } from '@redux-devtools/extension';
 import thunkMiddleware from 'redux-thunk';
 import {loginReducer, registerReducer} from './reducers/authReducers';
+import {getDoctorsAndClinicsReducers} from "./reducers/allClinicsAndDoctorsReducers";
 
 
 const rootReducers = combineReducers({
   login: loginReducer,
   register: registerReducer,
+  clinicsAndDoctors: getDoctorsAndClinicsReducers,
 });
 
 const composeEnhancers =
