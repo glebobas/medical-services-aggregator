@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import {useDispatch, useSelector} from 'react-redux';
 import styles from "./clinical.css";
 import SelectMenus from "../../components/SelectMenus/SelectMenus";
 import DoctorsTable from "../../components/DoctorsTable/DoctorsTable";
 import YandexMap from "../../components/Map/Map";
 import Rating from "../../components/Rating/Rating";
+import { TypesClinic } from "../../redux/types/typesClinic";
 
 export default function ClinicalCard() {
-  const [clinic, setClinic] = useState({});
+  const [clinic, setClinic] = useState({getDocs:[], infoClinic: {}});
+  const [doc, setDoc] = useState()
+  const dispatch = useDispatch()
   const data = { id: 1 };
   useEffect(() => {
     (async () => {
@@ -15,10 +19,29 @@ export default function ClinicalCard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      const res = await response.json();
-      setClinic(res);
+     response.json().then((r) => (setClinic(r)))
     })();
+   
   }, []);
+ 
+if (clinic.infoClinic.id) {
+  const clinicData = {
+      clinicInfo: {
+      id: clinic.infoClinic.id,
+      name: clinic.infoClinic.name,
+      phone: clinic.infoClinic.phone,
+      email: clinic.infoClinic.email,
+      generalInfo: clinic.infoClinic.generalInfo
+    },
+    addressClinic: {
+      country:clinic.infoClinic["Address.countryName"],
+      city: clinic.infoClinic['Address.cityName'],
+      street: clinic.infoClinic['Address.streetName'],
+  },
+  }
+  dispatch({type: TypesClinic.GET_CLINIC, payload: clinicData})
+}  
+
   return (
     <>
       <div className="bg-white">
@@ -42,7 +65,7 @@ export default function ClinicalCard() {
               {/* <!-- Options --> */}
               <div className="mt-4 lg:row-span-3 lg:mt-0">
                 <h2 className="sr-only">Product information</h2>
-                <p className="text-3xl tracking-tight text-gray-600">
+                <p className="text-3xs tracking-tight text-gray-600">
                   {clinic.generalnfo}
                 </p>
 
