@@ -5,7 +5,6 @@ const express = require('express');
 const app = express();
 
 
-
 const jwtSecret = process.env.JWT_SECRET
 
 exports.CheckUserAndCreateToken = async (req, res) => {
@@ -88,7 +87,7 @@ exports.VerifyUser = async (req, res) => {
             if (err) {
                 return res.status(401).json({message: 'Authentication failed: Invalid token'});
             }
-            const { username } = decodedToken
+            const {username} = decodedToken
 
             const userReady = await User.findOne({where: {username}, attributes: {exclude: ['password']},})
             res.json(userReady);

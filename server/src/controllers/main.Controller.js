@@ -1,8 +1,10 @@
-const {Doctor, Clinic, Address, Speciality, Rating} = require("../../db/models");
+const {Doctor, Clinic, Address, Speciality, Rating, Slot, Shedule} = require("../../db/models");
 const {Op} = require("sequelize");
 const express = require('express');
+const jwt = require("jsonwebtoken");
 const app = express();
 
+const jwtSecret = process.env.JWT_SECRET
 
 exports.GetAllClinicAndDoctors = async (req, res) => { //* ПО ИНПУТУ получаем все клиники и докторов с подробной инфой и рейтингами
 
@@ -477,7 +479,7 @@ exports.GetAllClinicAndDoctorsQuery = async (req, res) => { //* получаем
         }
 
 
-        res.json({readyClinicList, readyDoctorList, doctors})
+        res.json({readyClinicList, readyDoctorList})
 
 
     } catch
@@ -506,3 +508,67 @@ exports.GetAllAddresses = async (req, res) => {
         console.error(e);
     }
 }
+
+exports.GetInfoAboutSlot = async (req, res) => {
+    const {sheduleId} = req.params
+    try {
+        const slot = await Shedule.findOne({
+            where: {id: sheduleId},
+            include: [{model: Slot}, {
+                model: Doctor,
+                include: [{model: Speciality}, {model: Clinic, include: [{model: Address}]}]
+            }]
+        })
+        const readySlot = [slot].map(slot => {
+            return {
+                date: slot.date,
+                time: slot.Slot.timeGap,
+                id: slot.id,
+                status: slot.statusAppointment,
+                doctorName: `${slot.Doctor.firstName} ${slot.Doctor.lastName}`,
+                speciality: slot.Doctor.Speciality.name,
+                clinicName: slot.Doctor.Clinic.name,
+                address: `${slot.Doctor.Clinic.Address.streetName}, ${slot.Doctor.Clinic.Address.cityName}, ${slot.Doctor.Clinic.Address.countryName}`
+            }
+        })
+        if (slot.id) {
+            return res.json({readySlot})
+        }
+        if (!slot.id) {
+            return res.status(409).json({message: "No data found!"});
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message: 'Server error'});
+    }
+}
+
+
+exports.NewEntry = async (req, res) => {
+    const {sheduleId, statusAppointment} = req.body
+    const userId = res.locals.user.id
+
+    try {
+
+        const [nmbOfUpdatedShedule, [updatedShedule]] = await Shedule.update({statusAppointment, userId}, {
+            where: {
+                id: Number(sheduleId),
+            },
+            returning: true,
+            plain: true,
+        })
+        if (nmbOfUpdatedShedule === 0) {
+            return res.status(404).json({ message: 'Error while updating shedule' });
+        }
+
+        res.status(200).json({ user: updatedShedule })
+
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message: 'Server error'});
+    }
+
+}
+
+

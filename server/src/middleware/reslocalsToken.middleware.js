@@ -13,7 +13,7 @@ function tokenToLocals(req, res, next) {
                 next();
             });
 
-            console.log('\n\x1b[33m', 'req.user :', res.locals.user);
+            console.log('\n\x1b[33m', 'res.locals.user :', res.locals.user);
         }
     if (!req.headers['authorization']) {
         next()
