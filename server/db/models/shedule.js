@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    date: DataTypes.TIMESTAMP,
+    date: DataTypes.DATE,
     slotId: DataTypes.INTEGER,
     doctorId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER,
