@@ -11,7 +11,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 
 const navigationUserTrue = [
-  { name: 'Клиенты', href: '/clients', current: false },
+  { name: 'Клиники', href: '/clients', current: false },
   { name: 'Врачи', href: '/doctors', current: false },
   { name: 'Календарь', href: '/calendar', current: false },
 ]
@@ -76,7 +76,7 @@ export function NavBar() {
 
   const nav = (event: any) => {
     event.preventDefault();
-    console.log('>>>>>>>>>>>>>>>>>>>>>')
+    // console.log('>>>>>>>>>>>>>>>>>>>>>')
     navigate('/');
   }
 
@@ -93,7 +93,7 @@ export function NavBar() {
                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                       {/* Mobile menu button*/}
                       <Disclosure.Button
-                        className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        className="bg-gray-600 inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                         <span className="sr-only">Open main menu</span>
                         {open ? (
                           <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
@@ -183,7 +183,7 @@ export function NavBar() {
                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                       {/* Mobile menu button*/}
                       <Disclosure.Button
-                        className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        className="bg-gray-600 inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                         <span className="sr-only">Open main menu</span>
                         {open ? (
                           <XMarkIcon className="block h-6 w-6" aria-hidden="true" />

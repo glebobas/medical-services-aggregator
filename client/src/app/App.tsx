@@ -6,12 +6,14 @@ import { Layout } from "./Layout";
 import ClinicalCard from '../pages/ClinicalCard/ClinicalCard';
 import ErrorPage from '../pages/ErrorPage/ErrorPage';
 
-import { MainPage } from "../pages/MainPage/MainPage";
-import { AuthProvider } from '../context';
-import { useSelector } from "react-redux";
-import { store } from './../redux'
-import { IGeneralState, IUser, Types } from "../redux/types/types";
-import { ProfileEditing } from '../components/ProfileEditing';
+
+import {MainPage} from "../pages/MainPage/MainPage";
+import {AuthProvider} from '../context';
+import {useDispatch, useSelector} from "react-redux";
+import {store} from './../redux'
+import {IGeneralState, IUser, Types} from "../redux/types/types";
+import {ProfileEditing} from '../components/ProfileEditing';
+import {ListPage} from "../pages/ListPage";
 
 function App() {
 
@@ -19,7 +21,9 @@ function App() {
     fetch('/main/alldataquery')
       .then(response => response.json())
       .then(data => [...data.readyClinicList, ...data.readyDoctorList])
-      .then(data => dispatch({ type: Types.ADD_CLINICS_AND_DOCTORS_SUCCESS, payload: data }))
+
+
+      .then(data => dispatch({type: Types.ADD_CLINICS_AND_DOCTORS_SUCCESS, payload: data}))
       .catch(error => {
         console.error(error);
       })
@@ -53,6 +57,7 @@ function App() {
       </Route>
     </Routes>
       }
+
     </AuthProvider>
   );
 }
