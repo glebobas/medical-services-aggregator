@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import Rating from "../Rating/Rating";
 
 
-export function ClinicsAndDoctorsTable({data}) {
+export function ClinicsTable({data}) {
 
   const handleClick = () => {
     console.log('click')
@@ -20,7 +20,7 @@ export function ClinicsAndDoctorsTable({data}) {
                     scope="col"
                     className="py-3 pl-4 pr-3 text-left text-sm font-semibold text-gray-900"
                   >
-                    Наименование
+                    Клиника
                   </th>
                   <th
                     scope="col"

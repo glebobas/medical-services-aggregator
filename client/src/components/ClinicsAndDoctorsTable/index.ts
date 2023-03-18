@@ -1,1 +1,0 @@
-export {ClinicsAndDoctorsTable} from './ClinicsAndDoctorsTable'
