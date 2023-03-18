@@ -4,27 +4,36 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
 
+    const userClinicPairs = [];
 
-    return queryInterface.bulkInsert('UserClinics', [
-      {
-        userId: 1,
-        clinicId: 2,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        userId: 1,
-        clinicId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        userId: 2,
-        clinicId: 3,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ], {});
+
+    for (let i = 1; i <= 10; i++) {
+      for (let j = 1; j <= 10; j++) {
+        if (i !== j) {
+          userClinicPairs.push({ userId: i, clinicId: j });
+        }
+      }
+    }
+
+    for (let i = userClinicPairs.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [userClinicPairs[i], userClinicPairs[j]] = [userClinicPairs[j], userClinicPairs[i]];
+    }
+
+    for (const pair of userClinicPairs.slice(0, 20)) {
+      const userId = pair.userId;
+      const clinicId = pair.clinicId;
+      const createdAt = new Date();
+      const updatedAt = new Date();
+
+      // insert into the UserClinic table using your ORM or database driver
+      // e.g. using sequelize:
+      queryInterface.bulkInsert('UserClinics', [{ userId, clinicId, createdAt, updatedAt }], {});
+
+    }
+
+
+
   },
 
   async down (queryInterface, Sequelize) {
@@ -33,6 +42,5 @@ module.exports = {
 
   }
 };
-
 
 

@@ -39,8 +39,8 @@ export const loginReducer = (state: IGeneralState = initialState, action: IUserA
                 ...state,
                 user: null,
             };
-        case Types.CLEAR_STORE_ACTION:
-            return initialState;
+        // case Types.CLEAR_STORE_ACTION:
+        //     return initialState;
         default:
             return state;
     }

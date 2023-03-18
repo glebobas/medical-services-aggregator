@@ -5,15 +5,20 @@ const {Op} = require("sequelize");
 exports.DoctorsFromSearch = async (req, res) => {
     try {
         const {adultPatients, childrenPatients, specialityName, countryName, cityName, streetName} = req.body
+
+        if (!((adultPatients || childrenPatients) || specialityName || countryName || cityName || streetName)) {
+            return res.json({message: 'You should fill more then 1 field!'})
+        }
+
         let whereClause = {};
 
-        if (adultPatients && !childrenPatients) {
-            whereClause = {adultPatients: true, childrenPatients: false};
+        if (adultPatients === 'true' && childrenPatients === 'false') {
+            whereClause = {adultPatients: true};
         }
-        if (!adultPatients && childrenPatients) {
-            whereClause = {childrenPatients: true, adultPatients: false};
+        if (adultPatients === 'false' && childrenPatients === 'true') {
+            whereClause = {childrenPatients: true};
         }
-        if (adultPatients && childrenPatients) {
+        if (adultPatients === 'true' && childrenPatients === 'true') {
             whereClause = {
                 [Op.and]: [
                     {adultPatients: true},
@@ -21,22 +26,51 @@ exports.DoctorsFromSearch = async (req, res) => {
                 ]
             };
         }
+
+
+        const specialityWhereClause = specialityName
+            ? { name: specialityName }
+            : {};
+
+        const addressWhereClause = countryName || cityName || streetName
+            ? {
+                countryName: countryName || undefined,
+                cityName: cityName || undefined,
+                streetName: streetName || undefined,
+            }
+            : {};
+
         const doctors = await Doctor.findAll({
             where: whereClause,
             include: [
                 {
                     model: Clinic,
                     include: [
-                        {model: Address, where: {countryName, cityName, streetName}}
-                    ]
+                        { model: Address, where: addressWhereClause },
+                    ],
                 },
-                {
-                    model: Speciality, where: {name: specialityName}
-                },
+                { model: Speciality, where: specialityWhereClause },
             ],
             raw: true,
-            nest: true
+            nest: true,
         });
+
+        // const doctors = await Doctor.findAll({
+        //     where: whereClause,
+        //     include: [
+        //         {
+        //             model: Clinic,
+        //             include: [
+        //                 {model: Address, where: {countryName, cityName, streetName}}
+        //             ]
+        //         },
+        //         {
+        //             model: Speciality, where: {name: specialityName}
+        //         },
+        //     ],
+        //     raw: true,
+        //     nest: true
+        // });
 
         const doctorRating = await Rating.findAll({attributes: ['doctorRating', 'doctorId']})
 
