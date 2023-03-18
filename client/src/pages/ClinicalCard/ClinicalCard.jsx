@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import {useDispatch, useSelector} from 'react-redux';
 import styles from "./clinical.css";
 import SelectMenus from "../../components/SelectMenus/SelectMenus";
-import DoctorsTable from "../../components/DoctorsTable/DoctorsTable";
+import {DoctorsTable} from "../../components/DoctorsTable";
 import YandexMap from "../../components/Map/Map";
 import Rating from "../../components/Rating/Rating";
 import { TypesClinic } from "../../redux/types/typesClinic";
