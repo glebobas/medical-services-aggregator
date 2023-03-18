@@ -8,9 +8,6 @@ import {MainImage} from '../../components/MainImage/MainImage'
 export function MainPage() {
   return (
     <div className="flex flex-col w-full h-[780px]" >
-      <div className="flex flex-row">
-        <CommonInput />
-      </div>
       <div className="flex flex-row h-3/5 mt-8 bg-[url('https://source.unsplash.com/random/?hospitals')]">
         <div className="main-col-left flex flex-col w-2/5 px-8 pt-4 bg-white">
           <SelectSpecialization />

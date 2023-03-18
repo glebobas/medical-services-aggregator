@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import {useDispatch, useSelector} from 'react-redux';
 import styles from "./clinical.css";
 import SelectMenus from "../../components/SelectMenus/SelectMenus";
-import DoctorsTable from "../../components/DoctorsTable/DoctorsTable";
+import {DoctorsTable} from "../../components/DoctorsTable";
 import YandexMap from "../../components/Map/Map";
 import Rating from "../../components/Rating/Rating";
 import { TypesClinic } from "../../redux/types/typesClinic";
@@ -21,9 +21,9 @@ export default function ClinicalCard() {
       });
      response.json().then((r) => (setClinic(r)))
     })();
-   
+
   }, []);
- 
+
 if (clinic.infoClinic.id) {
   const clinicData = {
       clinicInfo: {
@@ -40,12 +40,12 @@ if (clinic.infoClinic.id) {
   },
   }
   dispatch({type: TypesClinic.GET_CLINIC, payload: clinicData})
-}  
+}
 
   return (
     <>
-      <div className="bg-white">
-        <div className="pt-6">
+      <div className="bg-white border">
+        <div className="pt-6 border">
           {/* <!-- Image gallery --> */}
           <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8 clinical">
             <div className="aspect-w-4 aspect-h-5 sm:overflow-hidden sm:rounded-lg lg:aspect-w-3 lg:aspect-h-4">
@@ -108,7 +108,7 @@ if (clinic.infoClinic.id) {
             <DoctorsTable />
           </div>
         </div>
-        <div className="ymaps">
+        <div className="ymaps w-full">
           <div className="ymap">
             <YandexMap />
           </div>
