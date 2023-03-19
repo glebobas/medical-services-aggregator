@@ -193,6 +193,7 @@ exports.DoctorsFromSearch = async (req, res) => {
 exports.ExactDoctor = async (req, res) => {
     try {
         const {doctorId} = req.params;
+
         const doctor = await Doctor.findOne({where: {id: doctorId}, include: [
                 {
                     model: Clinic,
@@ -205,7 +206,10 @@ exports.ExactDoctor = async (req, res) => {
                 },
             ],})
 
+
         const responseRating = await Rating.findAll({where: {doctorId}})
+
+
 
 
         const doctorRating = responseRating.reduce((acc, val) => {
@@ -214,6 +218,8 @@ exports.ExactDoctor = async (req, res) => {
         }, 0)
         const averageDocRating = (doctorRating / responseRating.length).toLocaleString('en-US', {maximumFractionDigits: 1})
         let readyDoc;
+        let readyUserOwnShedule;
+
         if (res?.locals?.user?.id) {
 
             const ratingToUser = await Rating.findAll({where: {userId: res.locals.user.id}})
@@ -245,16 +251,33 @@ exports.ExactDoctor = async (req, res) => {
                     avatar: el.avatar
                 }
             })
+
+            const shedulesAdUser = await Shedule.findAll({
+                where: {userId: res.locals.user.id, doctorId},
+                include: [{model: Slot}]
+            })
+
+            readyUserOwnShedule = shedulesAdUser.map((record) => {
+                return {
+                    date: record.date,
+                    time: record.Slot.timeGap,
+                    status: record.statusAppointment,
+                    userId: record.userId,
+                    sheduleId: record.id
+                }
+            })
+
         }
         if (!res?.locals?.user?.id) {
             readyDoc = [doctor].map((el) => {
                 return {
                     id: el.id,
-                    firstName: el.firstName,
-                    lastName: el.lastName,
+                    name: el.firstName + ' ' + el.lastName,
                     email: el.email,
                     phone: el.phone,
                     specialityId: el.specialityId,
+                    speciality: el.Speciality.name,
+                    clinic: el.Clinic.name,
                     clinicId: el.clinicId,
                     generalTiming: el.generalTiming,
                     adultPatients: el.adultPatients,
@@ -265,13 +288,7 @@ exports.ExactDoctor = async (req, res) => {
                 }
             })
         }
-        console.log("-> res.locals.user.id", res.locals.user.id);
-        console.log("-> doctorId", doctorId);
-        const shedulesAdUser = await Shedule.findAll({
-            where: {userId: res.locals.user.id, doctorId: Number(doctorId)},
-            include: [{model: Slot}]
-        })
-        console.log("-> shedulesAdUser", shedulesAdUser);
+
 
         const shedulesDoctor = await Shedule.findAll({
             where: {
@@ -283,15 +300,7 @@ exports.ExactDoctor = async (req, res) => {
             include: [{ model: Slot }],
         })
 
-        const readyUserOwnShedule = shedulesAdUser.map((record) => {
-            return {
-                date: record.date,
-                time: record.Slot.timeGap,
-                status: record.statusAppointment,
-                userId: record.userId,
-                sheduleId: record.id
-            }
-        })
+
 
         const doctorShedule = shedulesDoctor.map((record) => {
             return {
@@ -303,9 +312,13 @@ exports.ExactDoctor = async (req, res) => {
             }
         })
 
-        if (doctor.id) {
+        if (doctor.id && !readyUserOwnShedule.length) {
+            res.json({readyDoc, doctorShedule})
+        }
+        if (doctor.id && readyUserOwnShedule.length) {
             res.json({readyDoc, readyUserOwnShedule, doctorShedule})
-        } else res.json({message: "Couldn't find doctor"})
+        }
+        else res.json({message: "Couldn't find doctor"})
     } catch (e) {
         console.error(e)
     }
