@@ -36,9 +36,6 @@ export function Register(): JSX.Element {
 
   // const [errorAuth, setErrorAuth] = useState('');
 
-
-
-
   const {
     showModalRegister,
     setShowModalRegister,
@@ -99,6 +96,7 @@ export function Register(): JSX.Element {
           setShowModalMiniText('Registration successful!')
           setShowModalMini(true)
         }
+
         if (data?.message !== 'Registration successful!') {
           // setShowModalRegister(false)
           setShowModalMiniText(data?.message)

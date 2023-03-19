@@ -11,7 +11,7 @@ exports.CheckUserAndCreateToken = async (req, res) => {
     try {
         const {username, password} = req.body;
         const user = await User.findOne({where: {username}})
-        if (!user.username) {
+        if (!user?.username) {
             return res.status(401).json({message: 'Authentication failed: Invalid username or password'});
         }
         const passwordMatch = await bcrypt.compare(password, user.password);
@@ -66,7 +66,7 @@ exports.CreateUser = async (req, res) => {
         }
 
         const regexName = /^[a-zA-Z]+(\s+[a-zA-Z]+)*$/;
-        if (!regexName.test(firstName) && regexName.test(lastName)) {
+        if (!regexName.test(firstName) || !regexName.test(lastName)) {
             return res.status(409).json({message: "String consists only of words."});
         }
 
