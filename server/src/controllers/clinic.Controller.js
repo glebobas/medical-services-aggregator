@@ -6,7 +6,119 @@ exports.ExactClinic = async (req, res) => {
     try {
         const {clinicId} = req.params;
         const clinic = await Clinic.findOne({where: {id: clinicId}, include: [{model: Address}]})
-        const doctors = await Doctor.findAll({where: {clinicId}})
+        // const doctors = await Doctor.findAll({where: {clinicId}})
+        const doctors = await Doctor.findAll({
+            where: {clinicId},
+            include: [
+                {
+                    model: Clinic,
+                    include: [
+                        {model: Address}
+                    ]
+                },
+                {
+                    model: Speciality,
+                },
+            ],
+            raw: true,
+            nest: true
+        });
+
+        const doctorRating = await Rating.findAll({attributes: ['doctorRating', 'doctorId']})
+
+        const doctorRatings = {};
+        doctorRating.forEach(rating => {
+
+            if (doctorRatings[rating.doctorId]) {
+                doctorRatings[rating.doctorId].total += rating.doctorRating;
+                doctorRatings[rating.doctorId].count += 1;
+            } else {
+                doctorRatings[rating.doctorId] = {
+                    total: rating.doctorRating,
+                    count: 1
+                };
+            }
+        });
+
+        const doctorRatingAverages = {};
+
+        for (const [id, rating] of Object.entries(doctorRatings)) {
+            doctorRatingAverages[id] = (rating.total / rating.count).toLocaleString('en-US', {maximumFractionDigits: 1});
+        }
+
+        const arrDoc = Object.entries(doctorRatingAverages)
+
+        let readyDoctorList;
+
+        if (res?.locals?.user?.id) {
+
+            readyDoctorList = doctors.map(
+                doctor => {
+                    const fullname = `${doctor.firstName} ${doctor.lastName}`
+                    const fulladdress = `${doctor.Clinic.Address.countryName}, ${doctor.Clinic.Address.cityName}, ${doctor.Clinic.Address.streetName}`
+                    let docRate;
+                    arrDoc.forEach(el => {
+                        if (Number(el[0]) === doctor.id) {
+                            docRate = el[1]
+                        }
+                    })
+                    let ownRatingUserDoc;
+                    ratingToUser?.forEach(element => {
+                        if (element.userId === res.locals.user.id && doctor.id === element.doctorId) {
+                            ownRatingUserDoc = element.doctorRating
+                        }
+                    })
+                    return {
+                        doctorId: doctor.id,
+                        name: fullname,
+                        phone: doctor.phone,
+                        address: fulladdress,
+                        speciality: doctor.Speciality.name,
+                        clinic: doctor.Clinic.name,
+                        email: doctor.email,
+                        generalTiming: doctor.generalTiming,
+                        adultPatients: doctor.adultPatients,
+                        childrenPatients: doctor.childrenPatients,
+                        generalInfo: doctor.generalInfo,
+                        doctorRating: docRate,
+                        alreadyScoredPoints: ownRatingUserDoc,
+                        avatar: doctor.avatar,
+                    }
+                }
+            )
+        }
+
+        if (!res?.locals?.user?.id) {
+
+            readyDoctorList = doctors.map(
+                doctor => {
+                    const fullname = `${doctor.firstName} ${doctor.lastName}`
+                    const fulladdress = `${doctor.Clinic.Address.countryName}, ${doctor.Clinic.Address.cityName}, ${doctor.Clinic.Address.streetName}`
+                    let docRate;
+                    arrDoc.forEach(el => {
+                        if (Number(el[0]) === doctor.id) {
+                            docRate = el[1]
+                        }
+                    })
+                    return {
+                        doctorId: doctor.id,
+                        name: fullname,
+                        phone: doctor.phone,
+                        address: fulladdress,
+                        speciality: doctor.Speciality.name,
+                        clinic: doctor.Clinic.name,
+                        email: doctor.email,
+                        generalTiming: doctor.generalTiming,
+                        adultPatients: doctor.adultPatients,
+                        childrenPatients: doctor.childrenPatients,
+                        generalInfo: doctor.generalInfo,
+                        doctorRating: docRate,
+
+                        avatar: doctor.avatar,
+                    }
+                }
+            )
+        }
 
         const responseRating = await Rating.findAll({where: {clinicId}})
 
@@ -56,7 +168,7 @@ exports.ExactClinic = async (req, res) => {
             })
         }
         if (clinic.id) {
-            res.json({readyClinic, doctors})
+            res.json({readyClinic, readyDoctorList})
         } else res.json({message: "Couldn't find clinic"})
     } catch (e) {
         console.error(e)
