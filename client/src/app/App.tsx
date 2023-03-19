@@ -60,7 +60,7 @@ function App() {
             <Route path='/profileEditing' element={<ProfileEditing/>}/>
             <Route path='/clinic/:id' element={<ClinicalCard />}/>
             <Route path='/error' element={<ErrorPage/>}/>
-            <Route path='*' element={<ErrorPage/>}/>
+            {/*<Route path='*' element={<ErrorPage/>}/>*/}
           </Route>
         </Routes>
       }

@@ -312,11 +312,16 @@ exports.ExactDoctor = async (req, res) => {
             }
         })
 
+        console.log("-> readyDoc", readyDoc[0]);
+
+
         if (doctor.id && !readyUserOwnShedule.length) {
-            res.json({readyDoc, doctorShedule})
+            let readyDocOne = readyDoc[0]
+            res.json({readyDocOne, doctorShedule})
         }
         if (doctor.id && readyUserOwnShedule.length) {
-            res.json({readyDoc, readyUserOwnShedule, doctorShedule})
+            let readyDocOne = readyDoc[0]
+            res.json({readyDocOne, readyUserOwnShedule, doctorShedule})
         }
         if (!doctor.id) res.json({message: "Couldn't find doctor"})
     } catch (e) {
