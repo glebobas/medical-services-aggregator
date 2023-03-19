@@ -53,6 +53,7 @@ export function CommonInput({setData}) {
       // console.log("-> getClinicsAndDoctors", getClinicsAndDoctors);
       setData(results)
       navigate("/listpage")
+      setSearchTerm('')
     } catch (error) {
       console.error(error)
     }

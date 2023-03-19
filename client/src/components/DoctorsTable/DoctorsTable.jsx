@@ -20,7 +20,7 @@ export function DoctorsTable({data}) {
   // })()
 
   const handleClick = () => {
-    console.log('click')
+    console.log('click doctor table')
   }
 
   return (

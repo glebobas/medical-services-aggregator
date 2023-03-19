@@ -72,6 +72,7 @@ export function NavBar() {
   const logOut = () => {
     dispatch({ type: Types.LOGOUT });
     localStorage.clear();
+    navigate('/')
   }
 
   const nav = (event: any) => {

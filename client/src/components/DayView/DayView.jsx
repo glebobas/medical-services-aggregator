@@ -11,13 +11,47 @@ const minutes = ['00', '30'];
 
 export function DayView() {
   const [selectedDate, setSelectedDate] = useState(dayjs());
+  const [selectedMounth, setSelectedMounth] = useState();
   const [selectedHour, setSelectedHour] = useState(hours[0]);
   const [selectedMinute, setSelectedMinute] = useState(minutes[0]);
 
+  // Функция склонение даты
+  function getMonthName(month, caseNum) {
+    const months = [
+      ['Январь', 'Января'],
+      ['Февраль', 'Февраля'],
+      ['Март', 'Марта'],
+      ['Апрель', 'Апреля'],
+      ['Май', 'Мая'],
+      ['Июнь', 'Июня'],
+      ['Июль', 'Июля'],
+      ['Август', 'Августа'],
+      ['Сентябрь', 'Сентября'],
+      ['Октябрь', 'Октября'],
+      ['Ноябрь', 'Ноября'],
+      ['Декабрь', 'Декабря'],
+    ];
+
+    if (caseNum === 1) {
+      return months[month][0]; // именительный падеж
+    } else {
+      const lastDigit = month % 10;
+      const secondToLastDigit = Math.floor(month / 10) % 10;
+      const isEnding1 = secondToLastDigit !== 1 && lastDigit === 1;
+      const isEnding2to4 = secondToLastDigit !== 1 && lastDigit >= 2 && lastDigit <= 4;
+      const suffix = isEnding1 ? 'я' : isEnding2to4 ? 'я' : 'ев';
+      return months[month][1].replace('ь', suffix); // другие падежи
+    }
+  }
+
   // обработчик выбора даты
   function handleDateChange(event) {
-    setSelectedDate(dayjs(event.target.value));
+    const newData = dayjs(event.target.value)
+    setSelectedDate(newData);
+    const Mounth = getMonthName(selectedDate.month(), 2)
+    setSelectedMounth(Mounth)
   }
+
 
   // обработчик выбора часов
   function handleHourChange(hour) {
@@ -29,8 +63,9 @@ export function DayView() {
     setSelectedMinute(minute);
   }
 
-  function handleDateChange() {
-    console.log({selectedDate, selectedHour, selectedMinute})
+  function handleEventBron() {
+    // Оттлавливаем собитие по кнопке забронировать
+    console.log(`Ваше время записи: ${selectedDate.date()} ${selectedMounth} ${selectedDate.year()} в ${selectedHour.slice(0,2)}:${selectedMinute}`)
   }
 
   return (
@@ -39,7 +74,10 @@ export function DayView() {
         <h4>Расписание</h4>
         {/* отображение выбранной даты и времени */}
         <div className="flex justify-center">
-          Вы выбрали запись на: {selectedDate.format('DD MMMM YYYY')}, в {selectedHour}
+          Вы выбрали запись на:
+
+          <div className="ml-2 font-semibold">
+            {selectedDate.date()} {selectedMounth} {selectedDate.year()} в {selectedHour}</div>
         </div>
       </div>
       {/* блок выбора даты */}
@@ -54,9 +92,8 @@ export function DayView() {
         {/* блок выбора часов */}
         <div className="w-2/3 flex flex-row flex-wrap my-2 gap-2 mx-auto">
           {hours.map((hour) => (
-            <>
+            <React.Fragment key={hour}>
               <button
-                key={hour}
                 className={selectedHour === hour ? 'p-2 border bg-rose-200 hover:bg-rose-500 rounded' : 'rounded p-2' +
                   ' border' +
                   ' bg-emerald-200 hover:bg-green-500'}
@@ -64,7 +101,7 @@ export function DayView() {
               >
                 {hour}
               </button>
-            </>
+            </React.Fragment>
           ))}
         </div>
         {/*/!* блок выбора минут *!/*/}
@@ -83,7 +120,7 @@ export function DayView() {
         {/*</div>*/}
 
       {/* кнопка бронирования записи */}
-      <button className="border py-2 px-5 w-1/2 mx-auto text-sm tracking-wide rounded-lg my-4 bg-green-600 text-white hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300" onClick={handleDateChange}>ЗАБРОНИРОВАТЬ</button>
+      <button className="border py-2 px-5 w-1/2 mx-auto text-sm tracking-wide rounded-lg my-4 bg-green-600 text-white hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300" onClick={handleEventBron}>ЗАБРОНИРОВАТЬ</button>
       </div>
 
     </div>
