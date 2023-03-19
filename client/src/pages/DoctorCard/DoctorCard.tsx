@@ -1,10 +1,10 @@
 import React from 'react';
-import {DayView} from "../DayView/DayView";
+import {DayView} from "../../components/DayView/DayView";
 
 
 export const DoctorCard = () => {
   return (
-    <div className="doctor__cad flex flex-col w-1/2 mx-auto border rounded py-4 px-6 mt-4 shadow">
+    <div className="doctor__cad flex flex-col w-full mx-auto border rounded py-4 px-6 mt-4 shadow">
       <div className="doctor__card-row-1 flex flex-row justify-between">
         <div className="row-1__column-left flex flex-col justify-between">
           <div className="doctor__card-title text-xl font-semibold">Иванов Иван Иванович</div>
@@ -23,7 +23,7 @@ export const DoctorCard = () => {
 
         <div className="doctor__card-row-2-doctor-params text-sm text-gray-500 mt-4">О враче: <span className="font-semibold">выполняет все виды помощи по специальности “Терапия”. Имеет соответствующие сертификаты </span></div>
       </div>
-     <DayView />
+      <DayView />
     </div>
   );
 };
