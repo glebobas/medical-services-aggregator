@@ -1,8 +1,21 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {DayView} from "../../components/DayView/DayView";
+import {useLocation, useParams} from "react-router-dom";
 
 
 export const DoctorCard = () => {
+  const [doctor, setDoctor] = useState('')
+  const location = useLocation()
+  const {id} = location.state
+  console.log("-> doctorId", id);
+
+  useEffect(() => {
+    fetch(`/main/doctor/${id}`)
+      .then(response => response.json())
+      .then(response => console.log(response))
+      .catch(err => console.error(err))
+  }, [])
+
   return (
     <div className="doctor__cad flex flex-col w-full mx-auto border rounded py-4 px-6 mt-4 shadow">
       <div className="doctor__card-row-1 flex flex-row justify-between">

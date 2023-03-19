@@ -59,7 +59,7 @@ export default function ClinicalCard() {
           <div
             className="flex flex-col aspect-w-4 aspect-h-5 sm:overflow-hidden sm:rounded-lg lg:aspect-w-3 lg:aspect-h-4">
             <img
-              src="https://avatars.mds.yandex.net/get-altay/2767250/2a0000017497e0475cfffa14776f1aca2b34/XXL_height"
+              src="https://source.unsplash.com/random/?clinic"
               alt="Model wearing plain white basic tee."
               className="h-full w-full object-cover object-center"
             />
@@ -104,6 +104,8 @@ export default function ClinicalCard() {
             </div>
           </div>
         </div>
+
+        <DoctorsTable data={clinic.readyDoctorList}/>
 
         <div className="ymaps w-full mt-4">
           <div className="ymap">
