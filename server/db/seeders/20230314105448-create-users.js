@@ -1,6 +1,7 @@
 'use strict';
 
 const hoaxer = require('hoaxer');
+const bcrypt = require("bcryptjs");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -8,11 +9,12 @@ module.exports = {
 
     const users = []
     for (let i = 0; i < 10; i++) {
+      const saltRounds = 10;
+      const passwordHash = await bcrypt.hash('123', saltRounds);
       const username = hoaxer.internet.userName();
       const firstName = hoaxer.name.firstName();
       const lastName = hoaxer.name.lastName();
       const email = hoaxer.internet.email();
-      const password = hoaxer.internet.password();
       const telephone = hoaxer.phone.phoneNumberFormat();
       const role = 'user';
       const createdAt = new Date();
@@ -23,7 +25,7 @@ module.exports = {
         firstName,
         lastName,
         email,
-        password,
+        password: passwordHash,
         telephone,
         role,
         createdAt,

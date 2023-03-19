@@ -2,7 +2,7 @@ import { Fragment, useContext, useEffect, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Login } from "../Modal/Login/login";
-import { AuthContext } from "../../context";
+import {AuthContext, AuthContextType} from "../../context";
 import { Register } from '../Modal/Register/Register'
 import { MiniModal } from "../Modal/Confirm/MiniModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -54,16 +54,18 @@ export function NavBar() {
 
 
 
-  // Состояние модального окна передается в модальное окно
+  //* Состояние модального окна передается в модальное окно
 
-  const { setShowModalLogin } = useContext(AuthContext)
-  const { setShowModalRegister } = useContext(AuthContext)
+
+  const {errorAuth, setErrorAuth, setShowModalRegister, setShowModalLogin} = useContext<AuthContextType>(AuthContext)
 
   const handleClick = (event: any) => {
     if (event.target.id === 'loginButton') {
+      setErrorAuth('')
       setShowModalLogin(true)
     }
     if (event.target.id === 'registerButton') {
+      setErrorAuth('')
       setShowModalRegister(true)
     }
 
@@ -322,6 +324,8 @@ export function NavBar() {
         }
       </nav>
       <Register />
-      <Login /><MiniModal /></>
+      <Login />
+      <MiniModal />
+    </>
   );
 }

@@ -26,8 +26,8 @@ router.get('/doctor/:doctorId', tokenToLocals, ExactDoctor); //* получае�
 
 router.get("/clinic/:clinicId", tokenToLocals, ExactClinic); //* получаем клинику после выбора из поисковой выдачи
 
-router.get('/slot/:sheduleId', tokenToLocals, GetInfoAboutSlot) //* инфа о слоте расписания
+router.get('/slot/:sheduleId', authenticate, GetInfoAboutSlot) //* инфа о слоте расписания
 
-router.patch('/shedule/visit', tokenToLocals, NewEntry); //* обновляем в расписании состояние с null на pending или cancelled
+router.patch('/shedule/visit', authenticate, NewEntry); //* обновляем в расписании состояние с null на pending или cancelled
 
 module.exports = router;

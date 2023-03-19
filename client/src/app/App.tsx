@@ -32,7 +32,7 @@ function App() {
   }, [])
 
   const user = useSelector(state => state.login?.user?.id);
-  console.log(!!user);
+
 
   return (
     <AuthProvider>
