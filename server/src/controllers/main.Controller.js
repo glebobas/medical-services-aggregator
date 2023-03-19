@@ -546,11 +546,13 @@ exports.GetInfoAboutSlot = async (req, res) => {
 
 exports.NewEntry = async (req, res) => {
     const {sheduleId, statusAppointment} = req.body
+
     const userId = res.locals.user.id
+
 
     try {
 
-        const [nmbOfUpdatedShedule, [updatedShedule]] = await Shedule.update({statusAppointment, userId}, {
+        const [nmbOfUpdatedShedule, updatedShedule] = await Shedule.update({statusAppointment, userId}, {
             where: {
                 id: Number(sheduleId),
             },
