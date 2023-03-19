@@ -218,7 +218,7 @@ exports.ExactDoctor = async (req, res) => {
         }, 0)
         const averageDocRating = (doctorRating / responseRating.length).toLocaleString('en-US', {maximumFractionDigits: 1})
         let readyDoc;
-        let readyUserOwnShedule;
+        let readyUserOwnShedule = [];
 
         if (res?.locals?.user?.id) {
 
@@ -318,7 +318,7 @@ exports.ExactDoctor = async (req, res) => {
         if (doctor.id && readyUserOwnShedule.length) {
             res.json({readyDoc, readyUserOwnShedule, doctorShedule})
         }
-        else res.json({message: "Couldn't find doctor"})
+        if (!doctor.id) res.json({message: "Couldn't find doctor"})
     } catch (e) {
         console.error(e)
     }

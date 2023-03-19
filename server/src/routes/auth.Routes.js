@@ -1,8 +1,14 @@
 const express = require('express');
-const {CheckUserAndCreateToken, CreateUser, VerifyUser} = require("../controllers/auth.Controller");
+const {CheckUserAndCreateToken, CreateUser, VerifyUser, generateGoogleURL} = require("../controllers/auth.Controller");
 const router = express.Router();
 
 const jwtSecret = process.env.JWT_SECRET;
+
+router.get('/google', generateGoogleURL)
+
+// router.get('google/callback', googleCallback)
+
+
 
 router.post('/login', CheckUserAndCreateToken);
 
