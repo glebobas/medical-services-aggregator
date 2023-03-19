@@ -16,6 +16,7 @@ import {ProfileEditing} from '../components/ProfileEditing';
 import {ListPage} from "../pages/ListPage";
 import {DoctorCard} from "../pages/DoctorCard";
 import {DayView} from "../components/DayView/DayView";
+import GoogleAuth from "../components/Modal/Google/Google";
 
 function App() {
 
@@ -45,6 +46,7 @@ function App() {
             <Route index element={<MainPage/>}/>
             <Route path='/listpage' element={<ListPage/>}/>
             <Route path='/error' element={<ErrorPage/>}/>
+
             <Route path='*' element={<ErrorPage/>}/>
           </Route>
         </Routes>
@@ -60,7 +62,7 @@ function App() {
             <Route path='/profileEditing' element={<ProfileEditing/>}/>
             <Route path='/clinic/:id' element={<ClinicalCard />}/>
             <Route path='/error' element={<ErrorPage/>}/>
-            {/*<Route path='*' element={<ErrorPage/>}/>*/}
+            <Route path='*' element={<ErrorPage/>}/>
           </Route>
         </Routes>
       }
