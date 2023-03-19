@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { Clinic, Rating, Address, Doctor } = require("../../db/models");
+const {
+  Clinic,
+  Rating,
+  Address,
+  Doctor,
+  Speciality,
+} = require("../../db/models");
 
 router.post("/", async (req, res) => {
   const { id } = req.body;
@@ -16,21 +22,31 @@ router.post("/", async (req, res) => {
   });
   const getDocs = await Doctor.findAll({
     where: { clinicId: id },
-    include: { model: Rating, nested: true },
+    include: { model: Rating, left: true, nested: true },
     raw: true,
   });
   const infoClinic = {
     ...getClinic,
     ...getRating,
-
   };
-  // console.log(infoClinic);
-  res.json({infoClinic, getDocs});
+  const allAcc = await Doctor.findAll({where: {clinicId:id},
+     include: { all: true }, raw:true });
+  //    const clinicData = {
+  //     clinicInfo: {
+  //     id: clinic.infoClinic.id,
+  //     name: clinic.infoClinic.name,
+  //     phone: clinic.infoClinic.phone,
+  //     email: clinic.infoClinic.email,
+  //     generalInfo: clinic.infoClinic.generalInfo
+  //   },
+  //   addressClinic: {
+  //     country:clinic.infoClinic["Address.countryName"],
+  //     city: clinic.infoClinic['Address.cityName'],
+  //     street: clinic.infoClinic['Address.streetName'],
+  // },
+  // }
+  // console.log(allAcc);
+  res.json({ infoClinic, allAcc });
 });
-// router.post("/doc", async (req,res) => {
-//   const {id} = req.body
-//   const getDocs = await Doctor.findAll({where: {clinicId: id}, include: { model: Rating , nested: true } ,raw:true})
-//   res.json(getDocs)
-// })
 
 module.exports = router;

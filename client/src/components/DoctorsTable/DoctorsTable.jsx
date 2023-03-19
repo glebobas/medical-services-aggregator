@@ -52,7 +52,7 @@ const people = [
   },
 ];
 
-function DoctorsTable() {
+function DoctorsTable(props) {
   const [doc, setDoc] = useState(people)
   // console.log("table render")
   // const data = useSelector((state) => state.getClinic.clinicInfo.id)
@@ -67,6 +67,7 @@ function DoctorsTable() {
   // setDoc(resDoc)
   // // console.log(resDoc)
   // })()
+  const {docs} = props
   return (
     <div className="tableDoctors">
       <div className="px-4 sm:px-6 lg:px-8 ">
@@ -115,7 +116,7 @@ function DoctorsTable() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
-                    {people.map((person) => (
+                    {docs.map((person) => (
                       <tr key={person.email}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                           <div className="flex items-center">
@@ -146,7 +147,7 @@ function DoctorsTable() {
                           {/* <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
                             Active
                           </span> */}
-                          <Rating rat={4.7}/>
+                          <Rating rat={person['Ratings.doctorRating']}/>
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {person.role}

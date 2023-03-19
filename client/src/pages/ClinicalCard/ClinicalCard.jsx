@@ -9,7 +9,7 @@ import { TypesClinic } from "../../redux/types/typesClinic";
 
 export default function ClinicalCard() {
   const [clinic, setClinic] = useState({getDocs:[], infoClinic: {}});
-  const [doc, setDoc] = useState()
+  // const [doc, setDoc] = useState()
   const dispatch = useDispatch()
   const data = { id: 1 };
   useEffect(() => {
@@ -41,7 +41,7 @@ if (clinic.infoClinic.id) {
   }
   dispatch({type: TypesClinic.GET_CLINIC, payload: clinicData})
 }  
-
+console.log(clinic)
   return (
     <>
       <div className="bg-white">
@@ -58,7 +58,7 @@ if (clinic.infoClinic.id) {
             <div className="mx-auto max-w-2xl px-4 pt-10 pb-16 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pt-16 lg:pb-24">
               <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
                 <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-                  {clinic.name}
+                  {clinic.infoClinic.name}
                 </h1>
               </div>
 
@@ -66,14 +66,14 @@ if (clinic.infoClinic.id) {
               <div className="mt-4 lg:row-span-3 lg:mt-0">
                 <h2 className="sr-only">Product information</h2>
                 <p className="text-3xs tracking-tight text-gray-600">
-                  {clinic.generalnfo}
+                  {clinic.infoClinic.generalnfo}
                 </p>
 
                 {/* <!-- Reviews --> */}
                 <div className="mt-6">
                   <h3 className="sr-only">Reviews</h3>
                   <div className="flex items-center">
-                    <Rating rat={clinic.clinicRating} />
+                    <Rating rat={clinic.infoClinic.clinicRating} />
                     <a
                       href="#"
                       className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
@@ -92,10 +92,10 @@ if (clinic.infoClinic.id) {
           <div className="space-y-6 infoClinic">
             <p className="text-base text-gray-900">
               Address: {clinic["Address.streetName"]},{" "}
-              {clinic["Address.cityName"]}, {clinic["Address.countryName"]}
+              {clinic.infoClinic["Address.cityName"]}, {clinic.infoClinic["Address.countryName"]}
             </p>
-            <p className="text-base text-gray-900">Phone: {clinic.phone}</p>
-            <p className="text-base text-gray-900">Email: {clinic.email}</p>
+            <p className="text-base text-gray-900">Phone: {clinic.infoClinic.phone}</p>
+            <p className="text-base text-gray-900">Email: {clinic.infoClinic.email}</p>
           </div>
 
           {/* <!-- Product info --> */}
@@ -105,7 +105,7 @@ if (clinic.infoClinic.id) {
             <SelectMenus />
           </div>
           <div>
-            <DoctorsTable />
+            <DoctorsTable docs={clinic.getDocs}/>
           </div>
         </div>
         <div className="ymaps">
