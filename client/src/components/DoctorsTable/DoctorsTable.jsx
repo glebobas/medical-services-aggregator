@@ -2,8 +2,13 @@ import React, {useState} from "react";
 import {useSelector} from "react-redux"
 import SelectMenus from "../SelectMenus/SelectMenus";
 import Rating from "../Rating/Rating";
+import {useNavigate} from "react-router-dom";
 
 export function DoctorsTable({data}) {
+  console.log("-> data", data);
+
+  const navigate = useNavigate()
+
   // const [doc, setDoc] = useState(people)
   // console.log("table render")
   // const data = useSelector((state) => state.getClinic.clinicInfo.id)
@@ -19,8 +24,9 @@ export function DoctorsTable({data}) {
   // // console.log(resDoc)
   // })()
 
-  const handleClick = () => {
-    console.log('click doctor table')
+  const handleClick = (id) => {
+    console.log('click doctor table->', id)
+    navigate(`/doctor/${id}`, {state : {id}})
   }
 
   return (
@@ -67,7 +73,7 @@ export function DoctorsTable({data}) {
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                 {data.map(field => (
-                  <tr key={field.email} className="hover:bg-gray-100" onClick={handleClick}>
+                  <tr key={field.email} className="hover:bg-gray-100 cursor-pointer" onClick={()=>(handleClick(field.doctorId))}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                       <div className="flex items-center">
                         <div className="h-10 w-10 flex-shrink-0">
