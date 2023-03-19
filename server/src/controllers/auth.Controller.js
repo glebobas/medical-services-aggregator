@@ -4,8 +4,9 @@ const {User} = require('../../db/models')
 const express = require('express');
 const app = express();
 const { google } = require('googleapis');
-
+const { OAuth2Client } = require('google-auth-library');
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+console.log("-> GOOGLE_CLIENT_ID", GOOGLE_CLIENT_ID);
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 
@@ -140,6 +141,7 @@ exports.VerifyUser = async (req, res) => {
 };
 
 exports.generateGoogleURL = (req, res) => {
+    console.log("-> 123++++++++++++", );
     const url = oauth2Client.generateAuthUrl({
         access_type: 'offline',
         scope: ['profile', 'email']
@@ -148,23 +150,60 @@ exports.generateGoogleURL = (req, res) => {
 }
 
 exports.googleCallback = async (req, res) => {
-    const { code } = req.query;
-    const { tokens } = await oauth2Client.getToken(code);
-    oauth2Client.setCredentials(tokens);
+    const { token } = req.query;
+    console.log("-> req.query", req.query);
+    console.log("-> code", token);
 
-    const userInfo = await google.people({ version: 'v1', auth: oauth2Client }).people.get({
-        resourceName: 'people/me',
-        personFields: 'names,emailAddresses'
+    const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
+    //oauth2Client
+
+    //https://www.googleapis.com/oauth2/v3/userinfo?access_token=ya29.a0AVvZVsrcdXZJ6PCDJ3jMmRZEUmwlvdx4cHS6v-baYwmeFIM4CtQQYU4TkkjqwjsUF5EO5zuihHKn7lWD9o9bJGMSBmMOMi4fTP6kVpsGdvSf-QL-3n24gwyUl7Ri1pld6x_lAT852-8Q8ADsn91wcEZMv6xU3gaCgYKAdsSARMSFQGbdwaIwu5ECrvycic-IfyR-fql9w0165
+
+
+    async function verify(client_id, jwtToken) {
+        const client = new OAuth2Client(client_id);
+        // Call the verifyIdToken to
+        // varify and decode it
+        const ticket = await client.verifyIdToken({
+            idToken: jwtToken,
+            audience: client_id,
+        });
+        const payload = ticket.getPayload();
+        // This is a JSON object that contains
+        // all the user info
+        return payload;
+    }
+    // const verificationResponse = await verify(GOOGLE_CLIENT_ID, token);
+
+    jwt.verify(token, GOOGLE_CLIENT_SECRET, (err, decodedToken) => {
+        if (err) {
+            console.error('Error decoding token:', err);
+        } else {
+            console.log('Decoded token:', decodedToken);
+        }
     });
 
-    const user = {
-        id: userInfo.data.resourceName,
-        name: userInfo.data.names[0].displayName,
-        email: userInfo.data.emailAddresses[0].value
-    };
 
-    const token = jwt.sign(user, jwtSecret, { expiresIn: '1h' });
-    res.cookie('jwt', token, { httpOnly: true });
-    res.redirect('/');
+   //
+   // console.log("-> await oauth2Client.getToken(code)", await oauth2Client.getToken(code));
+   //  const { tokens } = await oauth2Client.getToken(code);
+   //  console.log("-> tokens", tokens);
+   //  oauth2Client.setCredentials(tokens);
+   //
+   //
+   //  const userInfo = await google.people({ version: 'v1', auth: oauth2Client }).people.get({
+   //      resourceName: 'people/me',
+   //      personFields: 'names,emailAddresses'
+   //  });
+   //
+   //  const user = {
+   //      id: userInfo.data.resourceName,
+   //      name: userInfo.data.names[0].displayName,
+   //      email: userInfo.data.emailAddresses[0].value
+   //  };
+   //
+   //  const token = jwt.sign(user, jwtSecret, { expiresIn: '1h' });
+   //  res.cookie('jwt', token, { httpOnly: true });
+   //  res.redirect('/');
 }
 

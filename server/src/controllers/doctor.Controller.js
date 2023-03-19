@@ -312,7 +312,6 @@ exports.ExactDoctor = async (req, res) => {
             }
         })
 
-        console.log("-> readyDoc", readyDoc[0]);
 
 
         if (doctor.id && !readyUserOwnShedule.length) {
