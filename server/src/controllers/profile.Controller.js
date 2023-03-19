@@ -185,24 +185,24 @@ exports.GetProfileArrays = async (req, res) => {
 }
 
 exports.EditRecordsInProfile = async (req, res) => {
+
     try {
         const { scheduleId, clinicRating, doctorRating, newdate, newslotid, userId, clinicId, doctorId } = req.body;
 
         //* апдейтим рейтинг определенного врача или клиники, за которые когда-то голосовал юзер
 
         if (clinicRating && clinicId) {
-            const [numUpdated, [updatedRating]] = await Rating.update(
+            const [numUpdated, updatedRating] = await Rating.update(
                 {
                     clinicRating
-
                 },
                 {
-                    where: { userId, clinicId },
+                    where: { userId: res?.locals?.user?.id, clinicId },
                     returning: true
                 }
             );
             if (numUpdated === 0) {
-                return res.status(404).json({message: 'Update error'});
+                return res.status(404).json({message: 'Clinic\'s rating not found'});
             }
             res.status(200).json({ rating: updatedRating });
         }
@@ -219,7 +219,7 @@ exports.EditRecordsInProfile = async (req, res) => {
                 }
             );
             if (numUpdated === 0) {
-                return res.status(404).json({ message: 'Rating not found' });
+                return res.status(404).json({ message: 'Doctor\'s rating not found' });
             }
             res.status(200).json({ rating: updatedRating });
         }

@@ -20,7 +20,7 @@ router.get('/specialities', GetAllSpecialities) //* получаем все сп
 
 router.get('/addresses', GetAllAddresses) //* получаем все адреса
 
-router.post("/somedoctors", DoctorsFromSearch); //* получаем список врачей после ввода необходимых данных в поиске
+router.post("/somedoctors", tokenToLocals, DoctorsFromSearch); //* получаем список врачей после ввода необходимых данных в поиске
 
 router.get('/doctor/:doctorId', tokenToLocals, ExactDoctor); //* получаем доктора после выбора из поисковой выдачи, его расписание, включая приёмы юзера, если последний залогинен
 

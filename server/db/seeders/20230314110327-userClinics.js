@@ -26,9 +26,8 @@ module.exports = {
       const createdAt = new Date();
       const updatedAt = new Date();
 
-      // insert into the UserClinic table using your ORM or database driver
-      // e.g. using sequelize:
-      queryInterface.bulkInsert('UserClinics', [{ userId, clinicId, createdAt, updatedAt }], {});
+
+     await queryInterface.bulkInsert('UserClinics', [{ userId, clinicId, createdAt, updatedAt }], {});
 
     }
 
