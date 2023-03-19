@@ -13,6 +13,10 @@ export enum Types {
     UPDATE_USERDATA_SUCCESS = 'UPDATE_USERDATA_SUCCESS',
     UPDATE_USERDATA_FAILURE = 'UPDATE_USERDATA_FAILURE',
 
+    ADD_CLINICS_AND_DOCTORS_REQUEST = 'ADD_CLINICS_AND_DOCTORS_REQUEST',
+    ADD_CLINICS_AND_DOCTORS_SUCCESS = 'ADD_CLINICS_AND_DOCTORS_SUCCESS',
+    ADD_CLINICS_AND_DOCTORS_FAILURE = 'ADD_CLINICS_AND_DOCTORS_FAILURE',
+
 }
 export interface IUser {
     id: number;
@@ -104,4 +108,29 @@ export interface IUserAction {
         role: string;
         error: string;
     };
+}
+
+// Интерфейс из общего массива для строки поиска
+export interface IAllClinicAndDoctor {
+    doctorId?: number;
+    clinicId?: number;
+    avatar?: string,
+    alreadyScoredPoints?: number
+    name: string,
+    phone?: string,
+    address: string,
+    email: string,
+    clinic?: string,
+    speciality?: string,
+    generalInfo: string,
+    doctorRating?: number,
+    clinicRating?: number,
+    generalTiming?: string,
+    adultPatients?: string,
+    childrenPatients?: string,
+}
+
+export interface IAllClinicAndDoctorAction {
+    type: Types.ADD_CLINICS_AND_DOCTORS_SUCCESS
+    payload: IAllClinicAndDoctor[]
 }

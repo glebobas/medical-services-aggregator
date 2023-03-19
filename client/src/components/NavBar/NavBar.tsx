@@ -2,18 +2,18 @@ import { Fragment, useContext, useEffect, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Login } from "../Modal/Login/login";
-import { AuthContext } from "../../context";
+import {AuthContext, AuthContextType} from "../../context";
 import { Register } from '../Modal/Register/Register'
 import { MiniModal } from "../Modal/Confirm/MiniModal";
 import { useDispatch, useSelector } from "react-redux";
 import { Types } from "../../redux/types/types";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const navigationUserTrue = [
-  { name: 'Клиенты', href: '#', current: false },
-  { name: 'Врачи', href: '#', current: false },
-  { name: 'Календарь', href: '#', current: false },
+  { name: 'Клиники', href: '/clients', current: false },
+  { name: 'Врачи', href: '/doctors', current: false },
+  { name: 'Календарь', href: '/calendar', current: false },
 ]
 
 const navigationUserFalse = [
@@ -31,6 +31,7 @@ export function NavBar() {
   const token = localStorage.getItem("jwtToken")
   const dispatch = useDispatch()
   const [user, setUser] = useState<string | undefined>('')
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Обновляет информацию в хранилище после того как юзер залогинился
@@ -53,16 +54,18 @@ export function NavBar() {
 
 
 
-  // Состояние модального окна передается в модальное окно
+  //* Состояние модального окна передается в модальное окно
 
-  const { setShowModalLogin } = useContext(AuthContext)
-  const { setShowModalRegister } = useContext(AuthContext)
+
+  const {errorAuth, setErrorAuth, setShowModalRegister, setShowModalLogin} = useContext<AuthContextType>(AuthContext)
 
   const handleClick = (event: any) => {
     if (event.target.id === 'loginButton') {
+      setErrorAuth('')
       setShowModalLogin(true)
     }
     if (event.target.id === 'registerButton') {
+      setErrorAuth('')
       setShowModalRegister(true)
     }
 
@@ -71,6 +74,13 @@ export function NavBar() {
   const logOut = () => {
     dispatch({ type: Types.LOGOUT });
     localStorage.clear();
+    navigate('/')
+  }
+
+  const nav = (event: any) => {
+    event.preventDefault();
+    // console.log('>>>>>>>>>>>>>>>>>>>>>')
+    navigate('/');
   }
 
   return (
@@ -86,7 +96,7 @@ export function NavBar() {
                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                       {/* Mobile menu button*/}
                       <Disclosure.Button
-                        className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        className="bg-gray-600 inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                         <span className="sr-only">Open main menu</span>
                         {open ? (
                           <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
@@ -96,16 +106,20 @@ export function NavBar() {
                       </Disclosure.Button>
                     </div>
                     <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-between">
-                      <div className="flex flex-shrink-0 items-center">
+                      <div
+                        className="flex flex-shrink-0 items-center"
+                      >
                         <img
                           className="block h-8 w-auto lg:hidden"
                           src="https://cdn-icons-png.flaticon.com/64/1052/1052784.png"
                           alt="Your Company"
+                          onClick={nav}
                         />
                         <img
                           className="hidden h-8 w-auto lg:block"
                           src="https://cdn-icons-png.flaticon.com/64/1052/1052784.png"
                           alt="Your Company"
+                          onClick={nav}
                         />
                       </div>
                       <div className="hidden sm:ml-6 sm:block">
@@ -172,7 +186,7 @@ export function NavBar() {
                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                       {/* Mobile menu button*/}
                       <Disclosure.Button
-                        className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        className="bg-gray-600 inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                         <span className="sr-only">Open main menu</span>
                         {open ? (
                           <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
@@ -187,11 +201,14 @@ export function NavBar() {
                           className="block h-8 w-auto lg:hidden"
                           src="https://cdn-icons-png.flaticon.com/64/1052/1052784.png"
                           alt="Medical"
+                          onClick={nav}
+
                         />
                         <img
                           className="hidden h-8 w-auto lg:block"
                           src="https://cdn-icons-png.flaticon.com/64/1052/1052784.png"
                           alt="Medical"
+                          onClick={nav}
                         />
                       </div>
                       <div className="hidden sm:ml-6 sm:block">
@@ -258,7 +275,7 @@ export function NavBar() {
                             </Menu.Item>
                             <Menu.Item>
                               {({ active }) => (
-                                <Link to ='/profileEditing'>
+                                <Link to='/profileEditing'>
                                   <div
                                     className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 cursor-pointer')}
                                   >
@@ -308,6 +325,8 @@ export function NavBar() {
         }
       </nav>
       <Register />
-      <Login /><MiniModal /></>
+      <Login />
+      <MiniModal />
+    </>
   );
 }

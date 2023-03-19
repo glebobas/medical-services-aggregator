@@ -1,55 +1,45 @@
 'use strict';
-
+const hoaxer = require('hoaxer');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('Ratings', [
-      {
-        userId: 1,
-        clinicRating: 4,
-        doctorRating: 5,
-        doctorId: 1,
-        clinicId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        userId: 2,
-        clinicRating: 3,
-        doctorRating: 5,
-        doctorId: 1,
-        clinicId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        userId: 1,
-        clinicRating: 4,
-        doctorRating: 4,
-        doctorId: 1,
-        clinicId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        userId: 2,
-        clinicRating: 3,
-        doctorRating: 2,
-        doctorId: 2,
-        clinicId: 2,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        userId: 3,
-        clinicRating: 5,
-        doctorRating: 4,
-        doctorId: 3,
-        clinicId: 3,
-        createdAt: new Date(),
-        updatedAt: new Date()
+    const doctorIds = Array.from({ length: 20 }, (_, i) => i + 1);
+    const clinicIds = Array.from({ length: 10 }, (_, i) => i + 1);
+
+    const ratings = [];
+
+    for (let i = 1; i <= 100; i++) {
+      const userId = hoaxer.datatype.number({ min: 1, max: 10 });
+      let doctorRating = hoaxer.datatype.number({ min: 1, max: 5 });
+      let clinicRating = hoaxer.datatype.number({ min: 1, max: 5 });
+      let doctorId = hoaxer.random.arrayElement(doctorIds.concat([null]));
+      let clinicId = hoaxer.random.arrayElement(clinicIds.concat([null]));
+
+
+      if (doctorId === null) {
+        doctorRating = null;
       }
-    ]);
+
+
+      if (clinicId === null) {
+        clinicRating = null;
+      }
+
+      const existingRating = ratings.find(rating => rating.userId === userId && rating.doctorId === doctorId && rating.clinicId === clinicId);
+
+      if (!existingRating) {
+        ratings.push({
+          userId,
+          doctorRating,
+          clinicRating,
+          doctorId,
+          clinicId,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        });
+      }
+    }
+    await queryInterface.bulkInsert('Ratings', ratings, {});
 
   },
 
@@ -59,3 +49,8 @@ module.exports = {
 
   }
 };
+
+
+
+
+

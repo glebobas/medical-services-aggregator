@@ -1,28 +1,32 @@
 'use strict';
+const { unique } = require('shorthash');
+const hoaxer = require('hoaxer');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('UserDoctors', [
-      {
-        userId: 1,
-        doctorId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        userId: 2,
-        doctorId: 2,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        userId: 3,
-        doctorId: 3,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ], {});
+
+
+    const userIds = Array.from({ length: 10 }, (_, i) => i + 1);
+    const doctorIds = Array.from({ length: 20 }, (_, i) => i + 1);
+
+    const userDoctorPairs = [];
+
+    while (userDoctorPairs.length < 30) {
+      const userId = hoaxer.random.arrayElement(userIds);
+      const doctorId = hoaxer.random.arrayElement(doctorIds);
+      const pairId = unique(`${userId}-${doctorId}`);
+
+      if (!userDoctorPairs.some(pair => pair.id === pairId)) {
+        userDoctorPairs.push({
+          userId,
+          doctorId,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+      }
+    }
+    await queryInterface.bulkInsert('UserDoctors', userDoctorPairs, {});
 
 
   },
@@ -31,3 +35,5 @@ module.exports = {
     await queryInterface.bulkDelete('UserDoctors', null, {});
   }
 };
+
+

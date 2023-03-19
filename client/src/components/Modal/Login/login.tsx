@@ -15,6 +15,7 @@ interface LoginData {
 interface ResponseData {
   token: string;
   userReady: IUser;
+  message: string;
 }
 
 export function Login(): JSX.Element {
@@ -26,10 +27,12 @@ export function Login(): JSX.Element {
         showModalLogin,
         setShowModalLogin,
         setShowModalMiniText,
-        setShowModalMini
+        setShowModalMini, errorAuth, setErrorAuth
     } = useContext<AuthContextType>(AuthContext)
 
-  const [error, setError] = useState('');
+  // const [errorAuth, setErrorAuth] = useState('');
+
+
 
     const signIn = (event: React.ChangeEvent<HTMLInputElement>) => {
         setUserData({...userData, [event.target.name]: event.target.value});
@@ -37,6 +40,7 @@ export function Login(): JSX.Element {
 
     const login = (data: LoginData): ThunkAction<Promise<ResponseData>, IGeneralState, unknown, UserActionTypes> => async (dispatch: Dispatch<UserActionTypes>): Promise<ResponseData> => {
         const {username, password} = data;
+
 
     try {
 
@@ -51,19 +55,19 @@ export function Login(): JSX.Element {
                 body: JSON.stringify({username, password}),
             });
             const responseData = await response.json();
-            const {token, userReady} = responseData
+            const {token, userReady, message} = responseData
 
             if (responseData.token) {
                 localStorage.setItem('jwtToken', responseData.token);
                 dispatch({type: Types.LOGIN_SUCCESS, payload: userReady});
             } else {
-                setError('Invalid username or password')
+                setErrorAuth('Invalid username or password')
                 dispatch({type: Types.LOGIN_FAILURE, payload: {error: 'Invalid username or password'}});
             }
-            return {token, userReady};
+            return {token, userReady, message};
         } catch (error: any) {
-            const errorMessage = error.response?.responseData?.error || 'An error occurred';
-            setError(errorMessage);
+            const errorMessage = error.response?.responseData?.error || 'An errorAuth occurred';
+            setErrorAuth(errorMessage);
             dispatch({type: Types.LOGIN_FAILURE, payload: {error: errorMessage}});
             return Promise.reject(errorMessage);
         }
@@ -74,17 +78,24 @@ export function Login(): JSX.Element {
         if (userData.username && userData.password) {
             try {
                 const response = await dispatch(login(userData))
-                if (response.userReady.username) {
+                if (response?.userReady?.username) {
                     setShowModalLogin(false)
-                    setShowModalMiniText('Login successful!')
+                    setShowModalMiniText(response?.message)
                     setShowModalMini(true)
-                } else setError("Couldn't enter on site")
+                }
+
+                if (!response?.userReady?.username) {
+                    // setShowModalLogin(false)
+                    setShowModalMiniText(response?.message)
+                    setShowModalMini(true)
+                    setErrorAuth(response?.message)
+                }
 
 
             } catch (e) {
                 console.log(e)
             }
-        } else setError('Fill all fields')
+        } else setErrorAuth('Fill all fields')
 
   }
 
@@ -131,6 +142,7 @@ export function Login(): JSX.Element {
                                                     name='username'
                                                     id="grid_password"
                                                     type="text"
+                                                    autoComplete="off"
                                                     placeholder="Please, type your login"
                                                     onChange={signIn}
                                                     required/>
@@ -147,13 +159,13 @@ export function Login(): JSX.Element {
                                                     name='password'
                                                     id="grid-password"
                                                     type="password"
-                                                    placeholder="Please, type your login"
+                                                    placeholder="Please, type your password"
                                                     onChange={signIn}
                                                     required />
-                                                    {error &&
+                                                    {errorAuth &&
                                                 <div className='flex flex-column justify-center align-items-center'>
                                                     <span className="top-0 right-0 py-3 px-4 text-sm text-red-600">
-                                                        {error}
+                                                        {errorAuth}
                                                     </span>
                                                 </div>
                                                     }

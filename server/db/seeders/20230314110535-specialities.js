@@ -19,6 +19,16 @@ module.exports = {
          name: 'Dermatologist',
          createdAt: new Date(),
          updatedAt: new Date()
+       },
+       {
+         name: 'Surgeon',
+         createdAt: new Date(),
+         updatedAt: new Date()
+       },
+       {
+         name: 'Therapist',
+         createdAt: new Date(),
+         updatedAt: new Date()
        }
      ], {});
 

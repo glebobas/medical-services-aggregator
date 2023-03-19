@@ -1,8 +1,10 @@
-const {Doctor, Clinic, Address, Speciality, Rating} = require("../../db/models");
+const {Doctor, Clinic, Address, Speciality, Rating, Slot, Shedule} = require("../../db/models");
 const {Op} = require("sequelize");
 const express = require('express');
+const jwt = require("jsonwebtoken");
 const app = express();
 
+const jwtSecret = process.env.JWT_SECRET
 
 exports.GetAllClinicAndDoctors = async (req, res) => { //* ПО ИНПУТУ получаем все клиники и докторов с подробной инфой и рейтингами
 
@@ -14,14 +16,32 @@ exports.GetAllClinicAndDoctors = async (req, res) => { //* ПО ИНПУТУ п�
             where: {
                 [Op.or]: [
                     {
-                        firstName: {
-                            [Op.iLike]: `%${inputText}%`
-                        }
+                        [Op.and]: [
+                            {
+                                firstName: {
+                                    [Op.iLike]: `%${inputText.split(' ')[0]}%`
+                                }
+                            },
+                            {
+                                lastName: {
+                                    [Op.iLike]: `%${inputText.split(' ')[1]}%`
+                                }
+                            }
+                        ]
                     },
                     {
-                        lastName: {
-                            [Op.iLike]: `%${inputText}%`
-                        }
+                        [Op.or]: [
+                            {
+                                firstName: {
+                                    [Op.iLike]: `%${inputText}%`
+                                }
+                            },
+                            {
+                                lastName: {
+                                    [Op.iLike]: `%${inputText}%`
+                                }
+                            }
+                        ]
                     }
                 ]
             },
@@ -102,54 +122,134 @@ exports.GetAllClinicAndDoctors = async (req, res) => { //* ПО ИНПУТУ п�
         const arrDoc = Object.entries(doctorRatingAverages)
         const arrClinic = Object.entries(clinicRatingAverages)
 
+        let readyClinicList;
+        let readyDoctorList;
 
-        const readyClinicList = clinics.map(clinic => {
-            const fulladdress = `${clinic.Address.streetName}, ${clinic.Address.cityName}, ${clinic.Address.countryName}`;
-            let clinicRate;
-            arrClinic.forEach(el => {
-                if (Number(el[0]) === clinic.id) {
-                    clinicRate = el[1]
-                }
-            })
-            return {
-                clinicId: clinic.id,
-                name: clinic.name,
-                phone: clinic.phone,
-                address: fulladdress,
-                email: clinic.email,
-                generalinfo: clinic.generalnfo,
-                clinicRating: clinicRate,
-                avatar: clinic.avatar
-            }
-        })
+        // console.log("-> res.locals.user.id", res.locals);
 
-        const readyDoctorList = doctors.map(
-            doctor => {
-                const fullname = `${doctor.firstName} ${doctor.lastName}`
-                const fulladdress = `${doctor.Clinic.Address.countryName}, ${doctor.Clinic.Address.cityName}, ${doctor.Clinic.Address.streetName}`
-                let docRate;
-                arrDoc.forEach(el => {
-                    if (Number(el[0]) === doctor.id) {
-                        docRate = el[1]
+        if (res?.locals?.user?.id) {
+
+            const ratingToUser = await Rating.findAll({where: {userId: res.locals.user.id}})
+
+            readyClinicList = clinics.map(clinic => {
+                const fulladdress = `${clinic.Address.streetName}, ${clinic.Address.cityName}, ${clinic.Address.countryName}`;
+                let clinicRate;
+                let ownRatingUser;
+                ratingToUser?.forEach(element => {
+                    if (element.userId === res.locals.user.id && clinic.id === element.clinicId) {
+                        ownRatingUser = element.clinicRating
+                    }
+                })
+                arrClinic?.forEach(el => {
+                    if (Number(el[0]) === clinic.id) {
+                        clinicRate = el[1]
                     }
                 })
                 return {
-                    doctorId: doctor.id,
-                    name: fullname,
-                    phone: doctor.phone,
+                    clinicId: clinic.id,
+                    name: clinic.name,
+                    phone: clinic.phone,
                     address: fulladdress,
-                    speciality: doctor.Speciality.name,
-                    clinic: doctor.Clinic.name,
-                    email: doctor.email,
-                    generalTiming: doctor.generalTiming,
-                    adultPatients: doctor.adultPatients,
-                    childrenPatients: doctor.childrenPatients,
-                    generalInfo: doctor.generalInfo,
-                    doctorRating: docRate,
-                    avatar: doctor.avatar
+                    email: clinic.email,
+                    generalinfo: clinic.generalnfo,
+                    clinicRating: clinicRate,
+                    alreadyScoredPoints: ownRatingUser,
+                    avatar: clinic.avatar
                 }
-            }
-        )
+            })
+
+            readyDoctorList = doctors.map(
+                doctor => {
+                    const fullname = `${doctor.firstName} ${doctor.lastName}`
+                    const fulladdress = `${doctor.Clinic.Address.countryName}, ${doctor.Clinic.Address.cityName}, ${doctor.Clinic.Address.streetName}`
+                    let docRate;
+                    arrDoc.forEach(el => {
+                        if (Number(el[0]) === doctor.id) {
+                            docRate = el[1]
+                        }
+                    })
+                    let ownRatingUserDoc;
+                    ratingToUser?.forEach(element => {
+                        if (element.userId === res.locals.user.id && doctor.id === element.doctorId) {
+                            ownRatingUserDoc = element.doctorRating
+                        }
+                    })
+                    return {
+                        doctorId: doctor.id,
+                        name: fullname,
+                        phone: doctor.phone,
+                        address: fulladdress,
+                        speciality: doctor.Speciality.name,
+                        clinic: doctor.Clinic.name,
+                        email: doctor.email,
+                        generalTiming: doctor.generalTiming,
+                        adultPatients: doctor.adultPatients,
+                        childrenPatients: doctor.childrenPatients,
+                        generalInfo: doctor.generalInfo,
+                        doctorRating: docRate,
+                        alreadyScoredPoints: ownRatingUserDoc,
+                        avatar: doctor.avatar,
+                    }
+                }
+            )
+
+        }
+
+        if (!res?.locals?.user?.id) {
+
+
+            readyClinicList = clinics.map(clinic => {
+                const fulladdress = `${clinic.Address.streetName}, ${clinic.Address.cityName}, ${clinic.Address.countryName}`;
+                let clinicRate;
+
+
+                arrClinic?.forEach(el => {
+                    if (Number(el[0]) === clinic.id) {
+                        clinicRate = el[1]
+                    }
+                })
+                return {
+                    clinicId: clinic.id,
+                    name: clinic.name,
+                    phone: clinic.phone,
+                    address: fulladdress,
+                    email: clinic.email,
+                    generalinfo: clinic.generalnfo,
+                    clinicRating: clinicRate,
+                    avatar: clinic.avatar
+                }
+            })
+
+            readyDoctorList = doctors.map(
+                doctor => {
+                    const fullname = `${doctor.firstName} ${doctor.lastName}`
+                    const fulladdress = `${doctor.Clinic.Address.countryName}, ${doctor.Clinic.Address.cityName}, ${doctor.Clinic.Address.streetName}`
+                    let docRate;
+                    arrDoc.forEach(el => {
+                        if (Number(el[0]) === doctor.id) {
+                            docRate = el[1]
+                        }
+                    })
+
+                    return {
+                        doctorId: doctor.id,
+                        name: fullname,
+                        phone: doctor.phone,
+                        address: fulladdress,
+                        speciality: doctor.Speciality.name,
+                        clinic: doctor.Clinic.name,
+                        email: doctor.email,
+                        generalTiming: doctor.generalTiming,
+                        adultPatients: doctor.adultPatients,
+                        childrenPatients: doctor.childrenPatients,
+                        generalInfo: doctor.generalInfo,
+                        doctorRating: docRate,
+                        avatar: doctor.avatar,
+                    }
+                }
+            )
+
+        }
 
         if (!readyClinicList.length && !readyDoctorList.length) {
             return res.status(409).json({message: "No clinics and doctors were found!"});
@@ -378,10 +478,8 @@ exports.GetAllClinicAndDoctorsQuery = async (req, res) => { //* получаем
             return res.status(409).json({message: "No clinics and doctors were found!"});
         }
 
-        console.log("-> readyClinicList", readyClinicList);
-        console.log("-> readyDoctorList", readyDoctorList);
 
-        res.json({readyClinicList, readyDoctorList, doctors})
+        res.json({readyClinicList, readyDoctorList})
 
 
     } catch
@@ -410,3 +508,69 @@ exports.GetAllAddresses = async (req, res) => {
         console.error(e);
     }
 }
+
+exports.GetInfoAboutSlot = async (req, res) => {
+    const {sheduleId} = req.params
+    try {
+        const slot = await Shedule.findOne({
+            where: {id: sheduleId},
+            include: [{model: Slot}, {
+                model: Doctor,
+                include: [{model: Speciality}, {model: Clinic, include: [{model: Address}]}]
+            }]
+        })
+        const readySlot = [slot].map(slot => {
+            return {
+                date: slot.date,
+                time: slot.Slot.timeGap,
+                id: slot.id,
+                status: slot.statusAppointment,
+                doctorName: `${slot.Doctor.firstName} ${slot.Doctor.lastName}`,
+                speciality: slot.Doctor.Speciality.name,
+                clinicName: slot.Doctor.Clinic.name,
+                address: `${slot.Doctor.Clinic.Address.streetName}, ${slot.Doctor.Clinic.Address.cityName}, ${slot.Doctor.Clinic.Address.countryName}`
+            }
+        })
+        if (slot.id) {
+            return res.json({readySlot})
+        }
+        if (!slot.id) {
+            return res.status(409).json({message: "No data found!"});
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message: 'Server error'});
+    }
+}
+
+
+exports.NewEntry = async (req, res) => {
+    const {sheduleId, statusAppointment} = req.body
+
+    const userId = res.locals.user.id
+
+
+    try {
+
+        const [nmbOfUpdatedShedule, updatedShedule] = await Shedule.update({statusAppointment, userId}, {
+            where: {
+                id: Number(sheduleId),
+            },
+            returning: true,
+            plain: true,
+        })
+        if (nmbOfUpdatedShedule === 0) {
+            return res.status(404).json({ message: 'Error while updating shedule' });
+        }
+
+        res.status(200).json({ user: updatedShedule })
+
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message: 'Server error'});
+    }
+
+}
+
+
