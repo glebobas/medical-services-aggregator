@@ -1,7 +1,8 @@
 import {CurrencyEuroIcon} from '@heroicons/react/24/outline';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Types} from '../../redux/types/types';
+import {AuthContext, AuthContextType} from "../../context";
 
 
 export function ProfileEditing() {
@@ -9,7 +10,7 @@ export function ProfileEditing() {
     const currentData = useSelector(state => state.login.user);
     const loading = useSelector(state => state.loading);
 
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem("jwtToken");
     const [error, setError] = useState('');
 
     const [userData, setUserData] = useState({
@@ -29,6 +30,10 @@ export function ProfileEditing() {
     const getUserData = (event) => {
         setUserData({...userData, [event.target.name]: event.target.value});
     }
+    const {
+        setShowModalMiniText,
+        setShowModalMini
+    } = useContext(AuthContext)
 
     const updateData = async (event) => {
         event.preventDefault();
@@ -53,10 +58,16 @@ export function ProfileEditing() {
 
             if (response.status === 200) {
                 dispatch({type: Types.UPDATE_USERDATA_SUCCESS, payload: responseData.user});
-            } else {
+                setShowModalMiniText(responseData?.message)
+                setShowModalMini(true)
+            }
+            if (response.status !== 200) {
                 dispatch({type: Types.UPDATE_USERDATA_FAILURE, payload: {error: responseData}});
+                setShowModalMiniText(responseData?.message)
+                setShowModalMini(true)
                 setError(responseData.message)
             }
+
         } catch (error) {
             console.error(error);
             const errorMessage = error.response?.responseData?.error || 'An error occurred';
@@ -64,7 +75,6 @@ export function ProfileEditing() {
         }
     }
 
-console.log("-> currentData", currentData);
     return (
         <>
             <div className='flex item-center justify-center'>
@@ -115,7 +125,7 @@ console.log("-> currentData", currentData);
                             type="email"
                             placeholder="Please, type your email"
                             onChange={getUserData}
-                            value={userData.firstName}
+                            value={userData.email}
                         />
                     </div>
                 </div>
@@ -123,7 +133,7 @@ console.log("-> currentData", currentData);
                     <div className="w-full px-3">
                         <label
                             className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                            Изменить номер телефон
+                            Изменить номер телефонa
                         </label>
                         <input
                             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -150,11 +160,12 @@ console.log("-> currentData", currentData);
                         />
                     </div>
                 </div>
+                <div/>
                 <div className="flex flex-wrap -mx-3 mb-6">
                     <div className="w-full px-3">
                         <label
                             className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                            Ваш текущий пароль
+                            Введите ваш текущий пароль для вступления изменений в силу
                         </label>
                         <input
                             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"

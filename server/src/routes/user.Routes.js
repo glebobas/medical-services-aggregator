@@ -12,7 +12,7 @@ router.get('/:userId',  GetProfileArrays)
 
 router.patch('/edit', authenticate, EditRecordsInProfile)
 
-router.patch('/profileEditing', EditProfile)
+router.patch('/profileEditing', authenticate, EditProfile)
 
 router.delete('/delete',  DeleteRecordsFromProfile)
 

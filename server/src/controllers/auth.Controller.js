@@ -40,11 +40,45 @@ exports.CreateUser = async (req, res) => {
 
     try {
         const existingUser = await User.findOne({where: {username}, attributes: {exclude: ['password']},});
+
         if (existingUser) {
             return res.status(409).json({message: 'Username already exists'});
         }
+
         if (!(username && password && firstName && lastName && email && telephone)) {
             return res.status(409).json({message: "Fields couldn't be empty!"});
+        }
+
+        if (!username || !username.match(/^[A-Za-z]\w+$/)) {
+            return res.status(400).send({ message: 'Invalid login format' });
+        }
+
+        if (username.length < 4) {
+            return res
+                .status(400)
+                .send({ message: 'Login must be at least 4 characters long' });
+        }
+
+
+        const regexTel = /^[0-9+-]+$/;
+        if (!regexTel.test(telephone)) {
+            return res.status(409).json({message: "Phone number consists of numbers (123), plus sign (+), and minus sign (-)."});
+        }
+
+        const regexName = /^[a-zA-Z]+(\s+[a-zA-Z]+)*$/;
+        if (!regexName.test(firstName) && regexName.test(lastName)) {
+            return res.status(409).json({message: "String consists only of words."});
+        }
+
+
+        if (!/^[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\.[A-Za-z]{2,}$/.test(email)) {
+            return res.status(400).send({ message: 'Invalid email address' });
+        }
+
+        if (!password || password.length < 3) {
+            return res
+                .status(400)
+                .send({ message: 'Password must be at least 3 characters long' });
         }
 
         const saltRounds = 10;
@@ -68,7 +102,7 @@ exports.CreateUser = async (req, res) => {
         }
         const newUser = await User.create({username, password: passwordHash, firstName, lastName, email, telephone});
         if (newUser.username) {
-            res.json({message: 'User registered successfully'})
+            res.json({message: 'Registration successful!'})
         }
     } catch (err) {
         console.error(err);

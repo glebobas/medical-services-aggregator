@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 export interface AuthContextType {
     showModalLogin: boolean;
@@ -9,6 +9,8 @@ export interface AuthContextType {
     setShowModalMini: React.Dispatch<React.SetStateAction<boolean>>;
     showModalMiniText: string;
     setShowModalMiniText: React.Dispatch<React.SetStateAction<string>>
+    errorAuth: string;
+    setErrorAuth: React.Dispatch<React.SetStateAction<string>>
 }
 
 interface AuthProviderProps {
@@ -27,8 +29,10 @@ export const AuthContext = React.createContext<AuthContextType>({
     },
     showModalMiniText: '',
     setShowModalMiniText: () => {
-
-    }
+    },
+    errorAuth: '',
+    setErrorAuth: () => {
+    },
 });
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
@@ -36,6 +40,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     const [showModalRegister, setShowModalRegister] = React.useState(false);
     const [showModalMini, setShowModalMini] = React.useState(false)
     const [showModalMiniText, setShowModalMiniText] = React.useState('')
+    const [errorAuth, setErrorAuth] = useState('');
 
     return (
         <AuthContext.Provider value={{
@@ -44,9 +49,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
             showModalRegister,
             setShowModalRegister,
             showModalMini,
-            setShowModalMini: setShowModalMini,
+            setShowModalMini,
             showModalMiniText,
-            setShowModalMiniText: setShowModalMiniText
+            setShowModalMiniText,
+            errorAuth, setErrorAuth
         }}>
             {children}
         </AuthContext.Provider>

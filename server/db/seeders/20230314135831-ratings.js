@@ -15,12 +15,12 @@ module.exports = {
       let doctorId = hoaxer.random.arrayElement(doctorIds.concat([null]));
       let clinicId = hoaxer.random.arrayElement(clinicIds.concat([null]));
 
-      // If doctorId is null, doctorRating must also be null
+
       if (doctorId === null) {
         doctorRating = null;
       }
 
-      // If clinicId is null, clinicRating must also be null
+
       if (clinicId === null) {
         clinicRating = null;
       }

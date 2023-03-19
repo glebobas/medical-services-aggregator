@@ -34,14 +34,17 @@ export function Register(): JSX.Element {
 
   // const [open, setOpen] = useState(true)
 
-  const [error, setError] = useState('');
+  // const [errorAuth, setErrorAuth] = useState('');
+
+
 
 
   const {
     showModalRegister,
     setShowModalRegister,
     setShowModalMiniText,
-    setShowModalMini
+    setShowModalMini,
+    errorAuth, setErrorAuth
   } = useContext<AuthContextType>(AuthContext)
 
   const signUp = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,19 +67,19 @@ export function Register(): JSX.Element {
         body: JSON.stringify({username, password, email, firstName, lastName, telephone}),
       });
       const responseData = await response.json();
-      console.log(responseData);
+
       const {message} = responseData
 
-      if (responseData.message === 'User registered successfully') {
+      if (responseData.message === 'Registration successful!') {
         dispatch({type: Types.REGISTER_SUCCESS, payload: {message}});
       } else {
-        setError('Invalid input data')
-        dispatch({type: Types.REGISTER_FAILURE, payload: {error: 'Invalid input data'}});
+        setErrorAuth(message)
+        dispatch({type: Types.REGISTER_FAILURE, payload: {message}});
       }
-      return message
+      return responseData
     } catch (error: any) {
-      const errorMessage = error.response?.responseData?.error || 'An error occurred';
-      setError(errorMessage);
+      const errorMessage = error.response?.responseData?.error || 'An errorAuth occurred';
+      setErrorAuth(errorMessage);
       dispatch({type: Types.REGISTER_FAILURE, payload: {error: errorMessage}});
       return Promise.reject(errorMessage);
     }
@@ -88,10 +91,19 @@ export function Register(): JSX.Element {
     event.preventDefault();
     try {
       if (userData.username && userData.password && userData.email && userData.firstName && userData.lastName && userData.telephone) {
-        await dispatch(register(userData))
-        setShowModalRegister(false)
-        setShowModalMiniText('Registration successful!')
-        setShowModalMini(true)
+        const data = await dispatch(register(userData))
+        // console.log("-> data", data);
+
+        if (data?.message === 'Registration successful!') {
+          setShowModalRegister(false)
+          setShowModalMiniText('Registration successful!')
+          setShowModalMini(true)
+        }
+        if (data?.message !== 'Registration successful!') {
+          // setShowModalRegister(false)
+          setShowModalMiniText(data?.message)
+          setShowModalMini(true)
+        }
       }
     } catch (error) {
       console.log(error)
@@ -140,6 +152,7 @@ export function Register(): JSX.Element {
                           className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                           name='username'
                           type="text"
+                          autoComplete="off"
                           placeholder="Please, type your login"
                           onChange={signUp}
                           required/>
@@ -155,6 +168,7 @@ export function Register(): JSX.Element {
                           className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                           name='firstName'
                           type="text"
+                          autoComplete="off"
                           placeholder="Please, type your first name"
                           onChange={signUp}
                           required/>
@@ -170,6 +184,7 @@ export function Register(): JSX.Element {
                           className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                           name='lastName'
                           type="text"
+                          autoComplete="off"
                           placeholder="Please, type your  Last name"
                           onChange={signUp}
                           required/>
@@ -185,6 +200,7 @@ export function Register(): JSX.Element {
                           className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                           name='email'
                           type="email"
+                          autoComplete="off"
                           placeholder="Please, type your email"
                           // value={value}
                           onChange={signUp}
@@ -218,13 +234,13 @@ export function Register(): JSX.Element {
                           name='password'
                           id="grid-password"
                           type="password"
-                          placeholder="Please, type your login"
+                          placeholder="Please, type your password"
                           onChange={signUp}
                           required/>
-                        {error &&
+                        {errorAuth &&
                           <div className='flex flex-column justify-center align-items-center'>
                             <span className="top-0 right-0 py-3 px-4 text-sm text-red-600">
-                              {error}
+                              {errorAuth}
                             </span>
                           </div>
                         }
