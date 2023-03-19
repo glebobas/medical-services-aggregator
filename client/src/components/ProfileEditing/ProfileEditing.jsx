@@ -1,8 +1,7 @@
-import {CurrencyEuroIcon} from '@heroicons/react/24/outline';
 import React, {useContext, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Types} from '../../redux/types/types';
-import {AuthContext, AuthContextType} from "../../context";
+import {AuthContext} from "../../context";
 
 
 export function ProfileEditing() {

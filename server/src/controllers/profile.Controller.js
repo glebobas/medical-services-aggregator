@@ -291,6 +291,7 @@ exports.EditProfile = async (req, res) => {
         } = req.body;
 
 
+
         if (newPassword && newPassword.length < 3) {
             return res
                 .status(400)
@@ -299,13 +300,15 @@ exports.EditProfile = async (req, res) => {
         if (!/^[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\.[A-Za-z]{2,}$/.test(email) && email) {
             return res.status(400).send({ message: 'Invalid email address' });
         }
+
         const regexName = /^[a-zA-Z]+(\s+[a-zA-Z]+)*$/;
-        if (!regexName.test(firstName) && regexName.test(lastName)) {
-            return res.status(409).json({message: "Name consists only of words."});
+        if (!regexName.test(firstName) || !regexName.test(lastName)) {
+            return res.status(409).json({message: "Name could consist only of words."});
         }
+
         const regexTel = /^[0-9+-]+$/;
         if (!regexTel.test(telephone) && telephone) {
-            return res.status(409).json({message: "Phone number consists of numbers (123), plus sign (+), and minus sign (-)."});
+            return res.status(409).json({message: "Phone number consists of numbers (123), plus sign (+) and minus sign (-)."});
         }
 
         const user = await User.findOne({where: {id}});
@@ -347,5 +350,4 @@ exports.EditProfile = async (req, res) => {
         console.log(error)
         res.status(500).json({message: 'Internal server error'})
     }
-    ;
 };

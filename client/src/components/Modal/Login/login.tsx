@@ -41,6 +41,7 @@ export function Login(): JSX.Element {
     const login = (data: LoginData): ThunkAction<Promise<ResponseData>, IGeneralState, unknown, UserActionTypes> => async (dispatch: Dispatch<UserActionTypes>): Promise<ResponseData> => {
         const {username, password} = data;
 
+
     try {
 
             dispatch({
@@ -77,13 +78,13 @@ export function Login(): JSX.Element {
         if (userData.username && userData.password) {
             try {
                 const response = await dispatch(login(userData))
-                if (response.userReady.username) {
+                if (response?.userReady?.username) {
                     setShowModalLogin(false)
                     setShowModalMiniText(response?.message)
                     setShowModalMini(true)
                 }
 
-                if (!response.userReady.username) {
+                if (!response?.userReady?.username) {
                     // setShowModalLogin(false)
                     setShowModalMiniText(response?.message)
                     setShowModalMini(true)
