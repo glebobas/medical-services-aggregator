@@ -27,12 +27,6 @@ app.use('/clinical', ClinicRoutes)
 app.use('/profile', UserRoutes)
 
 
-// app.get("/", (req, res) => {
-//
-//   res.send(`Hello world!`)
-// })
-
-
 
 app.listen(PORT, () => {
     try {
