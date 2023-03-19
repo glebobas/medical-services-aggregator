@@ -56,8 +56,8 @@ function App() {
             <Route path='/doctors' element={<h1>Страница врачей</h1>}></Route>
             <Route path='/calendar' element={<h1>Календарь</h1>}/>
             <Route path='/listpage' element={<ListPage/>}/>
-            <Route path='/doctor' element={<DoctorCard/>}/>
             <Route path='/profileEditing' element={<ProfileEditing/>}/>
+            <Route path='/doctor/:id' element={<DoctorCard/>}/>
             <Route path='/clinic/:id' element={<ClinicalCard />}/>
             <Route path='/error' element={<ErrorPage/>}/>
             {/*<Route path='*' element={<ErrorPage/>}/>*/}
