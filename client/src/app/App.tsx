@@ -17,6 +17,8 @@ import {ListPage} from "../pages/ListPage";
 
 function App() {
 
+  const dispatch = useDispatch()
+
   useEffect(() => {
     fetch('/main/alldataquery')
       .then(response => response.json())
@@ -29,12 +31,12 @@ function App() {
       })
   }, [])
 
-  const user = useSelector(state => state.login.user.id);
-  console.log(!!user);
+  const user = useSelector(state => state.login?.user?.id);
+
 
   return (
     <AuthProvider>
-      {!user 
+      {!user
       ?
       <Routes>
       <Route path="/" element={<Layout />}>
