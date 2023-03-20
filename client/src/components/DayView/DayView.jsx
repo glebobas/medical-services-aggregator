@@ -1,7 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import {useParams} from "react-router-dom"; // импортируем название месяцев на русском языке
+import {useParams} from "react-router-dom";
+import {ShedulRecModal} from "../Modal/ShedulRecModal";
+import {AuthContext} from "../../context";
 // import '../../index.css'; // стили для компонента
 
 // массив возможных часов
@@ -11,11 +13,14 @@ const hours = [...Array(12).keys()].map((i) => String(i + 9).padStart(2, '0') + 
 const minutes = ['00', '30'];
 
 export function DayView() {
+  const {
+    showModalShedulRec,
+    setShowModalShedulRec,
+  } = useContext(AuthContext)
+
   const [selectedDate, setSelectedDate] = useState(dayjs());
-  console.log("-> selectedDate", selectedDate);
 
   const currentDate = dayjs()
-  console.log("-> currentTime", currentDate);
 
   // const oneMinutesAgo = currentTime.subtract(1, 'minute');
   // console.log("-> oneMinutesAgo", oneMinutesAgo);
@@ -24,8 +29,8 @@ export function DayView() {
   const [selectedHour, setSelectedHour] = useState(hours[0]);
   const [selectedMinute, setSelectedMinute] = useState(minutes[0]);
   const [shedule, setShedule] = useState({})
+  const [sheduleIdOneBlock, setSheduleIdOneBlock] = useState('')
   const {doctorShedule} = shedule
-  console.log("-> shedule -->", doctorShedule);
 
   const token = localStorage.getItem("jwtToken")
   const {id} = useParams()
@@ -78,13 +83,16 @@ export function DayView() {
     setSelectedMinute(minute);
   }
 
-  function handleEventBron() {
-    // Оттлавливаем собитие по кнопке забронировать
-    console.log(`Ваше время записи: ${selectedDate.date()} ${selectedMounth} ${selectedDate.year()} в ${selectedHour.slice(0, 2)}:${selectedMinute}`)
-  }
+  // function handleEventBron() {
+  //   // Оттлавливаем собитие по кнопке забронировать
+  //   console.log(`Ваше время записи: ${selectedDate.date()} ${selectedMounth} ${selectedDate.year()} в ${selectedHour.slice(0, 2)}:${selectedMinute}`)
+  // }
 
-  function handleClickReg(sheduleId) {
-    console.log(sheduleId)
+  // Запрос в БД на запись
+  function handleClickReg(block) {
+    console.log("-> block", block);
+    setSheduleIdOneBlock(block)
+    setShowModalShedulRec(true)
   }
 
   // TODO: Запрос на блоки расписания
@@ -120,13 +128,6 @@ export function DayView() {
     <div className="mt-4 border-y py-4">
       <div className="flex justify-between">
         <h4 className="font-semibold">Расписание</h4>
-        {/* отображение выбранной даты и времени */}
-        {/*<div className="flex justify-center">*/}
-        {/*  Вы выбрали запись на:*/}
-
-        {/*  <div className="ml-2 font-semibold">*/}
-        {/*    {selectedDate.date()} {selectedMounth} {selectedDate.year()} в {selectedHour}</div>*/}
-        {/*</div>*/}
       </div>
       {/* блок выбора даты */}
       <input className="bg-gray-100 w-full rounded border p-2 my-4"
@@ -145,13 +146,13 @@ export function DayView() {
                              className="bg-red-300 px-2.5 py-2 rounded-lg border">{block.time}</button>
             }
             if (block.status === 'vacant') {
-              return <button key={block.sheduleId} className="bg-blue-400 px-2.5 py-2 rounded-lg border" onClick={()=>{handleClickReg(block.sheduleId)}}>{block.time}</button>
+              return <button key={block.sheduleId} className="bg-blue-400 px-2.5 py-2 rounded-lg border" onClick={()=>{handleClickReg(block)}}>{block.time}</button>
             }
             if (block.status === 'done') {
-              return <button key={block.sheduleId} className="bg-gray-400-700 px-2.5 py-2 rounded-lg border">{block.time}</button>
+              return <button key={block.sheduleId} className="bg-gray-200 px-2.5 py-2 rounded-lg border cursor-not-allowed">{block.time}</button>
             }
             if (block.status === 'cancelled') {
-              return <button key={block.sheduleId} className="bg-gray-400-700 px-2.5 py-2 rounded-lg border">{block.time}</button>
+              return <button key={block.sheduleId} className="bg-gray-200 px-2.5 py-2 rounded-lg border cursor-not-allowed">{block.time}</button>
             }
           })}
           {/*{hours.map((hour) => (*/}
@@ -188,7 +189,7 @@ export function DayView() {
         {/*  onClick={handleEventBron}>ЗАБРОНИРОВАТЬ*/}
         {/*</button>*/}
       </div>
-
+      <ShedulRecModal props={{idDoctor: id, sheduleIdOneBlock: sheduleIdOneBlock}}/>
     </div>
   );
 }

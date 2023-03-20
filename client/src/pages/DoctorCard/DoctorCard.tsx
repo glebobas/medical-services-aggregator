@@ -1,13 +1,30 @@
 import React, {useEffect, useState} from 'react';
 import {DayView} from "../../components/DayView/DayView";
 import {useLocation, useParams} from "react-router-dom";
+import {ShedulRecModal} from "../../components/Modal/ShedulRecModal";
+import {initialState} from "../../redux/store";
+import {object} from "yup";
+
+interface IDoctor {
+  id: number,
+  name: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  adultPatients: boolean,
+  avatar: string,
+  averageDocRating: string,
+  childrenPatients: boolean,
+  clinic: boolean,
+  clinicId: number
+}
 
 
 export const DoctorCard = () => {
-  const [doctor, setDoctor] = useState('')
+  const [doctor, setDoctor] = useState('');
+  console.log("-> doctor", doctor);
   const location = useLocation()
   const {id} = location.state
-  console.log("-> doctorId", id);
 
   useEffect(() => {
     fetch(`/main/doctor/${id}`)
@@ -16,7 +33,7 @@ export const DoctorCard = () => {
       .catch(err => console.error(err))
   }, [])
 
-  // TODO: Доделать адрес клиники чтоб брал по id клиники из БД
+
   return (
     <div className="doctor__cad flex flex-col bg-white w-full mx-auto border rounded py-6 px-6 mt-4">
       <div className="doctor__card-row-1 flex flex-row justify-between">
