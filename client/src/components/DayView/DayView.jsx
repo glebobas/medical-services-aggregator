@@ -88,7 +88,14 @@ export function DayView() {
       .catch(error => {
         console.error(error);
       })
-  }, [shedule])
+  }, [selectedDate])
+
+  // Сортируем doctorSchedule по sheduleId
+  doctorShedule?.sort((a, b) => {
+    if (a.sheduleId < b.sheduleId) return -1;
+    if (a.sheduleId > b.sheduleId) return 1;
+    return 0;
+  });
 
   return (
     <div className="mt-4 rounded border p-4 shadow">
@@ -119,6 +126,9 @@ export function DayView() {
             }
             if (block.status === 'vacant') {
               return <button key={index} className="bg-green-700 px-2.5 py-2 rounded-lg border">{block.time}</button>
+            }
+            if (block.status === 'done') {
+              return <button key={index} className="bg-gray-400-700 px-2.5 py-2 rounded-lg border">{block.time}</button>
             }
           })}
           {/*{hours.map((hour) => (*/}
