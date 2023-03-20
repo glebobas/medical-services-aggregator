@@ -578,17 +578,31 @@ exports.GetSlotsToDate = async (req, res) => {
     const {day, month, year, doctorId} = req.query
 
     const dateTime = new Date(year, month, Number(day) + 1);
-
-    const shedulesDoctor = await Shedule.findAll({
-        where: {
-            doctorId,
-            date: dateTime,
-            statusAppointment: {
-                [Op.or]: ['vacant', 'pending'],
+    let shedulesDoctor = []
+    if (!res?.locals?.user?.id) {
+        shedulesDoctor = await Shedule.findAll({
+            where: {
+                doctorId,
+                date: dateTime,
+                statusAppointment: {
+                    [Op.or]: ['vacant', 'pending'],
+                },
             },
-        },
-        include: [{model: Slot}],
-    })
+            include: [{model: Slot}],
+        })
+
+    }
+
+    if (res?.locals?.user?.id) {
+        shedulesDoctor = await Shedule.findAll({
+            where: {
+                doctorId,
+                date: dateTime,
+            },
+            include: [{model: Slot}],
+        })
+
+    }
 
     const doctorShedule = shedulesDoctor.map((record) => {
         return {
