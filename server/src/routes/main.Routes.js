@@ -7,7 +7,7 @@ const {
     GetSlotsToDate
 } = require("../controllers/main.Controller");
 const tokenToLocals = require("../middleware/reslocalsToken.middleware");
-const {DoctorsFromSearch, ExactDoctor} = require("../controllers/doctor.Controller");
+const {DoctorsFromSearch, ExactDoctor, GetAllDoctors} = require("../controllers/doctor.Controller");
 const {ExactClinic} = require("../controllers/clinic.Controller");
 
 
@@ -19,6 +19,8 @@ router.get("/alldataquery", tokenToLocals, GetAllClinicAndDoctorsQuery); //* п�
 
 router.get('/specialities', GetAllSpecialities) //* получаем все специальности
 
+router.get('/doctors', GetAllDoctors) //* получаем всех докторов
+
 router.get('/addresses', GetAllAddresses) //* получаем все адреса
 
 router.post("/somedoctors", tokenToLocals, DoctorsFromSearch); //* получаем список врачей после ввода необходимых данных в поиске
@@ -29,7 +31,7 @@ router.get("/clinic/:clinicId", tokenToLocals, ExactClinic); //* получае�
 
 router.get('/slot/:sheduleId', authenticate, GetInfoAboutSlot) //* инфа о слоте расписания
 
-router.get('/date', GetSlotsToDate) //* инфа о слотах на конкретный день
+router.get('/date', tokenToLocals, GetSlotsToDate) //* инфа о слотах на конкретный день
 
 router.patch('/shedule/visit', authenticate, NewEntry); //* обновляем в расписании состояние с null на pending или cancelled
 
