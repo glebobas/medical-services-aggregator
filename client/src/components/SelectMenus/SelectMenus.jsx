@@ -5,12 +5,13 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import styles from "./select.module.css";
 
 const people = [
-  { id: 6, name: "Профиль" },
-  { id: 1, name: "Терапевт" },
-  { id: 2, name: "Хирург" },
-  { id: 3, name: "Дерматолог" },
-  { id: 4, name: "Отоларинголог" },
-  { id: 5, name: "Практолог" },
+  { id: 7, name: "Select profile" },
+  { id: 6, name: "All doctors" },
+  { id: 1, name: "Dentist" },
+  { id: 2, name: "Cardiologist" },
+  { id: 3, name: "Dermatologist" },
+  { id: 4, name: "Surgeon" },
+  { id: 5, name: "Therapist" },
 ];
 
 function classNames(...classes) {
