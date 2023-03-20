@@ -58,7 +58,7 @@ function App() {
           <Route path="/" element={<Layout/>}>
             <Route index element={<MainPage/>}/>
             <Route path='/clients' element={<h1>Страница пациентов</h1>}/>
-            <Route path='/doctors' element={<h1>Страница врачей</h1>}></Route>
+            <Route path='/doctors' element={<DoctorList />}></Route>
             <Route path='/calendar' element={<h1>Календарь</h1>}/>
             <Route path='/listpage' element={<ListPage/>}/>
             <Route path='/profileEditing' element={<ProfileEditing/>}/>

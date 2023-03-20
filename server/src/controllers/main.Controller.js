@@ -632,7 +632,9 @@ exports.GetSlotsToDate = async (req, res) => {
                     body: JSON.stringify({sheduleId, statusAppointment: 'done'}),
                 })
                 const result = await response.json()
-                if (response.status !== 200) { throw new Error(result.message) }
+                if (response.status !== 200) {
+                    throw new Error(result.message)
+                }
             }
 
             shedulesDoctorRes = await Shedule.findAll({
@@ -682,7 +684,9 @@ exports.GetSlotsToDate = async (req, res) => {
                     body: JSON.stringify({sheduleId, statusAppointment: 'done'}),
                 })
                 const result = await response.json()
-                if (response.status !== 200) { throw new Error(result.message) }
+                if (response.status !== 200) {
+                    throw new Error(result.message)
+                }
             }
             shedulesDoctorRes = await Shedule.findAll({
                 where: {
@@ -726,4 +730,6 @@ exports.GetSlotsToDate = async (req, res) => {
 
 }
 
-
+exports.RandomDocClinic = async (req, res) => {
+    const {countryName, cityName, speciality} = req.params
+}

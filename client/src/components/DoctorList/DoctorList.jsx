@@ -41,14 +41,14 @@ export function DoctorList() {
     // console.log('scrollHeight');
     // console.log('scrollHeight', window.innerHeight);
 
-    }
+    // }
 
   const navigate = useNavigate()
-  const handleClick = (field) => {
-    navigate(`/clinic/${field}`)
+  const handleClick = (id) => {
+    navigate(`/doctor/${id}`, {state : {id}})
   }
 
-  console.log(allDoctorsData);
+  // console.log(allDoctorsData);
 
   return (
     <div className="mt-4 flex flex-col">
