@@ -11,7 +11,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 
 const navigationUserTrue = [
-  { name: 'Клиники', href: '/clients', current: false },
+  { name: 'Клиники', href: '/clinics', current: false },
   { name: 'Врачи', href: '/doctors', current: false },
   { name: 'Календарь', href: '/calendar', current: false },
 ]
