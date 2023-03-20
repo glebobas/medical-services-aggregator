@@ -3,7 +3,8 @@ const authenticate = require("../middleware/auth.middleware");
 const router = express.Router();
 
 const {
-    GetAllClinicAndDoctors, GetAllClinicAndDoctorsQuery, GetAllSpecialities, GetAllAddresses, NewEntry, GetInfoAboutSlot
+    GetAllClinicAndDoctors, GetAllClinicAndDoctorsQuery, GetAllSpecialities, GetAllAddresses, NewEntry, GetInfoAboutSlot,
+    GetSlotsToDate
 } = require("../controllers/main.Controller");
 const tokenToLocals = require("../middleware/reslocalsToken.middleware");
 const {DoctorsFromSearch, ExactDoctor} = require("../controllers/doctor.Controller");
@@ -27,6 +28,8 @@ router.get('/doctor/:doctorId', tokenToLocals, ExactDoctor); //* получае�
 router.get("/clinic/:clinicId", tokenToLocals, ExactClinic); //* получаем клинику после выбора из поисковой выдачи
 
 router.get('/slot/:sheduleId', authenticate, GetInfoAboutSlot) //* инфа о слоте расписания
+
+router.get('/date', GetSlotsToDate) //* инфа о слотах на конкретный день
 
 router.patch('/shedule/visit', authenticate, NewEntry); //* обновляем в расписании состояние с null на pending или cancelled
 
