@@ -219,6 +219,7 @@ exports.ExactDoctor = async (req, res) => {
         const averageDocRating = (doctorRating / responseRating.length).toLocaleString('en-US', {maximumFractionDigits: 1})
         let readyDoc;
         let readyUserOwnShedule = [];
+        let doctorShedule = []
 
         if (res?.locals?.user?.id) {
 
@@ -232,8 +233,10 @@ exports.ExactDoctor = async (req, res) => {
                         ownRatingUser = element.doctorRating
                     }
                 })
+                const fullName = el.firstName + ' ' + el.lastName
                 return {
                     id: el.id,
+                    name: fullName,
                     firstName: el.firstName,
                     lastName: el.lastName,
                     speciality: doctor.Speciality.name,
@@ -267,12 +270,36 @@ exports.ExactDoctor = async (req, res) => {
                 }
             })
 
+            const shedulesDoctor = await Shedule.findAll({
+                where: {
+                    doctorId,
+                },
+                include: [{ model: Slot }],
+            })
+
+
+
+            doctorShedule = shedulesDoctor.map((record) => {
+                return {
+                    date: record.date,
+                    time: record.Slot.timeGap,
+                    status: record.statusAppointment,
+                    userId: record.userId,
+                    sheduleId: record.id
+                }
+            })
+
         }
+
+
         if (!res?.locals?.user?.id) {
             readyDoc = [doctor].map((el) => {
+                const fullName = el.firstName + ' ' + el.lastName
                 return {
                     id: el.id,
-                    name: el.firstName + ' ' + el.lastName,
+                    name: fullName,
+                    firstName: el.firstName,
+                    lastName: el.lastName,
                     email: el.email,
                     phone: el.phone,
                     specialityId: el.specialityId,
@@ -287,30 +314,31 @@ exports.ExactDoctor = async (req, res) => {
                     avatar: el.avatar
                 }
             })
+            const shedulesDoctor = await Shedule.findAll({
+                where: {
+                    doctorId,
+                    statusAppointment: {
+                        [Op.or]: ['vacant', 'pending', 'cancelled'],
+                    },
+                },
+                include: [{ model: Slot }],
+            })
+
+
+
+            doctorShedule = shedulesDoctor.map((record) => {
+                return {
+                    date: record.date,
+                    time: record.Slot.timeGap,
+                    status: record.statusAppointment,
+                    userId: record.userId,
+                    sheduleId: record.id
+                }
+            })
         }
 
 
-        const shedulesDoctor = await Shedule.findAll({
-            where: {
-                doctorId,
-                statusAppointment: {
-                    [Op.or]: ['vacant', 'pending'],
-                },
-            },
-            include: [{ model: Slot }],
-        })
 
-
-
-        const doctorShedule = shedulesDoctor.map((record) => {
-            return {
-                date: record.date,
-                time: record.Slot.timeGap,
-                status: record.statusAppointment,
-                userId: record.userId,
-                sheduleId: record.id
-            }
-        })
 
 
 
