@@ -560,15 +560,52 @@ exports.NewEntry = async (req, res) => {
             plain: true,
         })
         if (nmbOfUpdatedShedule === 0) {
-            return res.status(404).json({ message: 'Error while updating shedule' });
+            return res.status(404).json({message: 'Error while updating shedule'});
         }
 
-        res.status(200).json({ user: updatedShedule })
+        res.status(200).json({user: updatedShedule})
 
 
     } catch (err) {
         console.error(err);
         res.status(500).json({message: 'Server error'});
+    }
+
+}
+
+
+exports.GetSlotsToDate = async (req, res) => {
+    const {day, month, year, doctorId} = req.query
+
+    const dateTime = new Date(year, month, Number(day) + 1);
+
+    const shedulesDoctor = await Shedule.findAll({
+        where: {
+            doctorId,
+            date: dateTime,
+            statusAppointment: {
+                [Op.or]: ['vacant', 'pending'],
+            },
+        },
+        include: [{model: Slot}],
+    })
+
+    const doctorShedule = shedulesDoctor.map((record) => {
+        return {
+            date: record.date,
+            time: record.Slot.timeGap,
+            status: record.statusAppointment,
+            userId: record.userId,
+            sheduleId: record.id
+        }
+    })
+
+
+    if (doctorShedule.length) {
+        res.json({doctorShedule})
+    }
+    if (!doctorShedule.length) {
+        res.json({message: 'Nothing to show!'})
     }
 
 }
