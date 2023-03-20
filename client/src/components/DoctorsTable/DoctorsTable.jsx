@@ -9,21 +9,6 @@ export function DoctorsTable({ data }) {
 
   const navigate = useNavigate();
 
-  // const [doc, setDoc] = useState(people)
-  // console.log("table render")
-  // const data = useSelector((state) => state.getClinic.clinicInfo.id)
-  // console.log(data);
-  // (async() => {
-  // const responseDoc = await await fetch("/clinical/doc", {
-  // method: "POST",
-  // headers: { "Content-Type": "application/json" },
-  // body: JSON.stringify({id:data}),
-  // });
-  // const resDoc = await responseDoc.json()
-  // setDoc(resDoc)
-  // // console.log(resDoc)
-  // })()
-
   const handleClick = (id) => {
     console.log("click doctor table->", id);
     navigate(`/doctor/${id}`, { state: { id } });

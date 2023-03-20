@@ -32,7 +32,7 @@ export default function ClinicalCard() {
     }
     console.log(dataRes);
   };
-
+console.log(clinic)
   return (
     <>
       {/* <!-- Head block --> */}
@@ -85,7 +85,7 @@ export default function ClinicalCard() {
             <div className="mt-6">
               <h3 className="sr-only">Reviews</h3>
               <div className="flex items-center">
-                <Rating rat={4}/>
+                <Rating rat={clinic.readyClinic[0]?.averageClinicRating}/>
                 <a
                   href="#"
                   className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
