@@ -1,22 +1,24 @@
 //@ts-nocheck
-import React, {useEffect} from 'react';
-import {Route, Routes} from "react-router-dom";
+import React, { useEffect } from 'react';
+import { Route, Routes } from "react-router-dom";
 import './App.css';
-import {Layout} from "./Layout";
+import { Layout } from "./Layout";
 import ClinicalCard from '../pages/ClinicalCard/ClinicalCard';
 import ErrorPage from '../pages/ErrorPage/ErrorPage';
 
 
-import {MainPage} from "../pages/MainPage/MainPage";
-import {AuthProvider} from '../context';
-import {useDispatch, useSelector} from "react-redux";
-import {store} from './../redux'
-import {IGeneralState, IUser, Types} from "../redux/types/types";
-import {ProfileEditing} from '../components/ProfileEditing';
-import {ListPage} from "../pages/ListPage";
-import {DoctorCard} from "../pages/DoctorCard";
-import {DayView} from "../components/DayView/DayView";
+import { MainPage } from "../pages/MainPage/MainPage";
+import { AuthProvider } from '../context';
+import { useDispatch, useSelector } from "react-redux";
+import { store } from './../redux'
+import { IGeneralState, IUser, Types } from "../redux/types/types";
+import { ProfileEditing } from '../components/ProfileEditing';
+import { ListPage } from "../pages/ListPage";
+import { DoctorCard } from "../pages/DoctorCard";
+import { DayView } from "../components/DayView/DayView";
 import GoogleAuth from "../components/Modal/Google/Google";
+import {ClinicList} from '../components/ClinicList';
+import { DoctorList } from '../components/DoctorList';
 
 function App() {
 
@@ -28,7 +30,7 @@ function App() {
       .then(data => [...data.readyClinicList, ...data.readyDoctorList])
 
 
-      .then(data => dispatch({type: Types.ADD_CLINICS_AND_DOCTORS_SUCCESS, payload: data}))
+      .then(data => dispatch({ type: Types.ADD_CLINICS_AND_DOCTORS_SUCCESS, payload: data }))
       .catch(error => {
         console.error(error);
       })
@@ -42,28 +44,28 @@ function App() {
       {!user
         ?
         <Routes>
-          <Route path="/" element={<Layout/>}>
-            <Route index element={<MainPage/>}/>
-            <Route path='/listpage' element={<ListPage/>}/>
-            <Route path='/error' element={<ErrorPage/>}/>
-            <Route path='/doctor/:id' element={<DoctorCard/>}/>
-            <Route path='/clinic/:id' element={<ClinicalCard/>}/>
-            <Route path='*' element={<ErrorPage/>}/>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<MainPage />} />
+            <Route path='/listpage' element={<ListPage />} />
+            <Route path='/error' element={<ErrorPage />} />
+            <Route path='/doctor/:id' element={<DoctorCard />} />
+            <Route path='/clinic/:id' element={<ClinicalCard />} />
+            <Route path='*' element={<ErrorPage />} />
           </Route>
         </Routes>
         :
         <Routes>
-          <Route path="/" element={<Layout/>}>
-            <Route index element={<MainPage/>}/>
-            <Route path='/clients' element={<h1>Страница клиентов</h1>}/>
-            <Route path='/doctors' element={<h1>Страница врачей</h1>}></Route>
-            <Route path='/calendar' element={<h1>Календарь</h1>}/>
-            <Route path='/listpage' element={<ListPage/>}/>
-            <Route path='/profileEditing' element={<ProfileEditing/>}/>
-            <Route path='/doctor/:id' element={<DoctorCard/>}/>
-            <Route path='/clinic/:id' element={<ClinicalCard/>}/>
-            <Route path='/error' element={<ErrorPage/>}/>
-            <Route path='*' element={<ErrorPage/>}/>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<MainPage />} />
+            <Route path='/clinics' element={<ClinicList />} />
+            <Route path='/doctors' element={<DoctorList />}></Route>
+            <Route path='/calendar' element={<h1>Календарь</h1>} />
+            <Route path='/listpage' element={<ListPage />} />
+            <Route path='/profileEditing' element={<ProfileEditing />} />
+            <Route path='/doctor/:id' element={<DoctorCard />} />
+            <Route path='/clinic/:id' element={<ClinicalCard />} />
+            <Route path='/error' element={<ErrorPage />} />
+            <Route path='*' element={<ErrorPage />} />
           </Route>
         </Routes>
       }
