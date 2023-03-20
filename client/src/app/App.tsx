@@ -55,17 +55,17 @@ function App() {
         </Routes>
         :
         <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<MainPage />} />
-            <Route path='/clinics' element={<ClinicList />} />
-            <Route path='/doctors' element={<DoctorList />}></Route>
-            <Route path='/calendar' element={<h1>Календарь</h1>} />
-            <Route path='/listpage' element={<ListPage />} />
-            <Route path='/profileEditing' element={<ProfileEditing />} />
-            <Route path='/doctor/:id' element={<DoctorCard />} />
-            <Route path='/clinic/:id' element={<ClinicalCard />} />
-            <Route path='/error' element={<ErrorPage />} />
-            <Route path='*' element={<ErrorPage />} />
+          <Route path="/" element={<Layout/>}>
+            <Route index element={<MainPage/>}/>
+            <Route path='/clients' element={<h1>Страница пациентов</h1>}/>
+            <Route path='/doctors' element={<h1>Страница врачей</h1>}></Route>
+            <Route path='/calendar' element={<h1>Календарь</h1>}/>
+            <Route path='/listpage' element={<ListPage/>}/>
+            <Route path='/profileEditing' element={<ProfileEditing/>}/>
+            <Route path='/doctor/:id' element={<DoctorCard/>}/>
+            <Route path='/clinic/:id' element={<ClinicalCard/>}/>
+            <Route path='/error' element={<ErrorPage/>}/>
+            <Route path='*' element={<ErrorPage/>}/>
           </Route>
         </Routes>
       }
