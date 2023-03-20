@@ -76,19 +76,19 @@ export function DayView() {
   }
 
   // TODO: Запрос на блоки расписания
-  // useEffect(() => {
-  //   const data = {
-  //     year: selectedDate.year(),
-  //     month: selectedDate.month(),
-  //     day: selectedDate.date()
-  //   }
-  //   fetch(`/main/date?day=${data.day}&month=${data.month}&year=${data.year}&doctorId=${id}`)
-  //     .then(response => response.json())
-  //     .then(data => setShedule(data))
-  //     .catch(error => {
-  //       console.error(error);
-  //     })
-  // }, [shedule])
+  useEffect(() => {
+    const data = {
+      year: selectedDate.year(),
+      month: selectedDate.month(),
+      day: selectedDate.date()
+    }
+    fetch(`/main/date?day=${data.day}&month=${data.month}&year=${data.year}&doctorId=${id}`)
+      .then(response => response.json())
+      .then(data => setShedule(data))
+      .catch(error => {
+        console.error(error);
+      })
+  }, [shedule])
 
   return (
     <div className="mt-4 rounded border p-4 shadow">
