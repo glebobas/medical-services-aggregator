@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru'; // импортируем название месяцев на русском языке
 // import '../../index.css'; // стили для компонента
@@ -67,6 +67,17 @@ export function DayView() {
     // Оттлавливаем собитие по кнопке забронировать
     console.log(`Ваше время записи: ${selectedDate.date()} ${selectedMounth} ${selectedDate.year()} в ${selectedHour.slice(0,2)}:${selectedMinute}`)
   }
+
+  // TODO: Запрос на блоки расписания
+  useEffect(() => {
+    const data = {
+      year: selectedDate.year(),
+      month: selectedDate.month(),
+      day: selectedDate.date()
+    }
+    fetch('main/date/:')
+    console.log('SelectedDate-->', data)
+  },[selectedDate])
 
   return (
     <div className="mt-4 rounded border p-4 shadow">
