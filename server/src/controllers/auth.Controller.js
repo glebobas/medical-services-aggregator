@@ -151,37 +151,36 @@ exports.generateGoogleURL = (req, res) => {
 
 exports.googleCallback = async (req, res) => {
     const { token } = req.query;
-    console.log("-> req.query", req.query);
-    console.log("-> code", token);
-
-    const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
-    //oauth2Client
-
-    //https://www.googleapis.com/oauth2/v3/userinfo?access_token=ya29.a0AVvZVsrcdXZJ6PCDJ3jMmRZEUmwlvdx4cHS6v-baYwmeFIM4CtQQYU4TkkjqwjsUF5EO5zuihHKn7lWD9o9bJGMSBmMOMi4fTP6kVpsGdvSf-QL-3n24gwyUl7Ri1pld6x_lAT852-8Q8ADsn91wcEZMv6xU3gaCgYKAdsSARMSFQGbdwaIwu5ECrvycic-IfyR-fql9w0165
+    // console.log("-> req.query", req.query);
+    // console.log("-> code", token);
 
 
-    async function verify(client_id, jwtToken) {
-        const client = new OAuth2Client(client_id);
-        // Call the verifyIdToken to
-        // varify and decode it
-        const ticket = await client.verifyIdToken({
-            idToken: jwtToken,
-            audience: client_id,
-        });
-        const payload = ticket.getPayload();
-        // This is a JSON object that contains
-        // all the user info
-        return payload;
-    }
-    // const verificationResponse = await verify(GOOGLE_CLIENT_ID, token);
+    //https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}
 
-    jwt.verify(token, GOOGLE_CLIENT_SECRET, (err, decodedToken) => {
-        if (err) {
-            console.error('Error decoding token:', err);
-        } else {
-            console.log('Decoded token:', decodedToken);
-        }
-    });
+    const data = await fetch (`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`)
+
+    // async function verify(client_id, jwtToken) {
+    //     const client = new OAuth2Client(client_id);
+    //     // Call the verifyIdToken to
+    //     // varify and decode it
+    //     const ticket = await client.verifyIdToken({
+    //         idToken: jwtToken,
+    //         audience: client_id,
+    //     });
+    //     const payload = ticket.getPayload();
+    //     // This is a JSON object that contains
+    //     // all the user info
+    //     return payload;
+    // }
+    // // const verificationResponse = await verify(GOOGLE_CLIENT_ID, token);
+    //
+    // jwt.verify(token, GOOGLE_CLIENT_SECRET, (err, decodedToken) => {
+    //     if (err) {
+    //         console.error('Error decoding token:', err);
+    //     } else {
+    //         console.log('Decoded token:', decodedToken);
+    //     }
+    // });
 
 
    //
