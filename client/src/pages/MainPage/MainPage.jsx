@@ -4,6 +4,7 @@ import { SelectLocation } from '../../components/SelectLocation/SelectLocation'
 import { CheckBoxes } from '../../components/CheckBoxes/CheckBoxes'
 import { SelectSpecialization } from '../../components/SelectSpecialization/SelectSpecialization'
 import {MainImage} from '../../components/MainImage/MainImage'
+import RandomSearch from "../../components/RandomSearch/RandomSearch";
 
 export function MainPage() {
   return (
@@ -17,6 +18,7 @@ export function MainPage() {
           </div>
           <br />
           <SelectLocation />
+          <RandomSearch />
         </div>
         {/*<div className="main-col-right w-full h-full"><MainImage /></div>*/}
       </div>

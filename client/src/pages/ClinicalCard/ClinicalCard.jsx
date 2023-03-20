@@ -90,7 +90,7 @@ export default function ClinicalCard() {
                   href="#"
                   className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
                 >
-                  Отзывы клиентов
+                  Отзывы пациентов
                 </a>
               </div>
             </div>

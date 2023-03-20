@@ -6,7 +6,7 @@ const app = express();
 const {google} = require('googleapis');
 const {OAuth2Client} = require('google-auth-library');
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-console.log("-> GOOGLE_CLIENT_ID", GOOGLE_CLIENT_ID);
+
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 
@@ -165,10 +165,13 @@ exports.loginWithGoogle = async (req, res) => {
 }
 
 exports.googleCallback = async (req, res) => {
-    const {token} = req.query;
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
 
     const data = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`)
     const {sub, name, given_name, family_name, email, picture} = await data.json()
+
 
     if (name) {
 
@@ -179,6 +182,7 @@ exports.googleCallback = async (req, res) => {
         const userExisted = await User.findOne({where: {username: trueLogin}})
         const userId = userExisted?.id
         if (!userExisted) {
+            console.log("-> await data.json()", picture);
             newUser = await User.create({
                 username: trueLogin,
                 firstName,
@@ -223,51 +227,5 @@ exports.googleCallback = async (req, res) => {
         }
     }
 
-
-    // async function verify(client_id, jwtToken) {
-    //     const client = new OAuth2Client(client_id);
-    //     // Call the verifyIdToken to
-    //     // varify and decode it
-    //     const ticket = await client.verifyIdToken({
-    //         idToken: jwtToken,
-    //         audience: client_id,
-    //     });
-    //     const payload = ticket.getPayload();
-    //     // This is a JSON object that contains
-    //     // all the user info
-    //     return payload;
-    // }
-    // // const verificationResponse = await verify(GOOGLE_CLIENT_ID, token);
-    //
-    // jwt.verify(token, GOOGLE_CLIENT_SECRET, (err, decodedToken) => {
-    //     if (err) {
-    //         console.error('Error decoding token:', err);
-    //     } else {
-    //         console.log('Decoded token:', decodedToken);
-    //     }
-    // });
-
-
-   //
-   // console.log("-> await oauth2Client.getToken(code)", await oauth2Client.getToken(code));
-   //  const { tokens } = await oauth2Client.getToken(code);
-   //  console.log("-> tokens", tokens);
-   //  oauth2Client.setCredentials(tokens);
-   //
-   //
-   //  const userInfo = await google.people({ version: 'v1', auth: oauth2Client }).people.get({
-   //      resourceName: 'people/me',
-   //      personFields: 'names,emailAddresses'
-   //  });
-   //
-   //  const user = {
-   //      id: userInfo.data.resourceName,
-   //      name: userInfo.data.names[0].displayName,
-   //      email: userInfo.data.emailAddresses[0].value
-   //  };
-   //
-   //  const token = jwt.sign(user, jwtSecret, { expiresIn: '1h' });
-   //  res.cookie('jwt', token, { httpOnly: true });
-   //  res.redirect('/');
 }
 

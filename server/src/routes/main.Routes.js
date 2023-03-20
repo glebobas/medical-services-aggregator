@@ -4,14 +4,12 @@ const router = express.Router();
 
 const {
     GetAllClinicAndDoctors, GetAllClinicAndDoctorsQuery, GetAllSpecialities, GetAllAddresses, NewEntry, GetInfoAboutSlot,
-    GetSlotsToDate
+    GetSlotsToDate, ToCurrentTimeSlots, RandomDocClinic
 } = require("../controllers/main.Controller");
 const tokenToLocals = require("../middleware/reslocalsToken.middleware");
-const {DoctorsFromSearch, ExactDoctor} = require("../controllers/doctor.Controller");
+const {DoctorsFromSearch, ExactDoctor, GetAllDoctors} = require("../controllers/doctor.Controller");
 const {ExactClinic} = require("../controllers/clinic.Controller");
 
-
-//! authenticate вставить в нужные эндпоинты в кач-ве миддлварки
 
 router.get("/alldata/:inputText", tokenToLocals, GetAllClinicAndDoctors); //* получаем все клиники и врачей ПОСЛЕ ввода в инпут поисковой строки
 
@@ -19,9 +17,11 @@ router.get("/alldataquery", tokenToLocals, GetAllClinicAndDoctorsQuery); //* п�
 
 router.get('/specialities', GetAllSpecialities) //* получаем все специальности
 
+router.get('/doctors', GetAllDoctors) //* получаем всех докторов
+
 router.get('/addresses', GetAllAddresses) //* получаем все адреса
 
-router.post("/somedoctors", tokenToLocals, DoctorsFromSearch); //* получаем список врачей после ввода необходимых данных в поиске
+router.get("/somedoctors", tokenToLocals, DoctorsFromSearch); //* получаем список врачей после ввода необходимых данных в поиске
 
 router.get('/doctor/:doctorId', tokenToLocals, ExactDoctor); //* получаем доктора после выбора из поисковой выдачи, его расписание, включая приёмы юзера, если последний залогинен
 
@@ -29,8 +29,13 @@ router.get("/clinic/:clinicId", tokenToLocals, ExactClinic); //* получае�
 
 router.get('/slot/:sheduleId', authenticate, GetInfoAboutSlot) //* инфа о слоте расписания
 
-router.get('/date', GetSlotsToDate) //* инфа о слотах на конкретный день
+router.get('/date', tokenToLocals, GetSlotsToDate) //* инфа о слотах на конкретный день
 
 router.patch('/shedule/visit', authenticate, NewEntry); //* обновляем в расписании состояние с null на pending или cancelled
+
+router.patch('/shedule/slots', ToCurrentTimeSlots); //* для эндпоинта со слотами, обновляем старые записи по дате
+
+router.get('/random', RandomDocClinic) //* рандомайзер поиска врача или клиник
+
 
 module.exports = router;

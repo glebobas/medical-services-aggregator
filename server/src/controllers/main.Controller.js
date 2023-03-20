@@ -3,6 +3,8 @@ const {Op} = require("sequelize");
 const express = require('express');
 const jwt = require("jsonwebtoken");
 const app = express();
+const dayjs = require('dayjs')
+
 
 const jwtSecret = process.env.JWT_SECRET
 
@@ -547,7 +549,7 @@ exports.GetInfoAboutSlot = async (req, res) => {
 exports.NewEntry = async (req, res) => {
     const {sheduleId, statusAppointment} = req.body
 
-    const userId = res.locals.user.id
+    const userId = res?.locals?.user?.id
 
 
     try {
@@ -573,24 +575,142 @@ exports.NewEntry = async (req, res) => {
 
 }
 
+exports.ToCurrentTimeSlots = async (req, res) => {
+    const {sheduleId, statusAppointment} = req.body
+
+
+    try {
+
+        const [nmbOfUpdatedShedule, updatedShedule] = await Shedule.update({statusAppointment}, {
+            where: {
+                id: Number(sheduleId),
+            },
+            returning: true,
+            plain: true,
+        })
+        if (nmbOfUpdatedShedule === 0) {
+            return res.status(404).json({message: 'Error while updating shedule'});
+        }
+
+        res.status(200).json({message: 'success!'})
+
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message: 'Server error'});
+    }
+
+}
+
 
 exports.GetSlotsToDate = async (req, res) => {
     const {day, month, year, doctorId} = req.query
 
     const dateTime = new Date(year, month, Number(day) + 1);
+    const dateQuery = dayjs(dateTime)
+    const dateCurrent = dayjs()
 
-    const shedulesDoctor = await Shedule.findAll({
-        where: {
-            doctorId,
-            date: dateTime,
-            statusAppointment: {
-                [Op.or]: ['vacant', 'pending'],
-            },
-        },
-        include: [{model: Slot}],
-    })
 
-    const doctorShedule = shedulesDoctor.map((record) => {
+    let shedulesDoctorRes = []
+    if (!res?.locals?.user?.id) {
+        if (dateQuery.isBefore(dateCurrent)) {
+
+            const shedulesDoctor = await Shedule.findAll({
+                where: {
+                    doctorId,
+                    date: dateTime,
+                },
+                include: [{model: Slot}],
+            })
+            for (const shedule of shedulesDoctor) {
+                let sheduleId = shedule.id;
+                const response = await fetch('http://localhost:4000/main/shedule/slots', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({sheduleId, statusAppointment: 'done'}),
+                })
+                const result = await response.json()
+                if (response.status !== 200) {
+                    throw new Error(result.message)
+                }
+            }
+
+            shedulesDoctorRes = await Shedule.findAll({
+                where: {
+                    doctorId,
+                    date: dateTime,
+                    statusAppointment: {
+                        [Op.or]: ['vacant', 'done', 'pending'],
+                    },
+                },
+                include: [{model: Slot}],
+            })
+        }
+        if (!dateQuery.isBefore(dateCurrent)) {
+
+            shedulesDoctorRes = await Shedule.findAll({
+                where: {
+                    doctorId,
+                    date: dateTime,
+                    statusAppointment: {
+                        [Op.or]: ['vacant', 'done', 'pending'],
+                    },
+                },
+                include: [{model: Slot}],
+            })
+        }
+
+    }
+
+    if (res?.locals?.user?.id) {
+        if (dateQuery.isBefore(dateCurrent)) {
+
+            const shedulesDoctor = await Shedule.findAll({
+                where: {
+                    doctorId,
+                    date: dateTime,
+                },
+                include: [{model: Slot}],
+            })
+            for (const shedule of shedulesDoctor) {
+                let sheduleId = shedule.id
+                const response = await fetch('http://localhost:4000/main/shedule/slots', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({sheduleId, statusAppointment: 'done'}),
+                })
+                const result = await response.json()
+                if (response.status !== 200) {
+                    throw new Error(result.message)
+                }
+            }
+            shedulesDoctorRes = await Shedule.findAll({
+                where: {
+                    doctorId,
+                    date: dateTime,
+                },
+                include: [{model: Slot}],
+            })
+
+        }
+        if (!dateQuery.isBefore(dateCurrent)) {
+            shedulesDoctorRes = await Shedule.findAll({
+                where: {
+                    doctorId,
+                    date: dateTime,
+                },
+                include: [{model: Slot}],
+            })
+        }
+
+
+    }
+
+    const doctorShedule = shedulesDoctorRes.map((record) => {
         return {
             date: record.date,
             time: record.Slot.timeGap,
@@ -610,4 +730,6 @@ exports.GetSlotsToDate = async (req, res) => {
 
 }
 
-
+exports.RandomDocClinic = async (req, res) => {
+    const {countryName, cityName, speciality} = req.params
+}

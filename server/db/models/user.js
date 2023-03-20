@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.hasMany(models.Rating, { foreignKey: 'userId' });
       User.hasMany(models.Shedule, { foreignKey: 'userId' });
+      User.hasMany(models.Review, { foreignKey: 'userId' });
       User.belongsToMany(models.Doctor, { through: 'UserDoctor', foreignKey: 'userId' });
       User.belongsToMany(models.Clinic, { through: 'UserClinic', foreignKey: 'userId' });
     }
@@ -27,7 +28,8 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     telephone: DataTypes.STRING,
-    role: DataTypes.STRING
+    role: DataTypes.STRING,
+    avatarGoogle: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'User',
