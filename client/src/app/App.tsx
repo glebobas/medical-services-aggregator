@@ -46,7 +46,8 @@ function App() {
             <Route index element={<MainPage/>}/>
             <Route path='/listpage' element={<ListPage/>}/>
             <Route path='/error' element={<ErrorPage/>}/>
-
+            <Route path='/doctor/:id' element={<DoctorCard/>}/>
+            <Route path='/clinic/:id' element={<ClinicalCard/>}/>
             <Route path='*' element={<ErrorPage/>}/>
           </Route>
         </Routes>
@@ -60,7 +61,7 @@ function App() {
             <Route path='/listpage' element={<ListPage/>}/>
             <Route path='/profileEditing' element={<ProfileEditing/>}/>
             <Route path='/doctor/:id' element={<DoctorCard/>}/>
-            <Route path='/clinic/:id' element={<ClinicalCard />}/>
+            <Route path='/clinic/:id' element={<ClinicalCard/>}/>
             <Route path='/error' element={<ErrorPage/>}/>
             <Route path='*' element={<ErrorPage/>}/>
           </Route>
