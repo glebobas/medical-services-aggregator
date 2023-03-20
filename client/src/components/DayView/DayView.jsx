@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import dayjs from 'dayjs';
-import 'dayjs/locale/ru'; // импортируем название месяцев на русском языке
+import 'dayjs/locale/ru';
+import {useParams} from "react-router-dom"; // импортируем название месяцев на русском языке
 // import '../../index.css'; // стили для компонента
 
 // массив возможных часов
@@ -14,6 +15,12 @@ export function DayView() {
   const [selectedMounth, setSelectedMounth] = useState();
   const [selectedHour, setSelectedHour] = useState(hours[0]);
   const [selectedMinute, setSelectedMinute] = useState(minutes[0]);
+  const [shedule, setShedule] = useState({})
+  const {doctorShedule} = shedule
+  console.log("-> shedule", doctorShedule);
+
+
+  const {id} = useParams()
 
   // Функция склонение даты
   function getMonthName(month, caseNum) {
@@ -65,19 +72,23 @@ export function DayView() {
 
   function handleEventBron() {
     // Оттлавливаем собитие по кнопке забронировать
-    console.log(`Ваше время записи: ${selectedDate.date()} ${selectedMounth} ${selectedDate.year()} в ${selectedHour.slice(0,2)}:${selectedMinute}`)
+    console.log(`Ваше время записи: ${selectedDate.date()} ${selectedMounth} ${selectedDate.year()} в ${selectedHour.slice(0, 2)}:${selectedMinute}`)
   }
 
   // TODO: Запрос на блоки расписания
-  useEffect(() => {
-    const data = {
-      year: selectedDate.year(),
-      month: selectedDate.month(),
-      day: selectedDate.date()
-    }
-    fetch('main/date/:')
-    console.log('SelectedDate-->', data)
-  },[selectedDate])
+  // useEffect(() => {
+  //   const data = {
+  //     year: selectedDate.year(),
+  //     month: selectedDate.month(),
+  //     day: selectedDate.date()
+  //   }
+  //   fetch(`/main/date?day=${data.day}&month=${data.month}&year=${data.year}&doctorId=${id}`)
+  //     .then(response => response.json())
+  //     .then(data => setShedule(data))
+  //     .catch(error => {
+  //       console.error(error);
+  //     })
+  // }, [shedule])
 
   return (
     <div className="mt-4 rounded border p-4 shadow">
@@ -102,18 +113,26 @@ export function DayView() {
       <div className="flex flex-col w-full">
         {/* блок выбора часов */}
         <div className="w-2/3 flex flex-row flex-wrap my-2 gap-2 mx-auto">
-          {hours.map((hour) => (
-            <React.Fragment key={hour}>
-              <button
-                className={selectedHour === hour ? 'p-2 border bg-rose-200 hover:bg-rose-500 rounded' : 'rounded p-2' +
-                  ' border' +
-                  ' bg-emerald-200 hover:bg-green-500'}
-                onClick={() => handleHourChange(hour)}
-              >
-                {hour}
-              </button>
-            </React.Fragment>
-          ))}
+          {doctorShedule?.map((block, index) => {
+            if (block.status === 'pending') {
+              return <button key={index} disabled className="bg-red-300 px-2.5 py-2 rounded-lg border">{block.time}</button>
+            }
+            if (block.status === 'vacant') {
+              return <button key={index} className="bg-green-700 px-2.5 py-2 rounded-lg border">{block.time}</button>
+            }
+          })}
+          {/*{hours.map((hour) => (*/}
+          {/*  <React.Fragment key={hour}>*/}
+          {/*    <button*/}
+          {/*      className={selectedHour === hour ? 'p-2 border bg-rose-200 hover:bg-rose-500 rounded' : 'rounded p-2' +*/}
+          {/*        ' border' +*/}
+          {/*        ' bg-emerald-200 hover:bg-green-500'}*/}
+          {/*      onClick={() => handleHourChange(hour)}*/}
+          {/*    >*/}
+          {/*      {hour}*/}
+          {/*    </button>*/}
+          {/*  </React.Fragment>*/}
+          {/*))}*/}
         </div>
         {/*/!* блок выбора минут *!/*/}
         {/*<div className="flex flex-row justify-around my-2">*/}
@@ -130,8 +149,11 @@ export function DayView() {
         {/*  ))}*/}
         {/*</div>*/}
 
-      {/* кнопка бронирования записи */}
-      <button className="border py-2 px-5 w-1/2 mx-auto text-sm tracking-wide rounded-lg my-4 bg-green-600 text-white hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300" onClick={handleEventBron}>ЗАБРОНИРОВАТЬ</button>
+        {/* кнопка бронирования записи */}
+        <button
+          className="border py-2 px-5 w-1/2 mx-auto text-sm tracking-wide rounded-lg my-4 bg-green-600 text-white hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300"
+          onClick={handleEventBron}>ЗАБРОНИРОВАТЬ
+        </button>
       </div>
 
     </div>
