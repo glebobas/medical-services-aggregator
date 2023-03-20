@@ -168,20 +168,23 @@ exports.googleCallback = async (req, res) => {
     const {token} = req.query;
 
     const data = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`)
-    const result = await data.json()
+    const {sub, name, given_name, family_name, email, picture} = await data.json()
 
-    if (result.name) {
-        const trueLogin = result.sub
+    if (name) {
+
+        const trueLogin = sub
+        const firstName = given_name
+        const lastName = family_name
         let newUser;
         const userExisted = await User.findOne({where: {username: trueLogin}})
         const userId = userExisted?.id
         if (!userExisted) {
             newUser = await User.create({
                 username: trueLogin,
-                firstName: result.given_name,
-                lastName: result.family_name,
-                email: result.email,
-                avatarGoogle: result.picture
+                firstName,
+                lastName,
+                email,
+                avatarGoogle: picture
             }, {raw: true, nest: true});
             const username = newUser?.username
             const userId = newUser?.id
