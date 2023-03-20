@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Rating from '../Rating/Rating';
 
-export default function ClinicList() {
+export function ClinicList() {
 
   const [allClinicsData, setAllClinicsData] = useState(null);
 
@@ -21,6 +21,17 @@ export default function ClinicList() {
     fetchData();
   }, [])
 
+  useEffect(() => {
+    document.addEventListener('scroll', scrollHandler)
+    return function () {
+      document.removeEventListener('scroll', scrollHandler);
+    }
+  });
+
+  const scrollHandler = (e) => {
+    console.log('scroll')
+  }
+
   const navigate = useNavigate()
   const handleClick = (field) => {
     navigate(`/clinic/${field}`)
@@ -28,6 +39,7 @@ export default function ClinicList() {
 
   return (
     <div className="mt-4 flex flex-col">
+      <h3 className="font-semibold text-xl mb-2">List of all the clinics</h3>
       <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
         <table className="min-w-full divide-y divide-gray-300">
           <thead className="bg-gray-50">

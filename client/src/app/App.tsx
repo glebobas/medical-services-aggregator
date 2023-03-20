@@ -17,7 +17,8 @@ import { ListPage } from "../pages/ListPage";
 import { DoctorCard } from "../pages/DoctorCard";
 import { DayView } from "../components/DayView/DayView";
 import GoogleAuth from "../components/Modal/Google/Google";
-import ClinicList from '../components/ClinicList/ClinicList';
+import {ClinicList} from '../components/ClinicList';
+import { DoctorList } from '../components/DoctorList';
 
 function App() {
 
@@ -47,7 +48,8 @@ function App() {
             <Route index element={<MainPage />} />
             <Route path='/listpage' element={<ListPage />} />
             <Route path='/error' element={<ErrorPage />} />
-
+            <Route path='/doctor/:id' element={<DoctorCard />} />
+            <Route path='/clinic/:id' element={<ClinicalCard />} />
             <Route path='*' element={<ErrorPage />} />
           </Route>
         </Routes>
@@ -56,7 +58,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<MainPage />} />
             <Route path='/clinics' element={<ClinicList />} />
-            <Route path='/doctors' element={<h1>List of all the doctors</h1>}></Route>
+            <Route path='/doctors' element={<DoctorList />}></Route>
             <Route path='/calendar' element={<h1>Календарь</h1>} />
             <Route path='/listpage' element={<ListPage />} />
             <Route path='/profileEditing' element={<ProfileEditing />} />
