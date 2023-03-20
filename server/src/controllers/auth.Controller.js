@@ -3,9 +3,10 @@ const bcrypt = require('bcryptjs');
 const {User} = require('../../db/models')
 const express = require('express');
 const app = express();
-const { google } = require('googleapis');
-
+const {google} = require('googleapis');
+const {OAuth2Client} = require('google-auth-library');
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+console.log("-> GOOGLE_CLIENT_ID", GOOGLE_CLIENT_ID);
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 
@@ -57,13 +58,13 @@ exports.CreateUser = async (req, res) => {
         }
 
         if (!username || !username.match(/^[A-Za-z]\w+$/)) {
-            return res.status(400).send({ message: 'Invalid login format' });
+            return res.status(400).send({message: 'Invalid login format'});
         }
 
         if (username.length < 4) {
             return res
                 .status(400)
-                .send({ message: 'Login must be at least 4 characters long' });
+                .send({message: 'Login must be at least 4 characters long'});
         }
 
 
@@ -79,13 +80,13 @@ exports.CreateUser = async (req, res) => {
 
 
         if (!/^[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\.[A-Za-z]{2,}$/.test(email)) {
-            return res.status(400).send({ message: 'Invalid email address' });
+            return res.status(400).send({message: 'Invalid email address'});
         }
 
         if (!password || password.length < 3) {
             return res
                 .status(400)
-                .send({ message: 'Password must be at least 3 characters long' });
+                .send({message: 'Password must be at least 3 characters long'});
         }
 
         const saltRounds = 10;
@@ -139,32 +140,134 @@ exports.VerifyUser = async (req, res) => {
     }
 };
 
-exports.generateGoogleURL = (req, res) => {
-    const url = oauth2Client.generateAuthUrl({
-        access_type: 'offline',
-        scope: ['profile', 'email']
-    });
-    res.redirect(url);
+exports.loginWithGoogle = async (req, res) => {
+    try {
+        const {username, userId} = req.body;
+
+
+        const token = jwt.sign(
+            {id: Number(userId), username},
+            jwtSecret,
+            {expiresIn: '5h'}
+        );
+
+        const userReady = await User.findOne({where: {username},})
+        if (token) {
+            res.json({token, userReady, message: `Welcome, ${userReady.firstName}!`});
+        }
+        if (!token) {
+            res.json({message: 'Couldn\'t generate token!'});
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message: 'Server error'});
+    }
 }
 
 exports.googleCallback = async (req, res) => {
-    const { code } = req.query;
-    const { tokens } = await oauth2Client.getToken(code);
-    oauth2Client.setCredentials(tokens);
+    const {token} = req.query;
 
-    const userInfo = await google.people({ version: 'v1', auth: oauth2Client }).people.get({
-        resourceName: 'people/me',
-        personFields: 'names,emailAddresses'
-    });
+    const data = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`)
+    const {sub, name, given_name, family_name, email, picture} = await data.json()
 
-    const user = {
-        id: userInfo.data.resourceName,
-        name: userInfo.data.names[0].displayName,
-        email: userInfo.data.emailAddresses[0].value
-    };
+    if (name) {
 
-    const token = jwt.sign(user, jwtSecret, { expiresIn: '1h' });
-    res.cookie('jwt', token, { httpOnly: true });
-    res.redirect('/');
+        const trueLogin = sub
+        const firstName = given_name
+        const lastName = family_name
+        let newUser;
+        const userExisted = await User.findOne({where: {username: trueLogin}})
+        const userId = userExisted?.id
+        if (!userExisted) {
+            newUser = await User.create({
+                username: trueLogin,
+                firstName,
+                lastName,
+                email,
+                avatarGoogle: picture
+            }, {raw: true, nest: true});
+            const username = newUser?.username
+            const userId = newUser?.id
+            const data = await fetch('http://localhost:4000/auth/google/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({username, userId}),
+            })
+            const result = await data.json()
+            if (result.token) {
+                return res.json(result)
+            }
+            if (!result.token) {
+               return res.json({message: 'Login is failed'})
+            }
+        }
+        if (userExisted) {
+            const username = userExisted?.username
+            const data = await fetch('http://localhost:4000/auth/google/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({username, userId}),
+            })
+            const result = await data.json()
+            if (result.token) {
+                return res.json(result)
+            }
+            if (!result.token) {
+                return res.json({message: 'Login is failed'})
+            }
+
+        }
+    }
+
+
+    // async function verify(client_id, jwtToken) {
+    //     const client = new OAuth2Client(client_id);
+    //     // Call the verifyIdToken to
+    //     // varify and decode it
+    //     const ticket = await client.verifyIdToken({
+    //         idToken: jwtToken,
+    //         audience: client_id,
+    //     });
+    //     const payload = ticket.getPayload();
+    //     // This is a JSON object that contains
+    //     // all the user info
+    //     return payload;
+    // }
+    // // const verificationResponse = await verify(GOOGLE_CLIENT_ID, token);
+    //
+    // jwt.verify(token, GOOGLE_CLIENT_SECRET, (err, decodedToken) => {
+    //     if (err) {
+    //         console.error('Error decoding token:', err);
+    //     } else {
+    //         console.log('Decoded token:', decodedToken);
+    //     }
+    // });
+
+
+   //
+   // console.log("-> await oauth2Client.getToken(code)", await oauth2Client.getToken(code));
+   //  const { tokens } = await oauth2Client.getToken(code);
+   //  console.log("-> tokens", tokens);
+   //  oauth2Client.setCredentials(tokens);
+   //
+   //
+   //  const userInfo = await google.people({ version: 'v1', auth: oauth2Client }).people.get({
+   //      resourceName: 'people/me',
+   //      personFields: 'names,emailAddresses'
+   //  });
+   //
+   //  const user = {
+   //      id: userInfo.data.resourceName,
+   //      name: userInfo.data.names[0].displayName,
+   //      email: userInfo.data.emailAddresses[0].value
+   //  };
+   //
+   //  const token = jwt.sign(user, jwtSecret, { expiresIn: '1h' });
+   //  res.cookie('jwt', token, { httpOnly: true });
+   //  res.redirect('/');
 }
 

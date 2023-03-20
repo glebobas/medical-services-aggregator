@@ -25,10 +25,12 @@
     "process": "^0.11.10",
     "sequelize": "^6.29.3",
     "sequelize-cli": "^6.6.0",
-    "shorthash": "^0.0.2"
+    "shorthash": "^0.0.2",
+    "socket.io": "^4.6.1"
   },
   "devDependencies": {
     "express-session": "^1.17.3",
+    "google-auth-library": "^8.7.0",
     "googleapis": "^113.0.0",
     "hoaxer": "^1.0.0",
     "morgan": "^1.10.0",

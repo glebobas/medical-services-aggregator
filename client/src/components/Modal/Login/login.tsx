@@ -5,6 +5,8 @@ import {UserActionTypes, Types, IGeneralState, IUser} from '../../../redux/types
 import React, {Fragment, useContext, useRef, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
 import {AuthContext, AuthContextType} from "../../../context";
+import GoogleAuth from "../Google/Google";
+import {Route} from "react-router-dom";
 
 
 interface LoginData {
@@ -43,7 +45,6 @@ export function Login(): JSX.Element {
 
 
     try {
-
             dispatch({
                 type: Types.LOGIN_REQUEST,
             });
@@ -172,7 +173,7 @@ export function Login(): JSX.Element {
                                             </div>
 
                                         </div>
-
+                                        <div className='google'><GoogleAuth/></div>
                                         <div className='flex flex-column justify-center align-items-center'>
                                             <button type="submit"
                                                 className=' left-20 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5'>Sign
@@ -181,7 +182,9 @@ export function Login(): JSX.Element {
 
                                         </div>
                                     </form>
+                                    {/*<Route path='/auth/google' element={<GoogleAuth />} />*/}
                                 </div>
+
                             </Dialog.Panel>
                         </Transition.Child>
                     </div>
