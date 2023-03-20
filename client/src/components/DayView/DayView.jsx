@@ -117,19 +117,19 @@ export function DayView() {
   });
 
   return (
-    <div className="mt-4 rounded border p-4 shadow">
+    <div className="mt-4 border-y py-4">
       <div className="flex justify-between">
-        <h4>Расписание</h4>
+        <h4 className="font-semibold">Расписание</h4>
         {/* отображение выбранной даты и времени */}
-        <div className="flex justify-center">
-          Вы выбрали запись на:
+        {/*<div className="flex justify-center">*/}
+        {/*  Вы выбрали запись на:*/}
 
-          <div className="ml-2 font-semibold">
-            {selectedDate.date()} {selectedMounth} {selectedDate.year()} в {selectedHour}</div>
-        </div>
+        {/*  <div className="ml-2 font-semibold">*/}
+        {/*    {selectedDate.date()} {selectedMounth} {selectedDate.year()} в {selectedHour}</div>*/}
+        {/*</div>*/}
       </div>
       {/* блок выбора даты */}
-      <input className="rounded p-2 w-full my-4 shadow"
+      <input className="bg-gray-100 w-full rounded border p-2 my-4"
              type="date"
              value={selectedDate.format('YYYY-MM-DD')}
              onChange={handleDateChange}

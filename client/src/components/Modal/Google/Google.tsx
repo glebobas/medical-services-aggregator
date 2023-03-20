@@ -44,9 +44,7 @@ function GoogleAuth(): JSX.Element {
 
     return (
         <div>
-
             {/*<GoogleLogin responseType="code" accessType="offline" onSuccess={handleSuccess} onError={handleFailure}/>*/}
-
             <button className="google-btn" onClick={() => login()}>
                 <img src={googleIcon} alt="Google icon"/>
             </button>
