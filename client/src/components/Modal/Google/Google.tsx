@@ -6,10 +6,6 @@ import {useDispatch} from "react-redux";
 import {ThunkDispatch} from "redux-thunk";
 import {AuthContext, AuthContextType} from "../../../context";
 
-// interface LoginData {
-//     username: string;
-//     password: string;
-// }
 
 function GoogleAuth(): JSX.Element {
 

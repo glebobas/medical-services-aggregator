@@ -245,26 +245,26 @@ exports.googleCallback = async (req, res) => {
     // });
 
 
-    //
-    // console.log("-> await oauth2Client.getToken(code)", await oauth2Client.getToken(code));
-    //  const { tokens } = await oauth2Client.getToken(code);
-    //  console.log("-> tokens", tokens);
-    //  oauth2Client.setCredentials(tokens);
-    //
-    //
-    //  const userInfo = await google.people({ version: 'v1', auth: oauth2Client }).people.get({
-    //      resourceName: 'people/me',
-    //      personFields: 'names,emailAddresses'
-    //  });
-    //
-    //  const user = {
-    //      id: userInfo.data.resourceName,
-    //      name: userInfo.data.names[0].displayName,
-    //      email: userInfo.data.emailAddresses[0].value
-    //  };
-    //
-    //  const token = jwt.sign(user, jwtSecret, { expiresIn: '1h' });
-    //  res.cookie('jwt', token, { httpOnly: true });
-    //  res.redirect('/');
+   //
+   // console.log("-> await oauth2Client.getToken(code)", await oauth2Client.getToken(code));
+   //  const { tokens } = await oauth2Client.getToken(code);
+   //  console.log("-> tokens", tokens);
+   //  oauth2Client.setCredentials(tokens);
+   //
+   //
+   //  const userInfo = await google.people({ version: 'v1', auth: oauth2Client }).people.get({
+   //      resourceName: 'people/me',
+   //      personFields: 'names,emailAddresses'
+   //  });
+   //
+   //  const user = {
+   //      id: userInfo.data.resourceName,
+   //      name: userInfo.data.names[0].displayName,
+   //      email: userInfo.data.emailAddresses[0].value
+   //  };
+   //
+   //  const token = jwt.sign(user, jwtSecret, { expiresIn: '1h' });
+   //  res.cookie('jwt', token, { httpOnly: true });
+   //  res.redirect('/');
 }
 
