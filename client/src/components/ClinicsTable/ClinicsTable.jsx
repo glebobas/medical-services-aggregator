@@ -2,12 +2,13 @@ import React, {useContext, useState} from "react";
 import Rating from "../Rating/Rating";
 import {useNavigate} from "react-router-dom";
 
-
 export function ClinicsTable({data}) {
+  console.log('clinictable', data)
   const navigate = useNavigate()
    const handleClick = (field) => {
     navigate(`/clinic/${field}`)
       }
+
   return (
     <>
       {(!data?.length > 0)
@@ -70,7 +71,7 @@ export function ClinicsTable({data}) {
                       {/* <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
                                 Active
                               </span> */}
-                      <Rating rat={4.7}/>
+                      <Rating rat={field.clinicRating}/>
                     </td>
                   </tr>
                 ))}
