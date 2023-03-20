@@ -45,7 +45,6 @@ export function Login(): JSX.Element {
 
 
     try {
-
             dispatch({
                 type: Types.LOGIN_REQUEST,
             });

@@ -15,13 +15,13 @@ export const loginReducer = (state: IGeneralState = initialState, action: IUserA
             return {
                 ...state,
                 user: {
-                    id: action.payload.id,
-                    username: action.payload.username,
-                    firstName: action.payload.firstName,
-                    lastName: action.payload.lastName,
-                    email: action.payload.email,
-                    role: action.payload.role,
-                    telephone: action.payload.telephone
+                    id: action?.payload?.id,
+                    username: action?.payload?.username,
+                    firstName: action?.payload?.firstName,
+                    lastName: action?.payload?.lastName,
+                    email: action?.payload?.email,
+                    role: action?.payload?.role,
+                    telephone: action?.payload?.telephone
                 },
                 loading: false,
                 error: null,
