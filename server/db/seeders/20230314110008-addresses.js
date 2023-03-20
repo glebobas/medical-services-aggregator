@@ -1,32 +1,33 @@
 'use strict';
+const hoaxer = require('hoaxer');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
 
-     await queryInterface.bulkInsert('Addresses', [
-       {
-         countryName: 'USA',
-         cityName: 'New York',
-         streetName: '123 Main St',
-         createdAt: new Date(),
-         updatedAt: new Date()
-       },
-       {
-         countryName: 'Canada',
-         cityName: 'Toronto',
-         streetName: '456 Maple Ave',
-         createdAt: new Date(),
-         updatedAt: new Date()
-       },
-       {
-         countryName: 'UK',
-         cityName: 'London',
-         streetName: '789 Oxford St',
-         createdAt: new Date(),
-         updatedAt: new Date()
-       }
-     ], {});
+    const countries = ['Australia', 'Vietnam', 'Turkey'];
+    const addresses = [];
+
+    for (let i = 0; i < 10; i++) {
+      const randomNum = hoaxer.datatype.number({ min: 1, max: 10 });
+      const countryName = hoaxer.random.arrayElement(countries);
+      const cityName = hoaxer.address.city();
+      const streetName = randomNum + ' ' + hoaxer.address.streetName();
+      const createdAt = new Date();
+      const updatedAt = new Date();
+
+      const user = {
+        countryName,
+        cityName,
+        streetName,
+        createdAt,
+        updatedAt,
+      };
+
+      addresses.push(user);
+    }
+
+     await queryInterface.bulkInsert('Addresses', addresses, {});
 
   },
 
@@ -36,3 +37,9 @@ module.exports = {
 
   }
 };
+
+
+
+
+
+

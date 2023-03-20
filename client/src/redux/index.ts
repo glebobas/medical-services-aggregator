@@ -7,6 +7,7 @@ import { getClinicReducer } from './reducers/clinicReducers';
 
 
 
+
 const rootReducers = combineReducers({
   login: loginReducer,
   register: registerReducer,

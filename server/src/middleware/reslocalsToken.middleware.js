@@ -8,10 +8,12 @@ function tokenToLocals(req, res, next) {
             const authHeader = req.headers['authorization'];
             const token = authHeader && authHeader.split(' ')[1];
             jwt.verify(token, jwtSecret, (err, decodedToken) => {
+                console.log("-> decodedToken", decodedToken);
                 decodedToken?.id ? res.locals.user = decodedToken : null
                 next();
             });
-            console.log('\n\x1b[33m', 'req.user :', res.locals.user);
+
+            console.log('\n\x1b[33m', 'res.locals.user :', res.locals.user);
         }
     if (!req.headers['authorization']) {
         next()
