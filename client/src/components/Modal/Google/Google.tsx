@@ -1,10 +1,21 @@
 import React, {useState} from 'react';
-import {useGoogleLogin} from '@react-oauth/google';
+import {GoogleLogin, useGoogleLogin} from '@react-oauth/google';
 import googleIcon from './7123025_logo_google_g_icon.png';
 
+const GOOGLE_CLIENT_ID: string = process.env.GOOGLE_CLIENT_ID ?? '';
 
 function GoogleAuth(): JSX.Element {
     // const [user, setUser] = useState([]);
+
+    // const handleSuccess = (response: any) => {
+    //     // Handle successful authentication
+    //     console.log(response);
+    // };
+    //
+    // const handleFailure = () => {
+    //     // Handle failed authentication
+    //     console.error();
+    // };
 
     const login = useGoogleLogin({
         onSuccess: async (code) => {
