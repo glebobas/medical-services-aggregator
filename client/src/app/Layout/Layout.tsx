@@ -5,7 +5,7 @@ import {Footer} from "../../components/Footer";
 import { Chat }  from '../../components/Chat/Chat'
 import {MainPage} from '../../pages/MainPage/MainPage'
 // import { Footer } from 'widgets/Footer';
-
+import {DoctorCard} from "../../components/DoctorCard";
 
 
 
