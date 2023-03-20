@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const path = require('path');
+const morgan = require('morgan');
 
 const http = require('http');
 
@@ -14,6 +15,8 @@ const io = require('socket.io')(server, {
     methods: ['GET, POST, PUT, DELETE, OPTIONS'],
   },
 });
+
+app.use(morgan('dev'))
 
 app.use(express.static(path.join(__dirname, '../public/')));
 const AuthRoutes = require('./routes/auth.Routes')
