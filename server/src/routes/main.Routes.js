@@ -4,7 +4,7 @@ const router = express.Router();
 
 const {
     GetAllClinicAndDoctors, GetAllClinicAndDoctorsQuery, GetAllSpecialities, GetAllAddresses, NewEntry, GetInfoAboutSlot,
-    GetSlotsToDate, ToCurrentTimeSlots
+    GetSlotsToDate, ToCurrentTimeSlots, RandomDocClinic
 } = require("../controllers/main.Controller");
 const tokenToLocals = require("../middleware/reslocalsToken.middleware");
 const {DoctorsFromSearch, ExactDoctor, GetAllDoctors} = require("../controllers/doctor.Controller");
@@ -34,5 +34,8 @@ router.get('/date', tokenToLocals, GetSlotsToDate) //* инфа о слотах 
 router.patch('/shedule/visit', authenticate, NewEntry); //* обновляем в расписании состояние с null на pending или cancelled
 
 router.patch('/shedule/slots', ToCurrentTimeSlots); //* для эндпоинта со слотами, обновляем старые записи по дате
+
+router.get('/random', RandomDocClinic) //* рандомайзер поиска врача или клиник
+
 
 module.exports = router;
