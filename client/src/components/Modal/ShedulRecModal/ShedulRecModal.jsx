@@ -4,8 +4,8 @@ import {AuthContext} from "../../../context";
 
 
 export function ShedulRecModal({props}) {
-  const {idDoctor, sheduleIdOneBlock} = props
-  // console.log("-> idDoctor", idDoctor, sheduleIdOneBlock);
+  const {idDoctor, sheduleIdOneBlock, setStaff} = props
+  // console.log("-> idDoctor", shedule);
   const {
     showModalShedulRec,
     setShowModalShedulRec,
@@ -26,7 +26,7 @@ export function ShedulRecModal({props}) {
       body: JSON.stringify({sheduleId: sheduleIdOneBlock.sheduleId, statusAppointment: 'pending'})
     })
       .then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => setStaff(data))
       .catch(error => console.log(error));
     setShowModalShedulRec(false)
   }
@@ -57,17 +57,16 @@ export function ShedulRecModal({props}) {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-center shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start">
+                  <div className="sm:flex sm:justify-center sm:items-center">
                     <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                       <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
                         Хотите записаться на текущее время
                       </Dialog.Title>
                       <div className="mt-2">
-                        <p className="text-sm text-gray-500">
-                          Are you sure you want to deactivate your account? All of your data will be permanently
-                          removed. This action cannot be undone.
+                        <p className="text-sm text-gray-500 text-center">
+                          Подтвердите запись
                         </p>
                       </div>
                     </div>

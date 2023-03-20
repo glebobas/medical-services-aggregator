@@ -29,6 +29,7 @@ export function DayView() {
   const [selectedHour, setSelectedHour] = useState(hours[0]);
   const [selectedMinute, setSelectedMinute] = useState(minutes[0]);
   const [shedule, setShedule] = useState({})
+  const [staff, setStaff] = useState()
   const [sheduleIdOneBlock, setSheduleIdOneBlock] = useState('')
   const {doctorShedule} = shedule
 
@@ -115,7 +116,7 @@ export function DayView() {
       .catch(error => {
         console.error(error);
       })
-  }, [selectedDate])
+  }, [selectedDate, staff])
 
   // Сортируем doctorSchedule по sheduleId
   doctorShedule?.sort((a, b) => {
@@ -189,7 +190,7 @@ export function DayView() {
         {/*  onClick={handleEventBron}>ЗАБРОНИРОВАТЬ*/}
         {/*</button>*/}
       </div>
-      <ShedulRecModal props={{idDoctor: id, sheduleIdOneBlock: sheduleIdOneBlock}}/>
+      <ShedulRecModal props={{idDoctor: id, sheduleIdOneBlock: sheduleIdOneBlock, setStaff: setStaff}}/>
     </div>
   );
 }

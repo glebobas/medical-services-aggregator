@@ -22,7 +22,6 @@ interface IDoctor {
 
 export const DoctorCard = () => {
   const [doctor, setDoctor] = useState('');
-  console.log("-> doctor", doctor);
   const location = useLocation()
   const {id} = location.state
 
