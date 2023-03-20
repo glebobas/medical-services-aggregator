@@ -10,38 +10,28 @@ import {useParams} from "react-router-dom";
 
 export default function ClinicalCard() {
   const {id} = useParams()
-  console.log("-> id", id);
-
+  console.log("-> id", id)
   const [clinic, setClinic] = useState({readyClinic: [], doctors: []});
-
-  const [doc, setDoc] = useState()
-  const dispatch = useDispatch()
+  
   const data = {id: 1};
   useEffect(() => {
     (async () => {
       const response = await fetch(`/main/clinic/${id}`);
       response.json().then((r) => (setClinic(r)))
     })();
-
   }, []);
-
-  if (clinic.readyClinic.id) {
-    const clinicData = {
-      clinicInfo: {
-        id: clinic.readyClinic.id,
-        name: clinic.readyClinic.name,
-        phone: clinic.readyClinic.phone,
-        email: clinic.readyClinic.email,
-        generalInfo: clinic.readyClinic.generalInfo
-      },
-      addressClinic: {
-//       country:clinic.infoClinic["Address.countryName"],
-//       city: clinic.infoClinic['Address.cityName'],
-//       street: clinic.infoClinic['Address.streetName'],
-      },
+  const [dataRes, setDataRes] = useState(clinic.readyDoctorList);
+  const handleClick2 = (e) => {
+    const profile = e.target.innerHTML;
+    console.log(profile);
+    if (profile !== "All doctors") {
+      const fill = clinic.readyDoctorList.filter((el) => el.speciality === profile);
+      setDataRes(fill);
+    } else if (profile === "All doctors") {
+      setDataRes(clinic.readyDoctorList);
     }
-    // dispatch({type: TypesClinic.GET_CLINIC, payload: clinicData})
-  }
+    console.log(dataRes);
+  };
 
   return (
     <>
@@ -75,6 +65,7 @@ export default function ClinicalCard() {
         <div className="options flex flex-row justify-between mt-4">
           <div className="flex-col">
             <table>
+              <tbody>
               <tr>
                 <td>Address:</td>
                 <td className="pl-4">{clinic.readyClinic[0]?.address}</td>
@@ -87,13 +78,14 @@ export default function ClinicalCard() {
                 <td>Email:</td>
                 <td className="pl-4">{clinic.readyClinic[0]?.email}</td>
               </tr>
+              </tbody>
             </table>
           </div>
           <div className="flex-col">{/* <!-- Reviews --> */}
             <div className="mt-6">
               <h3 className="sr-only">Reviews</h3>
               <div className="flex items-center">
-                <Rating rat={clinic?.clinicRating}/>
+                <Rating rat={4}/>
                 <a
                   href="#"
                   className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
@@ -104,8 +96,12 @@ export default function ClinicalCard() {
             </div>
           </div>
         </div>
-
-        <DoctorsTable data={clinic.readyDoctorList}/>
+        <div onClick={handleClick2}>
+        {" "}
+        <SelectMenus />
+      </div>
+      
+        <DoctorsTable data={dataRes}/>
 
         <div className="ymaps w-full mt-4">
           <div className="ymap">

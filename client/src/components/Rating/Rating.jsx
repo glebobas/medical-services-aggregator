@@ -1,23 +1,30 @@
-import React from "react";
-import styles from "./rating.css"
+// import { render } from "@headlessui/react/dist/utils/render";
+import React, { useState, useEffect } from "react";
+import styles from "./rating.css";
 
-export default function Rating(props) {
-const {rat} = props
-const a = [0,0,0,0,0]
+function Rating(props) {
+  let { rat } = props;
+  if (!rat) {
+    rat = 0
+  }
+  // const [data, setData] = useState()
+  const random = Math.random()
+  const a = [0, 0, 0, 0, 0];
   function stars() {
     const ratMin = Math.floor(rat);
     const ratFloat = rat - ratMin;
-    const arr = [];
     for (let i = 0; i < ratMin; i++) {
-      a[i]= 100;
+      a[i] = 100;
     }
     a[ratMin] = Math.floor(ratFloat * 100);
   }
   stars();
-  
+  //setData(a)
+
+
   return (
     <>
-      <div >
+      <div>
         <div>
           <svg
             width="0"
@@ -26,7 +33,7 @@ const a = [0,0,0,0,0]
             viewBox="0 0 32 32"
           >
             <defs>
-              <linearGradient id="half1" x1="0" x2="100%" y1="0" y2="0">
+              <linearGradient id={`${rat}<>${a[0]}<>${random}`} x1="0" x2="100%" y1="0" y2="0">
                 <stop offset={`${a[0]}%`} stopColor="#fed94b"></stop>
                 <stop offset={`${a[0]}%`} stopColor="#f7f0c3"></stop>
               </linearGradient>
@@ -49,7 +56,7 @@ const a = [0,0,0,0,0]
             viewBox="0 0 32 32"
           >
             <defs>
-              <linearGradient id="half2" x1="0" x2="100%" y1="0" y2="0">
+              <linearGradient id={`${rat}<>${a[1]}<>${random}`} x1="0" x2="100%" y1="0" y2="0">
                 <stop offset={`${a[1]}%`} stopColor="#fed94b"></stop>
                 <stop offset={`${a[1]}%`} stopColor="#f7f0c3"></stop>
               </linearGradient>
@@ -72,7 +79,7 @@ const a = [0,0,0,0,0]
             viewBox="0 0 32 32"
           >
             <defs>
-              <linearGradient id="half3" x1="0" x2="100%" y1="0" y2="0">
+              <linearGradient id={`${rat}<>${a[2]}<>${random}`} x1="0" x2="100%" y1="0" y2="0">
                 <stop offset={`${a[2]}%`} stopColor="#fed94b"></stop>
                 <stop offset={`${a[2]}%`} stopColor="#f7f0c3"></stop>
               </linearGradient>
@@ -95,7 +102,7 @@ const a = [0,0,0,0,0]
             viewBox="0 0 32 32"
           >
             <defs>
-              <linearGradient id="half4" x1="0" x2="100%" y1="0" y2="0">
+              <linearGradient id={`${rat}<>${a[3]}<>${random}`} x1="0" x2="100%" y1="0" y2="0">
                 <stop offset={`${a[3]}%`} stopColor="#fed94b"></stop>
                 <stop offset={`${a[3]}%`} stopColor="#f7f0c3"></stop>
               </linearGradient>
@@ -118,7 +125,7 @@ const a = [0,0,0,0,0]
             viewBox="0 0 32 32"
           >
             <defs>
-              <linearGradient id="half5" x1="0" x2="100%" y1="0" y2="0">
+              <linearGradient id={`${rat}<>${a[4]}<>${random}`} x1="0" x2="100%" y1="0" y2="0">
                 <stop offset={`${a[4]}%`} stopColor="#fed94b"></stop>
                 <stop offset={`${a[4]}%`} stopColor="#f7f0c3"></stop>
               </linearGradient>
@@ -141,7 +148,8 @@ const a = [0,0,0,0,0]
             height="32"
             viewBox="0 0 32 32"
           >
-            <use xlinkHref="#star" fill="url(#half1)"></use>
+            <use xlinkHref="#star" fill={`url(#${rat}<>${a[0]}<>${random})`}></use>
+            
           </svg>
           <svg
             className="c-star active"
@@ -149,7 +157,7 @@ const a = [0,0,0,0,0]
             height="32"
             viewBox="0 0 32 32"
           >
-            <use xlinkHref="#star" fill="url(#half2)"></use>
+            <use xlinkHref="#star" fill={`url(#${rat}<>${a[1]}<>${random})`}></use>
           </svg>
           <svg
             className="c-star active"
@@ -157,7 +165,7 @@ const a = [0,0,0,0,0]
             height="32"
             viewBox="0 0 32 32"
           >
-            <use xlinkHref="#star" fill="url(#half3)"></use>
+            <use xlinkHref="#star" fill={`url(#${rat}<>${a[2]}<>${random})`}></use>
           </svg>
           <svg
             className="c-star active"
@@ -165,7 +173,7 @@ const a = [0,0,0,0,0]
             height="32"
             viewBox="0 0 32 32"
           >
-            <use xlinkHref="#star" fill="url(#half4)"></use>
+            <use xlinkHref="#star" fill={`url(#${rat}<>${a[3]}<>${random})`}></use>
           </svg>
           <svg
             className="c-star active"
@@ -173,10 +181,12 @@ const a = [0,0,0,0,0]
             height="32"
             viewBox="0 0 32 32"
           >
-            <use xlinkHref="#star" fill="url(#half5)"></use>
+            <use xlinkHref="#star" fill={`url(#${rat}<>${a[4]}<>${random})`}></use>
           </svg>
         </p>
       </div>
+      <p>{rat} / 5</p>
     </>
   );
 }
+export default React.memo(Rating);
