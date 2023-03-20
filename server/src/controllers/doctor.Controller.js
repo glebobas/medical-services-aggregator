@@ -355,3 +355,129 @@ exports.ExactDoctor = async (req, res) => {
         console.error(e)
     }
 };
+
+exports.GetAllDoctors = async (req, res) => {
+    try {
+        const doctors = await Doctor.findAll({
+            include: [
+                {
+                    model: Clinic,
+                    include: [
+                        {
+                            model: Address
+                        },
+                    ],
+                    required: true,
+                },
+                {model: Speciality},
+            ],
+            raw: true,
+            nest: true,
+        });
+        const doctorRating = await Rating.findAll({attributes: ['doctorRating', 'doctorId']})
+
+        const doctorRatings = {};
+        doctorRating.forEach(rating => {
+
+            if (doctorRatings[rating.doctorId]) {
+                doctorRatings[rating.doctorId].total += rating.doctorRating;
+                doctorRatings[rating.doctorId].count += 1;
+            } else {
+                doctorRatings[rating.doctorId] = {
+                    total: rating.doctorRating,
+                    count: 1
+                };
+            }
+        });
+
+        const doctorRatingAverages = {};
+
+        for (const [id, rating] of Object.entries(doctorRatings)) {
+            doctorRatingAverages[id] = (rating.total / rating.count).toLocaleString('en-US', {maximumFractionDigits: 1});
+        }
+
+        const arrDoc = Object.entries(doctorRatingAverages)
+
+        let readyDoctorList;
+        if (res?.locals?.user?.id) {
+
+            const ratingToUser = await Rating.findAll({where: {userId: res.locals.user.id}})
+
+            readyDoctorList = doctors.map(
+                doctor => {
+                    const fullname = `${doctor.firstName} ${doctor.lastName}`
+                    const fulladdress = `${doctor.Clinic.Address.countryName}, ${doctor.Clinic.Address.cityName}, ${doctor.Clinic.Address.streetName}`
+                    let docRate;
+                    arrDoc.forEach(el => {
+                        if (Number(el[0]) === doctor.id) {
+                            docRate = el[1]
+                        }
+                    })
+                    let ownRatingUserDoc;
+                    ratingToUser?.forEach(element => {
+                        if (element.userId === res.locals.user.id && doctor.id === element.doctorId) {
+                            ownRatingUserDoc = element.doctorRating
+                        }
+                    })
+                    return {
+                        doctorId: doctor.id,
+                        name: fullname,
+                        phone: doctor.phone,
+                        address: fulladdress,
+                        speciality: doctor.Speciality.name,
+                        clinic: doctor.Clinic.name,
+                        email: doctor.email,
+                        generalTiming: doctor.generalTiming,
+                        adultPatients: doctor.adultPatients,
+                        childrenPatients: doctor.childrenPatients,
+                        generalInfo: doctor.generalInfo,
+                        doctorRating: docRate,
+                        avatar: doctor.avatar,
+                        alreadyScoredPoints: ownRatingUserDoc,
+                    }
+                }
+            )
+
+
+        }
+
+        if (!res?.locals?.user?.id) {
+
+            readyDoctorList = doctors.map(
+                doctor => {
+                    const fullname = `${doctor.firstName} ${doctor.lastName}`
+                    const fulladdress = `${doctor.Clinic.Address.countryName}, ${doctor.Clinic.Address.cityName}, ${doctor.Clinic.Address.streetName}`
+                    let docRate;
+                    arrDoc.forEach(el => {
+                        if (Number(el[0]) === doctor.id) {
+                            docRate = el[1]
+                        }
+                    })
+
+                    return {
+                        doctorId: doctor.id,
+                        name: fullname,
+                        phone: doctor.phone,
+                        address: fulladdress,
+                        speciality: doctor.Speciality.name,
+                        clinic: doctor.Clinic.name,
+                        email: doctor.email,
+                        generalTiming: doctor.generalTiming,
+                        adultPatients: doctor.adultPatients,
+                        childrenPatients: doctor.childrenPatients,
+                        generalInfo: doctor.generalInfo,
+                        doctorRating: docRate,
+                        avatar: doctor.avatar,
+                    }
+                }
+            )
+
+        }
+
+        if (readyDoctorList.length) {
+            res.json(readyDoctorList)
+        } else res.json({message: 'Nothing to show!'});
+    } catch (e) {
+        console.error(e)
+    }
+}
