@@ -4,7 +4,7 @@ const router = express.Router();
 
 const {
     GetAllClinicAndDoctors, GetAllClinicAndDoctorsQuery, GetAllSpecialities, GetAllAddresses, NewEntry, GetInfoAboutSlot,
-    GetSlotsToDate
+    GetSlotsToDate, ToCurrentTimeSlots
 } = require("../controllers/main.Controller");
 const tokenToLocals = require("../middleware/reslocalsToken.middleware");
 const {DoctorsFromSearch, ExactDoctor, GetAllDoctors} = require("../controllers/doctor.Controller");
@@ -34,5 +34,7 @@ router.get('/slot/:sheduleId', authenticate, GetInfoAboutSlot) //* инфа о �
 router.get('/date', tokenToLocals, GetSlotsToDate) //* инфа о слотах на конкретный день
 
 router.patch('/shedule/visit', authenticate, NewEntry); //* обновляем в расписании состояние с null на pending или cancelled
+
+router.patch('/shedule/slots', ToCurrentTimeSlots); //* для эндпоинта со слотами, обновляем старые записи по дате
 
 module.exports = router;
