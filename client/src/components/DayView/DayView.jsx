@@ -17,7 +17,7 @@ export function DayView() {
   const [selectedMinute, setSelectedMinute] = useState(minutes[0]);
   const [shedule, setShedule] = useState({})
   const {doctorShedule} = shedule
-  console.log("-> shedule", doctorShedule);
+  console.log("-> shedule -->", doctorShedule);
 
 
   const {id} = useParams()
@@ -128,6 +128,9 @@ export function DayView() {
               return <button key={index} className="bg-green-700 px-2.5 py-2 rounded-lg border">{block.time}</button>
             }
             if (block.status === 'done') {
+              return <button key={index} className="bg-gray-400-700 px-2.5 py-2 rounded-lg border">{block.time}</button>
+            }
+            if (block.status === 'cancelled') {
               return <button key={index} className="bg-gray-400-700 px-2.5 py-2 rounded-lg border">{block.time}</button>
             }
           })}
