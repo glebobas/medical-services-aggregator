@@ -6,10 +6,6 @@ const cors = require('cors');
 const path = require('path');
 
 app.use(express.static(path.join(__dirname, '../public/')));
-const AuthRoutes = require('./routes/auth.Routes')
-const ClinicRoutes = require('./routes/clinic.Routes')
-const UserRoutes = require('./routes/user.Routes')
-const MainRoutes = require('./routes/main.Routes')
 
 app.use(express.static(path.join(__dirname, '../public/')));
 const jwt = require('jsonwebtoken');
