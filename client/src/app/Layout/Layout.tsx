@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Outlet} from 'react-router-dom';
 import {NavBar} from "../../components/NavBar";
 import {Footer} from "../../components/Footer";
-
+import { Chat }  from '../../components/Chat/Chat'
 import {MainPage} from '../../pages/MainPage/MainPage'
 // import { Footer } from 'widgets/Footer';
 import {DoctorCard} from "../../components/DoctorCard";
@@ -23,6 +23,7 @@ export const Layout: FC<LayoutProps> = ({title}) => {
           <Outlet />
         </div>
       </div>
+      <Chat />
       <Footer/>
     </div>
   );
