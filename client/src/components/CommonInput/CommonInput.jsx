@@ -3,6 +3,7 @@ import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {Select} from 'antd';
 import {SearchResultsContext} from "../../context/context";
+import {ShedulRecModal} from "../Modal/ShedulRecModal";
 
 export function CommonInput({setData}) {
 
