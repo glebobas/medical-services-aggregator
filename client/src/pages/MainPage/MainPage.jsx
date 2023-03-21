@@ -1,10 +1,4 @@
 import React from 'react'
-import { CommonInput } from '../../components/CommonInput/CommonInput'
-import { SelectLocation } from '../../components/SelectLocation/SelectLocation'
-import { CheckBoxes } from '../../components/CheckBoxes/CheckBoxes'
-import { SelectSpecialization } from '../../components/SelectSpecialization/SelectSpecialization'
-import {MainImage} from '../../components/MainImage/MainImage'
-import RandomSearch from "../../components/RandomSearch/RandomSearch";
 import {useNavigate} from "react-router-dom";
 
 export function MainPage() {
