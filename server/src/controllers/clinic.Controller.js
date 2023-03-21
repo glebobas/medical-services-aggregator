@@ -1,10 +1,38 @@
-const {User, Shedule, Doctor, Clinic, Address, Speciality, Rating, Slot} = require('../../db/models')
+const {User, Shedule, Doctor, Clinic, Address, Speciality, Rating, Slot, Review} = require('../../db/models')
 const {Op} = require("sequelize");
 
 
 exports.ExactClinic = async (req, res) => {
     try {
         const {clinicId} = req.params;
+
+
+        const reviewsNative = await Review.findAll({where: {clinicId}, include: [
+                {
+                    model: User,
+                    include: [
+                        {model: Rating, where: {clinicId}}
+                    ]
+                },
+            ],
+            raw: true,
+            nest: true})
+
+      const reviewsReady = reviewsNative.map(el => {
+          let fullname = el.User.firstName + ' ' + el.User.lastName
+          if (el.User.firstName === null || el.User.lastName === null) {
+              fullname = 'Anonimous'
+          }
+
+          return {
+              reviewId: el.id,
+              reviewText: el.clinic_review,
+              clinicId: el.clinicId,
+              reviewerName: fullname,
+              rating: el.User.Ratings.clinicRating || 0
+          }
+      })
+
         const clinic = await Clinic.findOne({where: {id: clinicId}, include: [{model: Address}]})
         // const doctors = await Doctor.findAll({where: {clinicId}})
         const doctors = await Doctor.findAll({
@@ -167,8 +195,9 @@ exports.ExactClinic = async (req, res) => {
                 }
             })
         }
+
         if (clinic.id) {
-            res.json({readyClinic, readyDoctorList})
+            res.json({readyClinic, readyDoctorList, reviewsReady})
         } else res.json({message: "Couldn't find clinic"})
     } catch (e) {
         console.error(e)

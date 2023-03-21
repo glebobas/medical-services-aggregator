@@ -1,4 +1,4 @@
-const {Doctor, Clinic, Address, Shedule, Speciality, Slot, Rating} = require("../../db/models");
+const {Doctor, Clinic, Address, Shedule, Speciality, Slot, Rating, Review, User} = require("../../db/models");
 const {Op} = require("sequelize");
 
 
@@ -194,6 +194,34 @@ exports.ExactDoctor = async (req, res) => {
     try {
         const {doctorId} = req.params;
 
+        const reviewsNative = await Review.findAll({where: {doctorId}, include: [
+                {
+                    model: User,
+                    include: [
+                        {model: Rating, where: {doctorId}}
+                    ]
+                },
+            ],
+            raw: true,
+            nest: true})
+
+
+        const reviewsReady = reviewsNative.map(el => {
+            let fullname = el.User.firstName + ' ' + el.User.lastName
+            if (el.User.firstName === null || el.User.lastName === null) {
+                fullname = 'Anonimous'
+            }
+
+            return {
+                reviewId: el.id,
+                reviewText: el.doctor_review,
+                doctorId: el.doctorId,
+                reviewerName: fullname,
+                rating: el.User.Ratings.doctorRating || 0
+            }
+        })
+        console.log("-> reviewsReady", reviewsReady);
+
         const doctor = await Doctor.findOne({where: {id: doctorId}, include: [
                 {
                     model: Clinic,
@@ -337,18 +365,15 @@ exports.ExactDoctor = async (req, res) => {
             })
         }
 
-
-
-
-
+        
 
         if (doctor.id && !readyUserOwnShedule.length) {
             let readyDocOne = readyDoc[0]
-            res.json({readyDocOne, doctorShedule})
+            res.json({readyDocOne, doctorShedule, reviewsReady})
         }
         if (doctor.id && readyUserOwnShedule.length) {
             let readyDocOne = readyDoc[0]
-            res.json({readyDocOne, readyUserOwnShedule, doctorShedule})
+            res.json({readyDocOne, readyUserOwnShedule, doctorShedule, reviewsReady})
         }
         if (!doctor.id) res.json({message: "Couldn't find doctor"})
     } catch (e) {
