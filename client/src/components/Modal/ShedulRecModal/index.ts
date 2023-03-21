@@ -1,0 +1,1 @@
+export {ShedulRecModal} from './ShedulRecModal'

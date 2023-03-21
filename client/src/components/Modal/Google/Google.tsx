@@ -20,8 +20,10 @@ function GoogleAuth(): JSX.Element {
             const tokenGoogle = code.access_token
 
             const exchangeToken = async (token: string) => {
-                const response = await fetch(`/auth/google/callback?token=${token}`, {
-                    credentials: 'include'
+                const response = await fetch('/auth/google/callback', {
+                    headers: {
+                        'authorization': 'Bearer ' + token,
+                    }
                 });
                 return await response.json()
             };
@@ -44,9 +46,7 @@ function GoogleAuth(): JSX.Element {
 
     return (
         <div>
-
             {/*<GoogleLogin responseType="code" accessType="offline" onSuccess={handleSuccess} onError={handleFailure}/>*/}
-
             <button className="google-btn" onClick={() => login()}>
                 <img src={googleIcon} alt="Google icon"/>
             </button>
