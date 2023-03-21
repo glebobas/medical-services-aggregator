@@ -17,7 +17,7 @@ export function ShedulRecModal({props}) {
 
   function handleClickModalShedule() {
     // console.log(idDoctor, sheduleIdOneBlock)
-    fetch('/main/shedule/visit', {
+    fetch('/user/shedule/visit', {
       method: "PATCH",
       headers: {
         'Content-Type': 'application/json',

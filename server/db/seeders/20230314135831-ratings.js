@@ -11,7 +11,7 @@ module.exports = {
     const reviews = []
 
 
-    for (let i = 1; i <= 300; i++) {
+    for (let i = 1; i <= 5000; i++) {
       const userId = hoaxer.datatype.number({min: 1, max: 10});
       let doctorRating = hoaxer.datatype.number({min: 1, max: 5});
       let clinicRating = hoaxer.datatype.number({min: 1, max: 5});
@@ -28,10 +28,10 @@ module.exports = {
         clinicRating = null;
       }
 
-      const existingRating = ratings.find(rating => rating.userId === userId && rating.doctorId === doctorId && rating.clinicId === clinicId);
+      // const existingRating = ratings.find(rating => rating.userId === userId && rating.doctorId === doctorId && rating.clinicId === clinicId);
 
 
-      if (!existingRating) {
+      // if (!existingRating) {
         ratings.push({
           userId,
           doctorRating,
@@ -41,7 +41,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date()
         });
-      }
+      // }
 
       let doctor_review = null;
       let clinic_review = null;
@@ -112,12 +112,9 @@ module.exports = {
 
 
 
-
-
-
 //* наваливаем норм отзывов и рейтинга для повышения среднего балла
 
-    for (let i = 1; i <= 600; i++) {
+    for (let i = 1; i <= 500; i++) {
       const userId = hoaxer.datatype.number({min: 1, max: 10});
       let doctorRating = hoaxer.datatype.number({min: 5, max: 5});
       let clinicRating = hoaxer.datatype.number({min: 5, max: 5});
@@ -134,9 +131,9 @@ module.exports = {
         clinicRating = null;
       }
 
-      const existingRating = ratings.find(rating => (rating.userId === userId && rating.doctorId === doctorId) || (rating.userId && rating.clinicId === clinicId));
+      // const existingRating = ratings.find(rating => (rating.userId === userId && rating.doctorId === doctorId) || (rating.userId && rating.clinicId === clinicId));
 
-      if (!existingRating) {
+      // if (!existingRating) {
         ratings.push({
           userId,
           doctorRating,
@@ -146,7 +143,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date()
         });
-      }
+      // }
 
       let doctor_review = null;
       let clinic_review = null;
@@ -216,9 +213,9 @@ module.exports = {
       if (existingRatingIndex === -1) {
         acc.push(rating);
       }
-      // else {
-      //   acc[existingRatingIndex] = rating;
-      // }
+      if (existingRatingIndex !== -1) {
+        acc[existingRatingIndex] = rating;
+      }
 
       return acc;
     }, []);

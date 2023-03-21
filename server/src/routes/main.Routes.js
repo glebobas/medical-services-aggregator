@@ -31,8 +31,6 @@ router.get('/slot/:sheduleId', authenticate, GetInfoAboutSlot) //* инфа о �
 
 router.get('/date', tokenToLocals, GetSlotsToDate) //* инфа о слотах на конкретный день
 
-router.patch('/shedule/visit', authenticate, NewEntry); //* обновляем в расписании состояние с null на pending или cancelled
-
 router.patch('/shedule/slots', ToCurrentTimeSlots); //* для эндпоинта со слотами, обновляем старые записи по дате
 
 router.get('/random', RandomDocClinic) //* рандомайзер поиска врача или клиник

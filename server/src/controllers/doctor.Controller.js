@@ -365,7 +365,7 @@ exports.ExactDoctor = async (req, res) => {
             })
         }
 
-        
+
 
         if (doctor.id && !readyUserOwnShedule.length) {
             let readyDocOne = readyDoc[0]

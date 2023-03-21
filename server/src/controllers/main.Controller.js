@@ -547,34 +547,6 @@ exports.GetInfoAboutSlot = async (req, res) => {
 }
 
 
-exports.NewEntry = async (req, res) => {
-    const {sheduleId, statusAppointment} = req.body
-
-    const userId = res?.locals?.user?.id
-
-
-    try {
-
-        const [nmbOfUpdatedShedule, updatedShedule] = await Shedule.update({statusAppointment, userId}, {
-            where: {
-                id: Number(sheduleId),
-            },
-            returning: true,
-            plain: true,
-        })
-        if (nmbOfUpdatedShedule === 0) {
-            return res.status(404).json({message: 'Error while updating shedule'});
-        }
-
-        res.status(200).json({user: updatedShedule})
-
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({message: 'Server error'});
-    }
-
-}
 
 exports.ToCurrentTimeSlots = async (req, res) => {
     const {sheduleId, statusAppointment} = req.body
@@ -976,7 +948,7 @@ exports.RandomDocClinic = async (req, res) => { //* получаем РАНДО�
         // readyDoctorListNotGrouped = readyDoctorListNative?.filter((el) => Number(el.doctorRating) > 4.5)
 
         readyClinicListNotGrouped = readyClinicListNative?.filter((el) => {
-            const clinicRatingFilter = Number(el.clinicRating) > 4.5;
+            const clinicRatingFilter = Number(el.clinicRating) > 4;
             const countryFilter = filterConditions.countryName ? el.address.includes(countryName) : true;
             const cityFilter = filterConditions.cityName ? el.address.includes(cityName) : true;
 
@@ -984,7 +956,7 @@ exports.RandomDocClinic = async (req, res) => { //* получаем РАНДО�
         });
 
         readyDoctorListNotGrouped = readyDoctorListNative?.filter((el) => {
-            const doctorRatingFilter = Number(el.doctorRating) > 4.5;
+            const doctorRatingFilter = Number(el.doctorRating) > 4;
             const adultFilter = filterConditions?.adultPatients ? el.adultPatients === adultPatients : true;
             const childrenFilter = filterConditions?.childrenPatients ? el.childrenPatients === childrenPatients : true;
             const specialityFilter = filterConditions.specialityName ? el.speciality === specialityName : true;
@@ -996,7 +968,9 @@ exports.RandomDocClinic = async (req, res) => { //* получаем РАНДО�
 
 
         let readyClinicList = []
+        console.log("-> readyClinicList", readyClinicList);
         let readyDoctorList = []
+        console.log("-> readyDoctorList", readyDoctorList);
 
         if (readyClinicListNotGrouped.length > 3) {
             while (readyClinicList.length < 3) {

@@ -6,7 +6,7 @@ import React, {Fragment, useContext, useRef, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
 import {AuthContext, AuthContextType} from "../../../context";
 import GoogleAuth from "../Google/Google";
-import {Route} from "react-router-dom";
+
 
 
 interface LoginData {
