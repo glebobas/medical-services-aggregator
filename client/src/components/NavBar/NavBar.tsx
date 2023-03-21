@@ -11,9 +11,9 @@ import { Link, useNavigate } from 'react-router-dom';
 
 
 const navigationUserTrue = [
-  { name: 'Клиники', href: '/clinics', current: false },
-  { name: 'Врачи', href: '/doctors', current: false },
-  { name: 'Календарь', href: '/calendar', current: false },
+  { name: 'Клиники', path: '/clinics', current: false },
+  { name: 'Врачи', path: '/doctors', current: false },
+  { name: 'Календарь', path: '/calendar', current: false },
 ]
 
 const navigationUserFalse = [
@@ -51,6 +51,10 @@ export function NavBar() {
     }
     setUser(getUser)
   }, [token, getUser, dispatch])
+
+  const redir =(to: any) => {
+    navigate(to);
+  }
 
 
 
@@ -214,18 +218,18 @@ export function NavBar() {
                       <div className="hidden sm:ml-6 sm:block">
                         <div className="flex space-x-4">
                           {navigationUserTrue.map((item) => (
-                            <a
+                            <div
                               key={item.name}
-                              href={item.href}
+                              onClick={() => redir(item.path)}
                               className={classNames(
-                                item.current ? 'bg-slate-400 text-white' : 'text-gray-700 hover:bg-gray-700' +
+                                item.current ? 'bg-slate-400 text-white' : 'text-gray-700 hover:bg-gray-700 cursor-pointer' +
                                   ' hover:text-white',
-                                'rounded-md px-3 py-2 text-sm font-medium'
+                                'rounded-md px-3 py-2 text-sm font-medium',
                               )}
                               aria-current={item.current ? 'page' : undefined}
                             >
                               {item.name}
-                            </a>
+                            </div>
                           ))}
                         </div>
                       </div>

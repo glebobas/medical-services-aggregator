@@ -35,7 +35,7 @@ router.patch('/shedule/visit', authenticate, NewEntry); //* обновляем �
 
 router.patch('/shedule/slots', ToCurrentTimeSlots); //* для эндпоинта со слотами, обновляем старые записи по дате
 
-// router.get('/random', RandomDocClinic) //* рандомайзер поиска врача или клиник
+router.get('/random', RandomDocClinic) //* рандомайзер поиска врача или клиник
 
 
 module.exports = router;
