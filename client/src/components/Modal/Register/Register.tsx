@@ -138,121 +138,129 @@ export function Register(): JSX.Element {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel
-                className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-                  <form onSubmit={onSubmit} className="w-full max-w-lg">
-                    <div className="flex flex-wrap -mx-3 mb-6">
-                      <div className="w-full px-3">
-                        <label
-                          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                          Login
-                        </label>
-                        <input
-                          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                          name='username'
-                          type="text"
-                          autoComplete="off"
-                          placeholder="Please, type your login"
-                          onChange={signUp}
-                          required/>
-                      </div>
-                    </div>
-                    <div className="flex flex-wrap -mx-3 mb-6">
-                      <div className="w-full px-3">
-                        <label
-                          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                          First name
-                        </label>
-                        <input
-                          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                          name='firstName'
-                          type="text"
-                          autoComplete="off"
-                          placeholder="Please, type your first name"
-                          onChange={signUp}
-                          required/>
-                      </div>
-                    </div>
-                    <div className="flex flex-wrap -mx-3 mb-6">
-                      <div className="w-full px-3">
-                        <label
-                          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                          Last name
-                        </label>
-                        <input
-                          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                          name='lastName'
-                          type="text"
-                          autoComplete="off"
-                          placeholder="Please, type your  Last name"
-                          onChange={signUp}
-                          required/>
-                      </div>
-                    </div>
-                    <div className="flex flex-wrap -mx-3 mb-6">
-                      <div className="w-full px-3">
-                        <label
-                          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                          email
-                        </label>
-                        <input
-                          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                          name='email'
-                          type="email"
-                          autoComplete="off"
-                          placeholder="Please, type your email"
-                          // value={value}
-                          onChange={signUp}
-                          // onBlur={handleBlur}
-                          required/>
-                      </div>
-                    </div>
-                    <div className="flex flex-wrap -mx-3 mb-6">
-                      <div className="w-full px-3">
-                        <label
-                          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                          Phone number
-                        </label>
-                        <input
-                          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                          name='telephone'
-                          type="text"
-                          placeholder="Please, type your Phone number"
-                          onChange={signUp}
-                          required/>
-                      </div>
-                    </div>
-                    <div className="flex flex-wrap -mx-3 mb-6">
-                      <div className="w-full px-3">
-                        <label
-                          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                          Password
-                        </label>
-                        <input
-                          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                          name='password'
-                          id="grid-password"
-                          type="password"
-                          placeholder="Please, type your password"
-                          onChange={signUp}
-                          required/>
-                        {errorAuth &&
-                          <div className='flex flex-column justify-center align-items-center'>
+                className="w-1/2">
+                <div className="flex flex-col items-center px-6 py-8 mx-auto lg:py-0">
+                  <div
+                    className="w-full bg-white rounded-lg shadow dark:border md:mt-8 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+                    <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+                      <h1
+                        className="text-xl text-left font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                        Create and account
+                      </h1>
+                      <form onSubmit={onSubmit} className="space-y-2 md:space-y-4">
+                        <div>
+                          <label
+                            className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Login
+                          </label>
+                          <input
+                            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                            name='username'
+                            type="text"
+                            autoComplete="off"
+                            placeholder="Please, type your login"
+                            onChange={signUp}
+                            required/>
+
+                        </div>
+                        <div className="flex flex-wrap -mx-3 mb-6">
+                          <div className="w-full px-3">
+                            <label
+                              className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                              First name
+                            </label>
+                            <input
+                              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                              name='firstName'
+                              type="text"
+                              autoComplete="off"
+                              placeholder="Please, type your first name"
+                              onChange={signUp}
+                              required/>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap -mx-3 mb-6">
+                          <div className="w-full px-3">
+                            <label
+                              className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                              Last name
+                            </label>
+                            <input
+                              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                              name='lastName'
+                              type="text"
+                              autoComplete="off"
+                              placeholder="Please, type your  Last name"
+                              onChange={signUp}
+                              required/>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap -mx-3 mb-6">
+                          <div className="w-full px-3">
+                            <label
+                              className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                              Email
+                            </label>
+                            <input
+                              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                              name='email'
+                              type="email"
+                              autoComplete="off"
+                              placeholder="Please, type your email"
+                              // value={value}
+                              onChange={signUp}
+                              // onBlur={handleBlur}
+                              required/>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap -mx-3 mb-6">
+                          <div className="w-full px-3">
+                            <label
+                              className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                              Phone number
+                            </label>
+                            <input
+                              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                              name='telephone'
+                              type="text"
+                              placeholder="Please, type your Phone number"
+                              onChange={signUp}
+                              required/>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap -mx-3 mb-6">
+                          <div className="w-full px-3">
+                            <label
+                              className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                              Password
+                            </label>
+                            <input
+                              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                              name='password'
+                              id="grid-password"
+                              type="password"
+                              placeholder="••••••••"
+                              onChange={signUp}
+                              required/>
+                            {errorAuth &&
+                              <div className='flex flex-column justify-center align-items-center'>
                             <span className="top-0 right-0 py-3 px-4 text-sm text-red-600">
                               {errorAuth}
                             </span>
+                              </div>
+                            }
                           </div>
-                        }
-                      </div>
+                        </div>
+                        <div className='google'><GoogleAuth/></div>
+                        <div className='flex flex-column justify-center align-items-center'>
+                          <button type="submit"
+                                  className="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Sign
+                            Up
+                          </button>
+                        </div>
+                      </form>
                     </div>
-                    <div className='google'><GoogleAuth/></div>
-                    <div className='flex flex-column justify-center align-items-center'>
-                      <button type="submit"
-                              className=' left-20 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5'>Sign
-                        Up
-                      </button>
-                    </div>
-                  </form>
+                  </div>
                 </div>
               </Dialog.Panel>
             </Transition.Child>

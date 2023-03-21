@@ -10,7 +10,6 @@ import {useParams} from "react-router-dom";
 
 export default function ClinicalCard() {
   const {id} = useParams()
-  console.log("-> id", id)
   const [clinic, setClinic] = useState({readyClinic: [], doctors: []});
   
   const data = {id: 1};
