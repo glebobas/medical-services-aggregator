@@ -21,7 +21,7 @@ module.exports = {
 
     const getRandomGeneralTiming = () => {
       const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-      const startHour = hoaxer.random.number({ min: 8, max: 12 });
+      const startHour = hoaxer.random.number({ min: 10, max: 12 });
       const endHour = hoaxer.random.number({ min: 13, max: 18 });
       const startTime = `${startHour}am`;
       const endTime = `${endHour - 12}pm`;

@@ -92,22 +92,22 @@ exports.CreateUser = async (req, res) => {
         const saltRounds = 10;
         const passwordHash = await bcrypt.hash(password, saltRounds);
 
-        if (secretPhrase === truePhrase) {
-            try {
-                const newAdmin = await User.create({
-                    username,
-                    password: passwordHash,
-                    firstName,
-                    lastName,
-                    email,
-                    telephone
-                });
-                res.json({message: 'New admin registered successfully'});
-            } catch (err) {
-                console.error(err);
-                res.status(500).json({message: 'Failed to register admin'});
-            }
-        }
+        // if (secretPhrase === truePhrase) {
+        //     try {
+        //         const newAdmin = await User.create({
+        //             username,
+        //             password: passwordHash,
+        //             firstName,
+        //             lastName,
+        //             email,
+        //             telephone
+        //         });
+        //         res.json({message: 'New admin registered successfully'});
+        //     } catch (err) {
+        //         console.error(err);
+        //         res.status(500).json({message: 'Failed to register admin'});
+        //     }
+        // }
         const newUser = await User.create({username, password: passwordHash, firstName, lastName, email, telephone});
         if (newUser.username) {
             res.json({message: 'Registration successful!'})
