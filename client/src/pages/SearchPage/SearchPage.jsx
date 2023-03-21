@@ -9,9 +9,10 @@ import {SelectLocation} from "../../components/SelectLocation/SelectLocation";
 import {useState} from 'react'
 import {CheckIcon, ChevronUpDownIcon} from '@heroicons/react/20/solid'
 import {Combobox} from '@headlessui/react'
+import {DoctorList} from "../../components/DoctorList";
 
 const speciality = [
-  {id: 1, name: 'Dentist'},
+  {id: 1, name: ''},
   {id: 2, name: 'Cardiologist'},
   {id: 3, name: 'Dermatologist'},
   {id: 4, name: 'Surgeon'},
@@ -34,6 +35,24 @@ export function SearchPage(props) {
   const [queryLocation, setLocationQuery] = useState('')
   const [selectedSpeciality, setSelectedSpeciality] = useState()
   const [selectedLocation, setSelectedLocation] = useState()
+  const [doctors, setDoctors] = useState([])
+
+  // Checked children
+  const [isCheckedChildren, setIsCheckedChildren] = useState(false);
+  // Checked parent
+  const [isCheckedParent, setIsCheckedParent] = useState(false);
+  // Checked random
+  const [isCheckedRandom, setIsCheckedRandom] = useState(false);
+  const handleCheckboxChildrenChange = (event) => {
+    setIsCheckedChildren(event.target.checked);
+  };
+  const handleCheckboxParentChange = (event) => {
+    setIsCheckedParent(event.target.checked);
+  };
+
+  const handleCheckboxRandomChange = (event) => {
+    setIsCheckedRandom(event.target.checked);
+  }
 
   const filteredSpeciality =
     queryPerson === ''
@@ -55,25 +74,48 @@ export function SearchPage(props) {
     setData
   } = useContext(SearchResultsContext)
 
+
+  // TODO: Продолжить логику
   const handleButtonClick = async () => {
-    // console.log(searchTerm)
-    try {
-      // const response =  await fetch(`/main/alldata/${searchTerm}`)
-      // const results = await response.json();
-      // // console.log("-> results", results);
-      // // const getClinicsAndDoctors = [...results.readyClinicList, ...results.readyDoctorList]
-      // // console.log("-> getClinicsAndDoctors", getClinicsAndDoctors);
-      // setData(results)
-      // navigate("/listpage")
-    } catch (error) {
-      console.error(error)
+    let query = `?adultPatients=${isCheckedParent}&childrenPatients=${isCheckedChildren}`
+
+    if (selectedSpeciality) {
+      query += `&specialityName=${selectedSpeciality.name}`;
     }
+    if (selectedLocation) {
+      query += `&countryName=${selectedLocation.name}`;
+    }
+    if (isCheckedRandom) {
+      fetch(`/main/random${query}`)
+        .then(response =>response.json())
+        .then(data => setDoctors(data))
+        .catch(error => console.log(error))
+    } else {
+      fetch(`/main/somedoctors${query}`)
+        .then(response =>response.json())
+        .then(data => setDoctors(data))
+        .catch(error => console.log(error))
+    }
+
+    // try {
+    //   // const response =  await fetch(`/main/alldata/${searchTerm}`)
+    //   // const results = await response.json();
+    //   // // console.log("-> results", results);
+    //   // // const getClinicsAndDoctors = [...results.readyClinicList, ...results.readyDoctorList]
+    //   // // console.log("-> getClinicsAndDoctors", getClinicsAndDoctors);
+    //   // setData(results)
+    //   // navigate("/listpage")
+    // } catch (error) {
+    //   console.error(error)
+    // }
   }
+
+
   return (
     <div className="flex flex-col flex-grow mt-4 w-full">
       <div className="title flex flex-row font-semibold text-xl">Расширенный поиск</div>
       <div className="flex flex-row flex-grow justify-start rounded border mt-4">
-        <div className="flex-col bg-white w-2/6 px-6 py-6">
+        <div className="flex-col bg-white w-1/3 px-6 py-6">
           <Combobox as="div" value={selectedSpeciality} onChange={setSelectedSpeciality}>
             <Combobox.Label
               className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">Специальность</Combobox.Label>
@@ -130,15 +172,17 @@ export function SearchPage(props) {
               <div className="relative flex items-start">
                 <div className="flex h-5 items-center">
                   <input
-                    id="candidates"
+                    id="children"
                     aria-describedby="candidates-description"
                     name="candidates"
                     type="checkbox"
                     className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    checked={isCheckedChildren}
+                    onChange={handleCheckboxChildrenChange}
                   />
                 </div>
                 <div className="ml-3 text-sm">
-                  <label htmlFor="candidates" className="font-medium text-gray-700">
+                  <label htmlFor="children" className="font-medium text-gray-700">
                     Детский
                   </label>
                 </div>
@@ -148,15 +192,17 @@ export function SearchPage(props) {
               <div className="relative flex items-start">
                 <div className="flex h-5 items-center">
                   <input
-                    id="candidates"
+                    id="parent"
                     aria-describedby="candidates-description"
                     name="candidates"
                     type="checkbox"
                     className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    checked={isCheckedParent}
+                    onChange={handleCheckboxParentChange}
                   />
                 </div>
                 <div className="ml-3 text-sm">
-                  <label htmlFor="candidates" className="font-medium text-gray-700">
+                  <label htmlFor="parent" className="font-medium text-gray-700">
                     Взрослый
                   </label>
                 </div>
@@ -223,6 +269,8 @@ export function SearchPage(props) {
                   name="candidates"
                   type="checkbox"
                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  checked={isCheckedRandom}
+                  onChange={handleCheckboxRandomChange}
                 />
               </div>
               <div className="ml-3 text-sm">
@@ -232,10 +280,10 @@ export function SearchPage(props) {
               </div>
             </div>
           </div>
-          <button className="mt-6 border rounded px-8 py-2 bg-green-700 text-white hover:bg-green-800">Search</button>
+          <button className="mt-6 border rounded px-8 py-2 bg-green-700 text-white hover:bg-green-800" onClick={handleButtonClick}>Search</button>
         </div>
         <div className="flex-col px-6 py-6">
-          Результат поиска
+          <DoctorList props={doctors}/>
         </div>
       </div>
       {/*<div>search</div>*/}

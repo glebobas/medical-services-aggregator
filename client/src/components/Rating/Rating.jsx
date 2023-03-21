@@ -24,7 +24,7 @@ function Rating(props) {
 
   return (
     <>
-      <div>
+      <div className="inline-block min-w-content">
         <div>
           <svg
             width="0"
@@ -149,7 +149,7 @@ function Rating(props) {
             viewBox="0 0 32 32"
           >
             <use xlinkHref="#star" fill={`url(#${rat}<>${a[0]}<>${random})`}></use>
-            
+
           </svg>
           <svg
             className="c-star active"
@@ -185,7 +185,7 @@ function Rating(props) {
           </svg>
         </p>
       </div>
-      <p>{rat} / 5</p>
+      <p className="text-left">{rat} / 5</p>
     </>
   );
 }
