@@ -1,10 +1,12 @@
+//@ts-ignore
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Rating from '../Rating/Rating';
+import usePagination from '../../hooks/usePagination';
 
 export function ClinicList() {
 
-  const [allClinicsData, setAllClinicsData] = useState(null);
+  const [allClinicsData, setAllClinicsData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,26 +18,29 @@ export function ClinicList() {
         credentials: "include",
       })
       const data = await response.json();
-      setAllClinicsData(data);
+      setAllClinicsData(data.readyClinicList);
+      console.log(data.readyClinicList)
     };
     fetchData();
   }, [])
 
-  useEffect(() => {
-    document.addEventListener('scroll', scrollHandler)
-    return function () {
-      document.removeEventListener('scroll', scrollHandler);
-    }
-  });
-
-  const scrollHandler = (e) => {
-    console.log('scroll')
-  }
-
   const navigate = useNavigate()
   const handleClick = (field) => {
     navigate(`/clinic/${field}`)
-  }
+  };
+
+  const {
+    firstContentIndex,
+    lastContentIndex,
+    nextPage,
+    prevPage,
+    page,
+    setPage,
+    totalPages,
+  } = usePagination({
+    contentPerPage: 3,
+    count: allClinicsData?.length,
+  });
 
   return (
     <div className="mt-4 flex flex-col">
@@ -70,7 +75,7 @@ export function ClinicList() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {allClinicsData?.readyClinicList.map(field => {
+            {allClinicsData?.slice(firstContentIndex, lastContentIndex).map(field => {
               return (
                 <tr key={field.email} name={`clinic ${field.id}`} className="hover:bg-gray-100 cursor-pointer" onClick={() => handleClick(field.clinicId)}>
                   <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
@@ -98,13 +103,33 @@ export function ClinicList() {
                     {/* <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
                                 Active
                               </span> */}
-                    <Rating rat={4.7} />
+                    <Rating rat={field.clinicRating} />
                   </td>
                 </tr>
               )
             })}
           </tbody>
         </table>
+      </div>
+      <div className="flex items-center">
+        <p className="text">
+          {page}/{totalPages}
+        </p>
+        <button onClick={prevPage} className="page">
+          &larr;
+        </button>
+        {[...Array(totalPages)?.keys()]?.map((el) => (
+          <button
+            onClick={() => setPage(el + 1)}
+            key={el}
+            className={`page ${page === el + 1 ? "active" : ""}`}
+          >
+            {el + 1}
+          </button>
+        ))}
+        <button onClick={nextPage} className="page">
+          &rarr;
+        </button>
       </div>
     </div>
   )
