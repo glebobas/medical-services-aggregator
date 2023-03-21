@@ -23,6 +23,9 @@ const AuthRoutes = require('./routes/auth.Routes')
 const ClinicRoutes = require('./routes/clinic.Routes')
 const UserRoutes = require('./routes/user.Routes')
 const MainRoutes = require('./routes/main.Routes')
+const UserActions = require('./routes/userAction.Routes')
+const authenticate = require("./middleware/auth.middleware");
+
 
 io.on('connection', (socket) => {
   console.log('A user connected');
@@ -58,7 +61,8 @@ const PORT = process.env.PORT || 4002;
 app.use('/main', MainRoutes)
 app.use('/auth', AuthRoutes)
 app.use('/clinical', ClinicRoutes)
-app.use('/profile', UserRoutes)
+app.use('/profile', authenticate, UserRoutes)
+app.use('/user', authenticate, UserActions)
 
 app.listen(PORT, () => {
     try {

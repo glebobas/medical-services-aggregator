@@ -8,8 +8,6 @@ router.post('/google/login', loginWithGoogle)
 
 router.get('/google/callback', googleCallback)
 
-
-
 router.post('/login', CheckUserAndCreateToken);
 
 

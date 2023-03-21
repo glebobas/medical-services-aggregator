@@ -208,7 +208,7 @@ exports.EditRecordsInProfile = async (req, res) => {
         }
 
         if (doctorRating && doctorId) { //* обновляем рейтинг докторов и клиник
-            const [numUpdated, [updatedRating]] = await Rating.update(
+            const [numUpdated, updatedRating] = await Rating.update(
                 {
                     doctorRating
 
