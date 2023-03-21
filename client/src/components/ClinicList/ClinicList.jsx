@@ -24,17 +24,6 @@ export function ClinicList() {
     fetchData();
   }, [])
 
-  useEffect(() => {
-    document.addEventListener('scroll', scrollHandler)
-    return function () {
-      document.removeEventListener('scroll', scrollHandler);
-    }
-  });
-
-  const scrollHandler = (e) => {
-    console.log('scroll')
-  }
-
   const navigate = useNavigate()
   const handleClick = (field) => {
     navigate(`/clinic/${field}`)
@@ -52,8 +41,6 @@ export function ClinicList() {
     contentPerPage: 3,
     count: allClinicsData?.length,
   });
-
-  console.log(allClinicsData);
 
   return (
     <div className="mt-4 flex flex-col">
@@ -116,7 +103,7 @@ export function ClinicList() {
                     {/* <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
                                 Active
                               </span> */}
-                    <Rating rat={4.7} />
+                    <Rating rat={field.clinicRating} />
                   </td>
                 </tr>
               )

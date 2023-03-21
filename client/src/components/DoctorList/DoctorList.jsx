@@ -28,8 +28,6 @@ export function DoctorList() {
     navigate(`/doctor/${id}`, {state : {id}})
   }
 
-  console.log(allDoctorsData.length);
-
   const {
     firstContentIndex,
     lastContentIndex,
@@ -111,7 +109,7 @@ export function DoctorList() {
                   {/* <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
                                 Active
                               </span> */}
-                  <Rating rat={4.7} />
+                  <Rating rat={field.doctorRating} />
                 </td>
               </tr>
             ))}
