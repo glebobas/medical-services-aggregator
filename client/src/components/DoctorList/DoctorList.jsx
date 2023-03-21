@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import usePagination from '../../hooks/usePagination';
 import Rating from '../Rating/Rating'
 
 export function DoctorList() {
 
-  const [allDoctorsData, setAllDoctorsData] = useState(null);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [fetching, setFetching] = useState(true);
+  const [allDoctorsData, setAllDoctorsData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,29 +23,25 @@ export function DoctorList() {
     fetchData();
   }, []);
 
-  // useEffect(() => {
-  //   document.addEventListener('scroll', scrollHandler)
-  //   return function () {
-  //     document.removeEventListener('scroll', scrollHandler);
-  //   }
-  // });
-
-  // const scrollHandler = (e) => {
-  //   if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
-  //     console.log('scroll');
-  //   }
-  //   console.log('scrollHeight', e.target.documentElement.scrollHeight);
-  //   console.log('scrollHeight');
-  //   console.log('scrollHeight', window.innerHeight);
-
-  // }
-
   const navigate = useNavigate()
   const handleClick = (id) => {
     navigate(`/doctor/${id}`, {state : {id}})
   }
 
-  // console.log(allDoctorsData);
+  console.log(allDoctorsData.length);
+
+  const {
+    firstContentIndex,
+    lastContentIndex,
+    nextPage,
+    prevPage,
+    page,
+    setPage,
+    totalPages,
+  } = usePagination({
+    contentPerPage: 3,
+    count: allDoctorsData?.length,
+  });
 
   return (
     <div className="mt-4 flex flex-col">
@@ -88,7 +83,7 @@ export function DoctorList() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {allDoctorsData?.map(field => (
+            {allDoctorsData?.slice(firstContentIndex, lastContentIndex).map(field => (
               <tr key={field.email} className="hover:bg-gray-100 cursor-pointer" onClick={() => (handleClick(field.doctorId))}>
                 <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                   <div className="flex items-center">
@@ -122,6 +117,26 @@ export function DoctorList() {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="flex items-center">
+        <p className="text">
+          {page}/{totalPages}
+        </p>
+        <button onClick={prevPage} className="page">
+          &larr;
+        </button>
+        {[...Array(totalPages)?.keys()].map((el) => (
+          <button
+            onClick={() => setPage(el + 1)}
+            key={el}
+            className={`page ${page === el + 1 ? "active" : ""}`}
+          >
+            {el + 1}
+          </button>
+        ))}
+        <button onClick={nextPage} className="page">
+          &rarr;
+        </button>
       </div>
     </div>
   )

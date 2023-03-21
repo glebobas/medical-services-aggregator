@@ -1,11 +1,12 @@
+//@ts-ignore
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Rating from '../Rating/Rating';
-// import usePagination from '../../hooks/usePagination';
+import usePagination from '../../hooks/usePagination';
 
 export function ClinicList() {
 
-  const [allClinicsData, setAllClinicsData] = useState(null);
+  const [allClinicsData, setAllClinicsData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,7 +18,8 @@ export function ClinicList() {
         credentials: "include",
       })
       const data = await response.json();
-      setAllClinicsData(data);
+      setAllClinicsData(data.readyClinicList);
+      console.log(data.readyClinicList)
     };
     fetchData();
   }, [])
@@ -38,20 +40,20 @@ export function ClinicList() {
     navigate(`/clinic/${field}`)
   };
 
-  // const {
-  //   firstContentIndex,
-  //   lastContentIndex,
-  //   nextPage,
-  //   prevPage,
-  //   page,
-  //   setPage,
-  //   totalPages,
-  // } = usePagination({
-  //   contentPerPage: 3,
-  //   count: allClinicsData?.readyClinicList.length,
-  // });
+  const {
+    firstContentIndex,
+    lastContentIndex,
+    nextPage,
+    prevPage,
+    page,
+    setPage,
+    totalPages,
+  } = usePagination({
+    contentPerPage: 3,
+    count: allClinicsData?.length,
+  });
 
-  // console.log(allClinicsData?.readyClinicList.length);
+  console.log(allClinicsData);
 
   return (
     <div className="mt-4 flex flex-col">
@@ -86,7 +88,7 @@ export function ClinicList() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {allClinicsData?.readyClinicList.slice(firstContentIndex, lastContentIndex).map(field => {
+            {allClinicsData?.slice(firstContentIndex, lastContentIndex).map(field => {
               return (
                 <tr key={field.email} name={`clinic ${field.id}`} className="hover:bg-gray-100 cursor-pointer" onClick={() => handleClick(field.clinicId)}>
                   <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
@@ -121,27 +123,26 @@ export function ClinicList() {
             })}
           </tbody>
         </table>
-        {/* <div className="pagination">
-          <p className="text">
-            {page}/{totalPages}
-          </p>
-          <button onClick={prevPage} className="page">
-            &larr;
+      </div>
+      <div className="flex items-center">
+        <p className="text">
+          {page}/{totalPages}
+        </p>
+        <button onClick={prevPage} className="page">
+          &larr;
+        </button>
+        {[...Array(totalPages)?.keys()]?.map((el) => (
+          <button
+            onClick={() => setPage(el + 1)}
+            key={el}
+            className={`page ${page === el + 1 ? "active" : ""}`}
+          >
+            {el + 1}
           </button>
-          @ts-ignore
-          {[...Array(totalPages)?.keys()].map((el) => (
-            <button
-              onClick={() => setPage(el + 1)}
-              key={el}
-              className={`page ${page === el + 1 ? "active" : ""}`}
-            >
-              {el + 1}
-            </button>
-          ))}
-          <button onClick={nextPage} className="page">
-            &rarr;
-          </button>
-          </div> */}
+        ))}
+        <button onClick={nextPage} className="page">
+          &rarr;
+        </button>
       </div>
     </div>
   )
