@@ -11,9 +11,9 @@ import {Link, useNavigate} from 'react-router-dom';
 
 
 const navigationUserTrue = [
-  {name: 'Клиники', href: '/clinics', current: false},
-  {name: 'Врачи', href: '/doctors', current: false},
-  {name: 'Календарь', href: '/calendar', current: false},
+  { name: 'Клиники', path: '/clinics', current: false },
+  { name: 'Врачи', path: '/doctors', current: false },
+  { name: 'Календарь', path: '/calendar', current: false },
 ]
 
 const navigationUserFalse = [
@@ -51,6 +51,10 @@ export function NavBar() {
     }
     setUser(getUser)
   }, [token, getUser, dispatch])
+
+  const redir =(to: any) => {
+    navigate(to);
+  }
 
 
   //* Состояние модального окна передается в модальное окно
@@ -200,30 +204,32 @@ export function NavBar() {
                         alt="Medical"
                         onClick={nav}
 
-                      />
-                      <img
-                        className="hidden h-8 w-auto lg:block"
-                        src="https://cdn-icons-png.flaticon.com/64/1052/1052784.png"
-                        alt="Medical"
-                        onClick={nav}
-                      />
-                    </div>
-                    <div className="hidden sm:ml-6 sm:block">
-                      <div className="flex space-x-4">
-                        {navigationUserTrue.map((item) => (
-                          <a
-                            key={item.name}
-                            href={item.href}
-                            className={classNames(
-                              item.current ? 'bg-slate-400 text-white' : 'text-gray-700 hover:bg-gray-700' +
-                                ' hover:text-white',
-                              'rounded-md px-3 py-2 text-sm font-medium'
-                            )}
-                            aria-current={item.current ? 'page' : undefined}
-                          >
-                            {item.name}
-                          </a>
-                        ))}
+                        />
+                        <img
+                          className="hidden h-8 w-auto lg:block"
+                          src="https://cdn-icons-png.flaticon.com/64/1052/1052784.png"
+                          alt="Medical"
+                          onClick={nav}
+                        />
+                      </div>
+                      <div className="hidden sm:ml-6 sm:block">
+                        <div className="flex space-x-4">
+                          {navigationUserTrue.map((item) => (
+                            <div
+                              key={item.name}
+                              onClick={() => redir(item.path)}
+                              className={classNames(
+                                item.current ? 'bg-slate-400 text-white' : 'text-gray-700 hover:bg-gray-700 cursor-pointer' +
+                                  ' hover:text-white',
+                                'rounded-md px-3 py-2 text-sm font-medium',
+                              )}
+                              aria-current={item.current ? 'page' : undefined}
+                            >
+                              {item.name}
+                            </div>
+                          ))}
+                        </div>
+
                       </div>
                     </div>
                   </div>
