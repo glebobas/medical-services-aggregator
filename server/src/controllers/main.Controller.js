@@ -492,6 +492,7 @@ exports.GetAllClinicAndDoctorsQuery = async (req, res) => { //* получаем
 }
 ;
 
+
 exports.GetAllSpecialities = async (req, res) => {
     try {
         const allSpecialities = await Speciality.findAll();
@@ -730,6 +731,318 @@ exports.GetSlotsToDate = async (req, res) => {
 
 }
 
-exports.RandomDocClinic = async (req, res) => {
-    const {countryName, cityName, speciality} = req.params
+
+exports.RandomDocClinic = async (req, res) => { //* получаем РАНДОМНО все клиники и докторов и топа (рейтинг боллее 4.5 без негативных отзывов) с подробной инфой и рейтингами
+    const {adultPatients, childrenPatients, specialityName, countryName, cityName} = req.query
+
+    const filterConditions = {};
+
+
+    if (specialityName) {
+        filterConditions.specialityName = specialityName;
+    }
+    if (countryName) {
+        filterConditions.countryName = countryName;
+    }
+    if (cityName) {
+        filterConditions.cityName = cityName;
+    }
+    if (adultPatients === 'true') {
+        filterConditions.adultPatients = true;
+    }
+    if (childrenPatients === 'true') {
+        filterConditions.childrenPatients = true;
+    }
+
+    if (adultPatients !== 'true' && childrenPatients !== 'true') {
+        delete filterConditions.adultPatients;
+        delete filterConditions.childrenPatients;
+    }
+    // console.log("-> filterConditions", filterConditions);
+
+    try {
+        const doctors = await Doctor.findAll({
+            include: [
+                {
+                    model: Clinic,
+                    include: [
+                        {model: Address}
+                    ]
+                },
+                {
+                    model: Speciality,
+                },
+            ],
+            raw: true,
+            nest: true
+        });
+
+
+        const clinics = await Clinic.findAll({
+            include: [
+                {
+                    model: Address,
+                },
+            ],
+            raw: true,
+            nest: true
+        });
+
+
+        const doctorRating = await Rating.findAll({attributes: ['doctorRating', 'doctorId']})
+        const clinicRating = await Rating.findAll({attributes: ['clinicRating', 'clinicId']})
+
+        const clinicRatings = {};
+        clinicRating.forEach(rating => {
+
+            if (clinicRatings[rating.clinicId]) {
+                clinicRatings[rating.clinicId].total += rating.clinicRating;
+                clinicRatings[rating.clinicId].count += 1;
+            } else {
+                clinicRatings[rating.clinicId] = {
+                    total: rating.clinicRating,
+                    count: 1
+                };
+            }
+        });
+
+        const clinicRatingAverages = {};
+
+        for (const [id, rating] of Object.entries(clinicRatings)) {
+            clinicRatingAverages[id] = (rating.total / rating.count).toLocaleString('en-US', {maximumFractionDigits: 1});
+        }
+
+        const doctorRatings = {};
+        doctorRating.forEach(rating => {
+
+            if (doctorRatings[rating.doctorId]) {
+                doctorRatings[rating.doctorId].total += rating.doctorRating;
+                doctorRatings[rating.doctorId].count += 1;
+            } else {
+                doctorRatings[rating.doctorId] = {
+                    total: rating.doctorRating,
+                    count: 1
+                };
+            }
+        });
+
+        const doctorRatingAverages = {};
+
+        for (const [id, rating] of Object.entries(doctorRatings)) {
+            doctorRatingAverages[id] = (rating.total / rating.count).toLocaleString('en-US', {maximumFractionDigits: 1});
+        }
+
+        const arrDoc = Object.entries(doctorRatingAverages)
+        const arrClinic = Object.entries(clinicRatingAverages)
+
+
+
+        let readyClinicListNative = [];
+        let readyDoctorListNative = [];
+
+
+        if (res?.locals?.user?.id) {
+
+            const ratingToUser = await Rating.findAll({where: {userId: res.locals.user.id}})
+
+            readyClinicListNative = clinics.map(clinic => {
+                const fulladdress = `${clinic.Address.streetName}, ${clinic.Address.cityName}, ${clinic.Address.countryName}`;
+                let clinicRate;
+                let ownRatingUser;
+                ratingToUser?.forEach(element => {
+                    if (element.userId === res.locals.user.id && clinic.id === element.clinicId) {
+                        ownRatingUser = element.clinicRating
+                    }
+                })
+                arrClinic?.forEach(el => {
+                    if (Number(el[0]) === clinic.id) {
+                        clinicRate = el[1]
+                    }
+                })
+                return {
+                    clinicId: clinic.id,
+                    name: clinic.name,
+                    phone: clinic.phone,
+                    address: fulladdress,
+                    email: clinic.email,
+                    generalinfo: clinic.generalnfo,
+                    clinicRating: clinicRate,
+                    alreadyScoredPoints: ownRatingUser,
+                    avatar: clinic.avatar
+                }
+            })
+
+            readyDoctorListNative = doctors.map(
+                doctor => {
+                    const fullname = `${doctor.firstName} ${doctor.lastName}`
+                    const fulladdress = `${doctor.Clinic.Address.countryName}, ${doctor.Clinic.Address.cityName}, ${doctor.Clinic.Address.streetName}`
+                    let docRate;
+                    arrDoc.forEach(el => {
+                        if (Number(el[0]) === doctor.id) {
+                            docRate = el[1]
+                        }
+                    })
+                    let ownRatingUserDoc;
+                    ratingToUser?.forEach(element => {
+                        if (element.userId === res.locals.user.id && doctor.id === element.doctorId) {
+                            ownRatingUserDoc = element.doctorRating
+                        }
+                    })
+                    return {
+                        doctorId: doctor.id,
+                        name: fullname,
+                        phone: doctor.phone,
+                        address: fulladdress,
+                        speciality: doctor.Speciality.name,
+                        clinic: doctor.Clinic.name,
+                        email: doctor.email,
+                        generalTiming: doctor.generalTiming,
+                        adultPatients: doctor.adultPatients,
+                        childrenPatients: doctor.childrenPatients,
+                        generalInfo: doctor.generalInfo,
+                        doctorRating: docRate,
+                        alreadyScoredPoints: ownRatingUserDoc,
+                        avatar: doctor.avatar,
+                    }
+                }
+            )
+
+        }
+
+        if (!res?.locals?.user?.id) {
+
+
+            readyClinicListNative = clinics.map(clinic => {
+                const fulladdress = `${clinic.Address.streetName}, ${clinic.Address.cityName}, ${clinic.Address.countryName}`;
+                let clinicRate;
+
+
+                arrClinic?.forEach(el => {
+                    if (Number(el[0]) === clinic.id) {
+                        clinicRate = el[1]
+                    }
+                })
+                return {
+                    clinicId: clinic.id,
+                    name: clinic.name,
+                    phone: clinic.phone,
+                    address: fulladdress,
+                    email: clinic.email,
+                    generalinfo: clinic.generalnfo,
+                    clinicRating: clinicRate,
+                    avatar: clinic.avatar
+                }
+            })
+
+
+
+            readyDoctorListNative = doctors.map(
+                doctor => {
+                    const fullname = `${doctor.firstName} ${doctor.lastName}`
+                    const fulladdress = `${doctor.Clinic.Address.countryName}, ${doctor.Clinic.Address.cityName}, ${doctor.Clinic.Address.streetName}`
+                    let docRate;
+                    arrDoc.forEach(el => {
+                        if (Number(el[0]) === doctor.id) {
+                            docRate = el[1]
+                        }
+                    })
+
+                    return {
+                        doctorId: doctor.id,
+                        name: fullname,
+                        phone: doctor.phone,
+                        address: fulladdress,
+                        speciality: doctor.Speciality.name,
+                        clinic: doctor.Clinic.name,
+                        email: doctor.email,
+                        generalTiming: doctor.generalTiming,
+                        adultPatients: doctor.adultPatients,
+                        childrenPatients: doctor.childrenPatients,
+                        generalInfo: doctor.generalInfo,
+                        doctorRating: docRate,
+                        avatar: doctor.avatar,
+                    }
+                }
+            )
+
+        }
+
+        let readyClinicListNotGrouped = []
+        let readyDoctorListNotGrouped = []
+
+
+        // readyClinicListNotGrouped = readyClinicListNative?.filter((el) => Number(el.clinicRating) > 4.5)
+        //
+        // readyDoctorListNotGrouped = readyDoctorListNative?.filter((el) => Number(el.doctorRating) > 4.5)
+
+        readyClinicListNotGrouped = readyClinicListNative?.filter((el) => {
+            const clinicRatingFilter = Number(el.clinicRating) > 4.5;
+            const countryFilter = filterConditions.countryName ? el.address.includes(countryName) : true;
+            const cityFilter = filterConditions.cityName ? el.address.includes(cityName) : true;
+
+            return clinicRatingFilter && countryFilter && cityFilter;
+        });
+
+        readyDoctorListNotGrouped = readyDoctorListNative?.filter((el) => {
+            const doctorRatingFilter = Number(el.doctorRating) > 4.5;
+            const adultFilter = filterConditions?.adultPatients ? el.adultPatients === adultPatients : true;
+            const childrenFilter = filterConditions?.childrenPatients ? el.childrenPatients === childrenPatients : true;
+            const specialityFilter = filterConditions.specialityName ? el.speciality === specialityName : true;
+            const countryFilter = filterConditions.countryName ? el.address.includes(countryName) : true;
+            const cityFilter = filterConditions.cityName ? el.address.includes(cityName) : true;
+
+            return doctorRatingFilter && adultFilter && childrenFilter && specialityFilter && countryFilter && cityFilter;
+        });
+
+
+        let readyClinicList = []
+        let readyDoctorList = []
+
+        if (readyClinicListNotGrouped.length > 3) {
+            while (readyClinicList.length < 3) {
+                const randomIndex = Math.floor(Math.random() * readyClinicListNotGrouped.length);
+                const randomElement = readyClinicListNotGrouped[randomIndex];
+                if (!readyClinicList.includes(randomElement)) {
+                    readyClinicList.push(randomElement);
+                }
+            }
+        }
+        if (readyClinicListNotGrouped.length <=3) {
+            readyClinicList = [...readyClinicListNotGrouped]
+        }
+
+
+        if (readyDoctorListNotGrouped.length > 3) {
+            while (readyDoctorList.length < 3) {
+                const randomIndex = Math.floor(Math.random() * readyDoctorListNotGrouped.length);
+                const randomElement = readyDoctorListNotGrouped[randomIndex];
+                if (!readyDoctorList.includes(randomElement)) {
+                    readyDoctorList.push(randomElement);
+                }
+            }
+        }
+        if (readyDoctorListNotGrouped.length <=3) {
+            readyDoctorList = [...readyDoctorListNotGrouped]
+        }
+
+
+
+
+        // if (!readyClinicList.length && !readyDoctorList.length) {
+        //     return res.status(409).json({message: "No clinics and doctors were found!"});
+        // }
+
+
+        res.json({readyClinicList, readyDoctorList})
+
+
+    } catch
+        (err) {
+        console.error(err);
+        res.status(500).json({message: 'Server error'});
+    }
 }
+;
+
+
+
