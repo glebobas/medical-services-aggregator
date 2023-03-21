@@ -20,8 +20,10 @@ function GoogleAuth(): JSX.Element {
             const tokenGoogle = code.access_token
 
             const exchangeToken = async (token: string) => {
-                const response = await fetch(`/auth/google/callback?token=${token}`, {
-                    credentials: 'include'
+                const response = await fetch('/auth/google/callback', {
+                    headers: {
+                        'authorization': 'Bearer ' + token,
+                    }
                 });
                 return await response.json()
             };

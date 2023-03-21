@@ -4,7 +4,7 @@ const {Op} = require("sequelize");
 
 exports.DoctorsFromSearch = async (req, res) => {
     try {
-        const {adultPatients, childrenPatients, specialityName, countryName, cityName, streetName} = req.body
+        const {adultPatients, childrenPatients, specialityName, countryName, cityName, streetName} = req.query
 
         if (!((adultPatients || childrenPatients) || specialityName || countryName || cityName || streetName)) {
             return res.json({message: 'You should fill more then 1 field!'})
