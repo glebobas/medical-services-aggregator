@@ -2,8 +2,11 @@ import React, {useContext} from 'react';
 import {AuthContext} from "../../context";
 import {SearchResultsContext} from "../../context/context";
 import {useNavigate} from "react-router-dom";
+import {SelectSpecialization} from "../SelectSpecialization/SelectSpecialization";
+import {CheckBoxes} from "../CheckBoxes/CheckBoxes";
+import {SelectLocation} from "../SelectLocation/SelectLocation";
 
-function RandomSearch(props) {
+function Search(props) {
 
     const navigate = useNavigate();
 
@@ -27,7 +30,16 @@ function RandomSearch(props) {
     }
     return (
         <>
-            <div>random search</div>
+            <div>search</div>
+            <div className="main-col-left flex flex-col w-2/5 px-8 pt-4 bg-white">
+                <SelectSpecialization />
+                <div className="flex flex-row justify-around">
+                    <div className="flex flex-col w-full"><CheckBoxes label={"Детский"}/></div>
+                    <div className="flex flex-col w-full"><CheckBoxes label={"Взрослый"} /></div>
+                </div>
+                <br />
+                <SelectLocation />
+            </div>
             <button
                 className="border rounded ml-2 px-8 py-2 bg-green-700 text-white hover:bg-green-800"
                 onClick={handleButtonClick}>
@@ -37,4 +49,4 @@ function RandomSearch(props) {
     );
 }
 
-export default RandomSearch;
+export default Search;
