@@ -6,24 +6,22 @@ export function DoctorList() {
 
   const [allDoctorsData, setAllDoctorsData] = useState(null);
   // const [currentPage, setCurrentPage] = useState(1);
-  const [fetching, setFetching] = useState(true);
+  // const [fetching, setFetching] = useState(true);
 
   useEffect(() => {
-    if (fetching) {
-      const fetchData = async () => {
-        const response = await fetch('/main/doctors', {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        })
-        const data = await response.json();
-        setAllDoctorsData(data);
-        console.log(data);
-      };
-      fetchData();
-    }
+    const fetchData = async () => {
+      const response = await fetch('/main/doctors', {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      })
+      const data = await response.json();
+      setAllDoctorsData(data);
+      console.log(data);
+    };
+    fetchData();
   }, []);
 
   // useEffect(() => {
@@ -37,11 +35,11 @@ export function DoctorList() {
   //   if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
   //     console.log('scroll');
   //   }
-    // console.log('scrollHeight', e.target.documentElement.scrollHeight);
-    // console.log('scrollHeight');
-    // console.log('scrollHeight', window.innerHeight);
+  //   console.log('scrollHeight', e.target.documentElement.scrollHeight);
+  //   console.log('scrollHeight');
+  //   console.log('scrollHeight', window.innerHeight);
 
-    }
+  // }
 
   const navigate = useNavigate()
   const handleClick = (field) => {
