@@ -24,6 +24,126 @@ exports.DeleteReview = async (req, res) => {
     }
 }
 
+exports.EditReviewWithRating = async (req, res) => {
+    try {
+        const {reviewId, doctorId, clinicId, reviewText, rating} = req.body;
+        const userId = res?.locals?.user?.id
+
+        //* апдейтим отзыв
+
+        if (reviewText && clinicId) {
+            const [numUpdated, updatedReview] = await Review.update(
+                {
+                    clinic_review: reviewText
+                },
+                {
+                    where: {id: reviewId},
+                    returning: true
+                }
+            );
+            if (numUpdated === 0) {
+                return res.status(404).json({message: 'Review was not found'});
+            }
+            return res.status(200).json({message: 'Update was successful'});
+        }
+        if (reviewText && doctorId) {
+            const [numUpdated, updatedReview] = await Review.update(
+                {
+                    doctor_review: reviewText
+                },
+                {
+                    where: {id: reviewId},
+                    returning: true
+                }
+            );
+            if (numUpdated === 0) {
+                return res.status(404).json({message: 'Review was not found'});
+            }
+            return res.status(200).json({message: 'Update was successful'});
+        }
+        if (rating && clinicId) {
+            const [numUpdated, updatedRating] = await Rating.update(
+                {
+                    clinicRating: Number(rating)
+                },
+                {
+                    where: {userId, clinicId},
+                    returning: true
+                }
+            );
+            if (numUpdated === 0) {
+                return res.status(404).json({message: 'Clinic\'s rating was not found'});
+            }
+            return res.status(200).json({message: 'Update was successful'});
+        }
+
+        if (rating && doctorId) {
+            const [numUpdated, updatedRating] = await Rating.update(
+                {
+                    doctorRating: Number(rating)
+
+                },
+                {
+                    where: {userId, doctorId},
+                    returning: true
+                }
+            );
+            if (numUpdated === 0) {
+                return res.status(404).json({message: 'Doctor\'s rating not found'});
+            }
+            return res.status(200).json({message: 'Update was successful'});
+        }
+        else return res.status(409).json({message: 'Fill necessary data'})
+
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+exports.NewReview = async (req, res) => {
+    const {doctorId, clinicId, reviewText} = req.body;
+    const userId = res?.locals?.user?.id
+
+    try {
+        if (doctorId) {
+            const review = await Review.findOne({where: {userId, doctorId}})
+            if (!review) {
+                const data = await Review.create({userId, doctorId, doctor_review: reviewText})
+                if (data) {
+                    return res.status(200).json({message: 'success adding review for doctor'})
+                }
+                if (!data) {
+                    return res.status(404).json({message: 'Error creating review for doctor'})
+                }
+            }
+            if(review) {
+                return res.status(404).json({message: 'You have already added review for this doctor'})
+            }
+        }
+        if (clinicId) {
+            const review = await Review.findOne({where: {userId, clinicId}})
+            if (!review) {
+                const data = await Review.create({userId, clinicId, clinic_review: reviewText})
+                if (data) {
+                    return res.status(200).json({message: 'success adding review for clinic'})
+                }
+                if (!data) {
+                    return res.status(404).json({message: 'Error creating review for clinic'})
+                }
+            }
+            if (review) {
+                return res.status(404).json({message: 'You have already added review for this clinic'})
+            }
+        }
+        else return res.status(409).json({message: 'Fill necessary data'})
+    } catch (e) {
+        console.error(e)
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
 
 exports.NewEntry = async (req, res) => {
     const {sheduleId, statusAppointment} = req.body
