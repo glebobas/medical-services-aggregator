@@ -5,24 +5,36 @@ import { CheckBoxes } from '../../components/CheckBoxes/CheckBoxes'
 import { SelectSpecialization } from '../../components/SelectSpecialization/SelectSpecialization'
 import {MainImage} from '../../components/MainImage/MainImage'
 import RandomSearch from "../../components/RandomSearch/RandomSearch";
+import {useNavigate} from "react-router-dom";
 
 export function MainPage() {
+  const navigate = useNavigate();
+  const handleButtonClick = async () => {
+    // console.log(searchTerm)
+    try {
+      // const response =  await fetch(`/main/alldata/${searchTerm}`)
+      // const results = await response.json();
+      // // console.log("-> results", results);
+      // // const getClinicsAndDoctors = [...results.readyClinicList, ...results.readyDoctorList]
+      // // console.log("-> getClinicsAndDoctors", getClinicsAndDoctors);
+      // setData(results)
+      navigate("/search")
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <div className="flex flex-col w-full h-[780px]" >
       <div className="flex flex-row h-3/5 mt-8 bg-[url('https://source.unsplash.com/random/?hospitals')]">
-        <div className="main-col-left flex flex-col w-2/5 px-8 pt-4 bg-white">
-          <SelectSpecialization />
-          <div className="flex flex-row justify-around">
-            <div className="flex flex-col w-full"><CheckBoxes label={"Детский"}/></div>
-            <div className="flex flex-col w-full"><CheckBoxes label={"Взрослый"} /></div>
-          </div>
-          <br />
-          <SelectLocation />
-          <RandomSearch />
-        </div>
+
         {/*<div className="main-col-right w-full h-full"><MainImage /></div>*/}
       </div>
-
+      <button
+          className="border rounded ml-2 px-8 py-2 bg-green-700 text-white hover:bg-green-800"
+          onClick={handleButtonClick}>
+        Extended Search
+      </button>
     </div>
 
   )

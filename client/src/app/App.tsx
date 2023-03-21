@@ -19,6 +19,7 @@ import { DayView } from "../components/DayView/DayView";
 import GoogleAuth from "../components/Modal/Google/Google";
 import {ClinicList} from '../components/ClinicList';
 import { DoctorList } from '../components/DoctorList';
+import Search from "../components/RandomSearch/RandomSearch";
 
 function App() {
 
@@ -49,6 +50,7 @@ function App() {
             <Route path='/listpage' element={<ListPage />} />
             <Route path='/error' element={<ErrorPage />} />
             <Route path='/doctor/:id' element={<DoctorCard />} />
+            <Route path='/search' element={<Search/>}/>
             <Route path='/clinic/:id' element={<ClinicalCard />} />
             <Route path='*' element={<ErrorPage />} />
           </Route>
@@ -64,6 +66,7 @@ function App() {
             <Route path='/profileEditing' element={<ProfileEditing/>}/>
             <Route path='/doctor/:id' element={<DoctorCard/>}/>
             <Route path='/clinic/:id' element={<ClinicalCard/>}/>
+            <Route path='/search' element={<Search/>}/>
             <Route path='/error' element={<ErrorPage/>}/>
             <Route path='*' element={<ErrorPage/>}/>
           </Route>
