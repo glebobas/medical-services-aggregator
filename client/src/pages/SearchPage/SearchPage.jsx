@@ -9,6 +9,7 @@ import {Combobox} from '@headlessui/react'
 import {DoctorList} from "../../components/DoctorList";
 import {useSelector} from "react-redux";
 import {ClinicList} from "../../components/ClinicList";
+import {FormattedMessage} from "react-intl";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -88,12 +89,23 @@ export function SearchPage() {
 
   return (
     <div className="flex flex-col flex-grow mt-4 w-full">
-      <div className="title flex flex-row font-semibold text-xl">Расширенный поиск</div>
+      <div className="title flex flex-row font-semibold text-xl">
+        Расширенный поиск
+        <FormattedMessage
+            id="Extended search"
+            defaultMessage="Default error message"
+        />
+      </div>
       <div className="flex flex-row flex-grow justify-start rounded border mt-4">
         <div className="flex-col bg-white w-1/3 px-6 py-6">
           <Combobox as="div" value={selectedSpeciality} onChange={setSelectedSpeciality}>
             <Combobox.Label
-              className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">Специальность</Combobox.Label>
+              className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <FormattedMessage
+                  id="Speciality"
+                  defaultMessage="Default error message"
+              />
+            </Combobox.Label>
             <div className="relative mt-1">
               <Combobox.Input
                 className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 sm:text-sm"
@@ -158,7 +170,10 @@ export function SearchPage() {
                 </div>
                 <div className="ml-3 text-sm">
                   <label htmlFor="children" className="font-medium text-gray-700">
-                    Детский
+                    <FormattedMessage
+                        id="Pediatrician"
+                        defaultMessage="Default error message"
+                    />
                   </label>
                 </div>
               </div>
@@ -178,7 +193,10 @@ export function SearchPage() {
                 </div>
                 <div className="ml-3 text-sm">
                   <label htmlFor="parent" className="font-medium text-gray-700">
-                    Взрослый
+                    <FormattedMessage
+                        id="Adult"
+                        defaultMessage="Default error message"
+                    />
                   </label>
                 </div>
               </div>
@@ -186,7 +204,12 @@ export function SearchPage() {
           </div>
           <Combobox as="div" className="mt-4" value={selectedLocation} onChange={setSelectedLocation}>
             <Combobox.Label
-              className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">Местоположение</Combobox.Label>
+              className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <FormattedMessage
+                  id="Location"
+                  defaultMessage="Default error message"
+              />
+            </Combobox.Label>
             <div className="relative mt-1">
               <Combobox.Input
                 className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 sm:text-sm"
@@ -250,13 +273,21 @@ export function SearchPage() {
               </div>
               <div className="ml-3 text-sm">
                 <label htmlFor="candidates" className="font-medium text-gray-700">
-                  Случайный поиск среди лучших клиник и врачей
+                  <FormattedMessage
+                      id="Random search among the best clinics and doctors"
+                      defaultMessage="Default error message"
+                  />
                 </label>
               </div>
             </div>
           </div>
           <button className="mt-6 border rounded px-8 py-2 bg-green-700 text-white hover:bg-green-800"
-                  onClick={handleButtonClick}>Search
+                  onClick={handleButtonClick}>
+            <FormattedMessage
+                id="Search"
+                defaultMessage="Default error message"
+            />
+
           </button>
         </div>
         <div className="flex-col px-6 py-6">

@@ -3,6 +3,7 @@ import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import styles from "./select.module.css";
+import {FormattedMessage} from "react-intl";
 
 const people = [
   { id: 7, name: "Select profile" },
@@ -21,19 +22,28 @@ function classNames(...classes) {
 function SelectMenus() {
 
   const [selected, setSelected] = useState(people[0]);
-  
+
   return (
     <div className={styles.container}>
     <div className={styles.select }>
       <Listbox value={selected} onChange={setSelected} >
         {({ open }) => (
           <>
-            <Listbox.Label className="block text-sm font-medium text-gray-700">
-              Выбрать профиль
-            </Listbox.Label>
+            {/*<Listbox.Label className="block text-sm font-medium text-gray-700">*/}
+            {/*  <FormattedMessage*/}
+            {/*      id='Choose speciality'*/}
+            {/*      defaultMessage="Default error message"*/}
+            {/*  />*/}
+            {/*</Listbox.Label>*/}
             <div className="relative mt-1">
               <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
-                <span className="block truncate">{selected.name}</span>
+                <span className="block truncate">
+                  <FormattedMessage
+                      id={selected.name}
+                      defaultMessage="Default error message"
+                  />
+
+                </span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                   <ChevronUpDownIcon
                     className="h-5 w-5 text-gray-400"
@@ -69,7 +79,10 @@ function SelectMenus() {
                               "block truncate"
                             )}
                           >
-                            {person.name}
+                            <FormattedMessage
+                                id={person.name}
+                                defaultMessage="Default error message"
+                            />
                           </span>
 
                           {selected ? (

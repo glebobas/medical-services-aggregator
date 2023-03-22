@@ -7,11 +7,12 @@ import YandexMap from "../../components/Map/Map";
 import Rating from "../../components/Rating/Rating";
 import {TypesClinic} from "../../redux/types/typesClinic";
 import {useParams} from "react-router-dom";
+import {FormattedMessage} from "react-intl";
 
 export default function ClinicalCard() {
   const {id} = useParams()
   const [clinic, setClinic] = useState({readyClinic: [], doctors: []});
-  
+
   const data = {id: 1};
   useEffect(() => {
     (async () => {
@@ -55,7 +56,13 @@ console.log(clinic)
           </div>
           {/* <!-- General info --> */}
           <div className="generalInfo flex flex-col mx-4">
-            <h2 className="sr-only">Product information</h2>
+            <h2 className="sr-only">
+
+              <FormattedMessage
+                  id="Clinic's information"
+                  defaultMessage="Default error message"
+              />
+            </h2>
             <p className="text-3xs tracking-tight text-gray-600">
               {clinic.readyClinic[0]?.generalInfo}
             </p>
@@ -66,15 +73,32 @@ console.log(clinic)
             <table>
               <tbody>
               <tr>
-                <td>Address:</td>
+                <td>
+                  <FormattedMessage
+                      id="Address:"
+                      defaultMessage="Default error message"
+                  />
+                </td>
                 <td className="pl-4">{clinic.readyClinic[0]?.address}</td>
               </tr>
               <tr>
-                <td>Phone:</td>
+                <td>
+
+                  <FormattedMessage
+                      id="Phone:"
+                      defaultMessage="Default error message"
+                  />
+                </td>
                 <td className="pl-4">{clinic.readyClinic[0]?.phone}</td>
               </tr>
               <tr>
-                <td>Email:</td>
+                <td>
+
+                  <FormattedMessage
+                      id="Email:"
+                      defaultMessage="Default error message"
+                  />
+                </td>
                 <td className="pl-4">{clinic.readyClinic[0]?.email}</td>
               </tr>
               </tbody>
@@ -82,14 +106,22 @@ console.log(clinic)
           </div>
           <div className="flex-col">{/* <!-- Reviews --> */}
             <div className="mt-6">
-              <h3 className="sr-only">Reviews</h3>
+              {/*<h3 className="sr-only">*/}
+              {/*  <FormattedMessage*/}
+              {/*      id="Reviews"*/}
+              {/*      defaultMessage="Default error message"*/}
+              {/*  />*/}
+              {/*</h3>*/}
               <div className="flex items-center">
                 <Rating rat={clinic.readyClinic[0]?.averageClinicRating}/>
                 <a
                   href="#"
                   className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
                 >
-                  Отзывы пациентов
+                  <FormattedMessage
+                      id="Reviews"
+                      defaultMessage="Default error message"
+                  />
                 </a>
               </div>
             </div>
@@ -99,7 +131,7 @@ console.log(clinic)
         {" "}
         <SelectMenus />
       </div>
-      
+
         <DoctorsTable data={dataRes}/>
 
         <div className="ymaps w-full mt-4">
