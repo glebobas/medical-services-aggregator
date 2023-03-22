@@ -8,7 +8,8 @@ export function ProfileEditing() {
     const dispatch = useDispatch();
     const currentData = useSelector(state => state.login.user);
 
-    const loading = useSelector(state => state.loading);
+    const loading = useSelector(state => state);
+    console.log(loading);
 
     const token = localStorage.getItem("jwtToken");
     const [error, setError] = useState('');

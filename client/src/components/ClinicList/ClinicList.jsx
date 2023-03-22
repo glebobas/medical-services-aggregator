@@ -1,12 +1,16 @@
 //@ts-ignore
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Rating from '../Rating/Rating';
+import { useSelector } from 'react-redux';
 import usePagination from '../../hooks/usePagination';
+import Rating from '../Rating/Rating';
 
 export function ClinicList() {
 
   const [allClinicsData, setAllClinicsData] = useState([]);
+
+  const log = useSelector(state => state);
+  console.log(log);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,7 +23,6 @@ export function ClinicList() {
       })
       const data = await response.json();
       setAllClinicsData(data.readyClinicList);
-      console.log(data.readyClinicList)
     };
     fetchData();
   }, [])
@@ -125,7 +128,7 @@ export function ClinicList() {
                 </div>
                 <div className="flex-col space-y-3">
                   <div>{field.phone}</div>
-                  <div><Rating rat={field.clinicRating}/></div>
+                  <div><Rating rat={field.clinicRating} /></div>
                 </div>
               </div>
             </div>
