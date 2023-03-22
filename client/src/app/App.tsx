@@ -13,24 +13,13 @@ import { ProfileEditing } from '../components/ProfileEditing';
 import { ListPage } from "../pages/ListPage";
 import { DoctorCard } from "../pages/DoctorCard";
 
-
-import {MainPage} from "../pages/MainPage/MainPage";
-import {AuthProvider} from '../context';
-import {useDispatch, useSelector} from "react-redux";
-import {store} from './../redux'
-import {IGeneralState, IUser, Types} from "../redux/types/types";
-import {ProfileEditing} from '../components/ProfileEditing';
-import {ListPage} from "../pages/ListPage";
-import {DoctorCard} from "../pages/DoctorCard";
-import {DayView} from "../components/DayView/DayView";
-import GoogleAuth from "../components/Modal/Google/Google";
 import {ClinicList} from '../components/ClinicList';
 import {DoctorList} from '../components/DoctorList';
 import {SearchPage} from "../pages/SearchPage/SearchPage";
 import { IntlProvider } from 'react-intl';
 import enMessages from '../messages/en.json';
 import ruMessages from '../messages/ru.json';
-import{NotePage} from '../pages/NotePage/NotePage';
+
 
 function App() {
 
