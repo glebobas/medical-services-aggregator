@@ -13,7 +13,8 @@ interface IPlaceholderText {
     firstName: string,
     lastName: string,
     email: string,
-    phoneNumber: string
+    phoneNumber: string,
+    search: string
 }
 
 export interface AuthContextType {
@@ -69,7 +70,8 @@ export const AuthContext = React.createContext<AuthContextType>({
         firstName: '',
         lastName: '',
         email: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        search: ''
     },
     setPlaceholderText: () => {
     },
@@ -89,7 +91,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children, locale, set
         firstName: '',
         lastName: '',
         email: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        search: ''
     });
 
     return (

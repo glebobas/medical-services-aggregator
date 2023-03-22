@@ -31,7 +31,7 @@ function Login(): JSX.Element {
         showModalLogin,
         setShowModalLogin,
         setShowModalMiniText,
-        setShowModalMini, errorAuth, setErrorAuth
+        setShowModalMini, errorAuth, setErrorAuth, placeholderText, setPlaceholderText, locale
     } = useContext<AuthContextType>(AuthContext)
 
     // const [errorAuth, setErrorAuth] = useState('');
@@ -41,7 +41,7 @@ function Login(): JSX.Element {
         setUserData({...userData, [event.target.name]: event.target.value});
     }
 
-    const {placeholderText, setPlaceholderText, locale} = useContext<AuthContextType>(AuthContext);
+
 
 
     useEffect(()=>{
@@ -53,7 +53,8 @@ function Login(): JSX.Element {
                 firstName: 'Пожалуйста, введите своё имя',
                 lastName: 'Пожалуйста, введите свою фамилию',
                 email: 'Пожалуйста введите свою электронную почту',
-                phoneNumber: 'Пожалуйста введите свой номер телефона'
+                phoneNumber: 'Пожалуйста введите свой номер телефона',
+                search: 'Поиск'
             })
         }
         if (locale === 'en') {
@@ -64,7 +65,8 @@ function Login(): JSX.Element {
                 firstName: 'Please enter your first name',
                 lastName: 'Please enter your last name',
                 email: 'Please enter your email',
-                phoneNumber: 'Please enter your phone number'
+                phoneNumber: 'Please enter your phone number',
+                search: 'Search'
             })
         }
     },[locale])
@@ -197,14 +199,17 @@ function Login(): JSX.Element {
                                                 <div>
                                                     <label
                                                         className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                        Password
+                                                        <FormattedMessage
+                                                            id='Password'
+                                                            defaultMessage="Default error message"
+                                                        />
                                                     </label>
                                                     <input
                                                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                                                         name='password'
                                                         id="grid-password"
                                                         type="password"
-                                                        placeholder="••••••••"
+                                                        placeholder={placeholderText.password}
                                                         onChange={signIn}
                                                         required/>
                                                     {errorAuth &&

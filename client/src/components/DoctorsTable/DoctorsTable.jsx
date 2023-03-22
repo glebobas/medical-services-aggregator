@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import SelectMenus from "../SelectMenus/SelectMenus";
 import Rating from "../Rating/Rating";
 import { useNavigate } from "react-router-dom";
+import {FormattedMessage} from "react-intl";
 
 export function DoctorsTable({ data }) {
   console.log("-> data", data);
@@ -13,13 +14,17 @@ export function DoctorsTable({ data }) {
     console.log("click doctor table->", id);
     navigate(`/doctor/${id}`, { state: { id } });
   };
-  
+
   return (
     <>
-     
+
       {!data?.length > 0 ? (
         <h3 className="font-semibold text-xl mt-4">
-          По вашему запросу доктора не найдены
+
+          <FormattedMessage
+              id='No doctors found in clinic matching your request'
+              defaultMessage="Default error message"
+          />
         </h3>
       ) : (
         <div className="tableDoctors">
@@ -31,31 +36,47 @@ export function DoctorsTable({ data }) {
                     scope="col"
                     className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                   >
-                    Доктор
+                    <FormattedMessage
+                        id='Doctor'
+                        defaultMessage="Default error message"
+                    />
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Специализация
+
+                    <FormattedMessage
+                        id='Speciality'
+                        defaultMessage="Default error message"
+                    />
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Клиника
+                    <FormattedMessage
+                        id='Clinic'
+                        defaultMessage="Default error message"
+                    />
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Телефон
+                    <FormattedMessage
+                        id='Phone number'
+                        defaultMessage="Default error message"
+                    />
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Рейтинг
+                    <FormattedMessage
+                        id='Rating'
+                        defaultMessage="Default error message"
+                    />
                   </th>
                 </tr>
               </thead>
@@ -85,7 +106,11 @@ export function DoctorsTable({ data }) {
                       </div>
                     </td>
                     <td className="whitespace-nowrap py-4 px-2 pl-4 text-sm">
-                      {field.speciality}
+
+                      <FormattedMessage
+                          id={field.speciality}
+                          defaultMessage="Default error message"
+                      />
                     </td>
                     <td className="whitespace-nowrap py-4 px-2 pl-4 text-sm">
                       {field.clinic}

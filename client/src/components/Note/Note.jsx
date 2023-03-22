@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { CalendarIcon } from '@heroicons/react/20/solid';
+import {FormattedMessage} from "react-intl";
 
 export function Note() {
   const [showModal, setShowModal] = useState(false);
@@ -38,7 +39,11 @@ export function Note() {
   return (
     <div className='ml-1'>
       <h3 className='font-sans text-slate-300 font-semibold text-lg subpixel-antialiased not-italic text-center'>
-       Полученные сообщения
+
+        <FormattedMessage
+            id="Incoming messages"
+            defaultMessage="Default error message"
+        />
       </h3>
       <div className='p-2 w-full justify-center aligoverflow-hidden bg-white shadow sm:rounded-md'>
         <ul role='list' className='divide-y divide-gray-200'>
@@ -56,7 +61,12 @@ export function Note() {
                         <div className='flex items-center text-sm text-gray-500'>
                           <CalendarIcon className='mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400' aria-hidden='true' />
                           <p>
-                            Дата приема <time dateTime={position.closeDate}>{position.closeDateFull}</time>
+
+                            <FormattedMessage
+                                id="The date of an appointment"
+                                defaultMessage="Default error message"
+                            />
+                            <time dateTime={position.closeDate}>{position.closeDateFull}</time>
                           </p>
                         </div>
                       </div>
@@ -67,7 +77,10 @@ export function Note() {
                         className='justify-around items-center px-2 py-1 border border-transparent text-base font-medium shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
                         onClick={() => setShowModal(true)}
                       >
-                      Удалить
+                        <FormattedMessage
+                            id="Remove"
+                            defaultMessage="Default error message"
+                        />
                       </button>
                     </div>
                   </div>
@@ -113,11 +126,19 @@ export function Note() {
               </div>
               <div className='mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left'>
                 <h3 className='text-lg leading-6 font-medium text-gray-900' id='modal-headline'>
-                  Вы точно уверены?
+
+                  <FormattedMessage
+                      id="Are you sure?"
+                      defaultMessage="Default error message"
+                  />
                 </h3>
                 <div className='mt-2'>
                   <p className='text-sm text-gray-500'>
-                    Вы собираетесь удалить запись. Это действие не может быть отменено.
+
+                    <FormattedMessage
+                        id="You are about to delete an entry. This action cannot be undone."
+                        defaultMessage="Default error message"
+                    />
                   </p>
                 </div>
               </div>
@@ -129,14 +150,20 @@ export function Note() {
               className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm'
               onClick={handleDelete}
             >
-              Подтвердить
+              <FormattedMessage
+                  id="Confirm"
+                  defaultMessage="Default error message"
+              />
             </button>
             <button
               type='button'
               className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm'
               onClick={() => setShowModal(false)}
             >
-              Отменить
+              <FormattedMessage
+                  id="Cancel"
+                  defaultMessage="Default error message"
+              />
             </button>
           </div>
         </div>
