@@ -42,10 +42,10 @@ io.on('connection', (socket) => {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
-    cors({
-        origin: 'http://localhost:3000',
-        credentials: true,
-    })
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
 );
 
 app.use((req, res, next) => {
@@ -65,9 +65,9 @@ app.use('/profile', authenticate, UserRoutes)
 app.use('/user', authenticate, UserActions)
 
 app.listen(PORT, () => {
-    try {
-        console.log(`Listening on port: ${PORT}`);
-    } catch (error) {
-        console.log('!!! ERROR ->>> Server not started', error);
-    }
+  try {
+    console.log(`Listening on port: ${PORT}`);
+  } catch (error) {
+    console.log('!!! ERROR ->>> Server not started', error);
+  }
 });
