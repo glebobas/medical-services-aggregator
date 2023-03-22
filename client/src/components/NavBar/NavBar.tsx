@@ -14,7 +14,7 @@ import {FormattedMessage} from "react-intl";
 const navigationUserTrue = [
   { name: 'Clinics', path: '/clinics', current: false },
   { name: 'Doctors', path: '/doctors', current: false },
-  { name: 'Calendar', path: '/calendar', current: false },
+  { name: 'Schedule', path: '/schedule', current: false },
 ]
 
 const navigationUserFalse = [
@@ -91,8 +91,8 @@ export function NavBar() {
   return (
     <>
       {!user
-        ? (<>
-            <Disclosure as="nav" className="bg-slate-400">
+        ? (
+            <Disclosure as="nav" className="bg-gray-500">
 
               {({open}) => (
                   <>
@@ -102,7 +102,7 @@ export function NavBar() {
                           {/* Mobile menu button*/}
 
                           <Disclosure.Button
-                              className="bg-gray-600 inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                              className="bg-gray-600 inline-flex items-center justify-center rounded-md p-2 text-gray-200 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                             <span className="sr-only">Open main menu</span>
                             {open ? (
                                 <XMarkIcon className="block h-6 w-6" aria-hidden="true"/>
@@ -116,13 +116,13 @@ export function NavBar() {
                               className="flex flex-shrink-0 items-center"
                           >
                             <img
-                                className="block h-8 w-auto lg:hidden"
+                                className="block h-8 w-auto lg:hidden cursor-pointer"
                                 src="https://cdn-icons-png.flaticon.com/64/1052/1052784.png"
                                 alt="Your Company"
                                 onClick={nav}
                             />
                             <img
-                                className="hidden h-8 w-auto lg:block"
+                                className="hidden h-8 w-auto lg:block cursor-pointer"
                                 src="https://cdn-icons-png.flaticon.com/64/1052/1052784.png"
                                 alt="Your Company"
                                 onClick={nav}
@@ -144,7 +144,7 @@ export function NavBar() {
                                       onClick={handleClick}
                                       key={item.name}
                                       className={classNames(
-                                          item.current ? 'bg-slate-400 text-white' : 'text-gray-700 hover:bg-gray-700' +
+                                          item.current ? 'bg-gray-200 text-white' : 'text-gray-700 hover:bg-gray-700' +
                                               ' hover:text-white',
                                           'rounded-md px-3 py-2 text-sm font-medium'
                                       )}
@@ -159,7 +159,7 @@ export function NavBar() {
                                   //   key={item.name}
                                   //   href={item.href}
                                   //   className={classNames(
-                                  //     item.current ? 'bg-slate-400 text-white' : 'text-gray-700 hover:bg-gray-700' +
+                                  //     item.current ? 'bg-gray-200 text-white' : 'text-gray-700 hover:bg-gray-700' +
                                   //       ' hover:text-white',
                                   //     'rounded-md px-3 py-2 text-sm font-medium'
                                   //   )}
@@ -184,55 +184,53 @@ export function NavBar() {
                                 key={item.name}
                                 as="a"
 
-                                className={classNames(
-                                    item.current ? 'bg-slate-400 text-white' : 'text-gray-700 hover:bg-gray-700 hover:text-white',
-                                    'block rounded-md px-3 py-2 text-base font-medium'
-                                )}
-                                aria-current={item.current ? 'page' : undefined}
-                            >
-                              <FormattedMessage
-                                  id={item.name}
-                                  defaultMessage="Default error message"
-                              />
+                      className={classNames(
+                        item.current ? 'bg-gray-200 text-white' : 'text-gray-700 hover:bg-gray-700 hover:text-white',
+                        'block rounded-md px-3 py-2 text-base font-medium'
+                      )}
+                      aria-current={item.current ? 'page' : undefined}
+                    >
+                      <FormattedMessage
+                          id={item.name}
+                          defaultMessage="Default error message"
+                      />
+                    </Disclosure.Button>
+                  ))}
+                </div>
+              </Disclosure.Panel>
+            </>
+          )}
+        </Disclosure>)
 
-                            </Disclosure.Button>
-                        ))}
-
-                      </div>
-                    </Disclosure.Panel>
-                  </>
-              )}
-            </Disclosure></>)
-        : (<>
-
-            <Disclosure as="nav" className="bg-slate-400">
-              {({open}) => (
-                  <>
-                    <div className="container mx-auto w-full">
-                      <div className="relative flex h-16 items-center justify-between">
-                        <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                          {/* Mobile menu button*/}
-                          <Disclosure.Button
-                              className="bg-gray-600 inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                            <span className="sr-only">Open main menu</span>
-                            {open ? (
-                                <XMarkIcon className="block h-6 w-6" aria-hidden="true"/>
-                            ) : (
-                                <Bars3Icon className="block h-6 w-6" aria-hidden="true"/>
-                            )}
-                          </Disclosure.Button>
-                        </div>
-                        <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                          <div className="flex flex-shrink-0 items-center">
-                            <img
-                                className="block h-8 w-auto lg:hidden"
-                                src="https://cdn-icons-png.flaticon.com/64/1052/1052784.png"
-                                alt="Medical"
-                                onClick={nav}
+        :
+            (<Disclosure as="nav" className="bg-gray-200">
+          {({open}) => (
+            <>
+              <div className="container mx-auto w-full">
+                <div className="relative flex h-16 items-center justify-between">
+                  <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                    {/* Mobile menu button*/}
+                    <Disclosure.Button
+                      className="bg-gray-600 inline-flex items-center justify-center rounded-md p-2 text-gray-200 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                      <span className="sr-only">Open main menu</span>
+                      {open ? (
+                        <XMarkIcon className="block h-6 w-6" aria-hidden="true"/>
+                      ) : (
+                        <Bars3Icon className="block h-6 w-6" aria-hidden="true"/>
+                      )}
+                    </Disclosure.Button>
+                  </div>
+                  <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                    <div className="flex flex-shrink-0 items-center">
+                      <img
+                        className="cursor-pointer block h-8 w-auto lg:hidden "
+                        src="https://cdn-icons-png.flaticon.com/64/1052/1052784.png"
+                        alt="Medical"
+                        onClick={nav}
 
                             />
                             <img
-                                className="hidden h-8 w-auto lg:block"
+                                className="cursor-pointer hidden h-8 w-auto lg:block"
                                 src="https://cdn-icons-png.flaticon.com/64/1052/1052784.png"
                                 alt="Medical"
                                 onClick={nav}
@@ -253,7 +251,7 @@ export function NavBar() {
                                       key={item.name}
                                       onClick={() => redir(item.path)}
                                       className={classNames(
-                                          item.current ? 'bg-slate-400 text-white' : 'text-gray-700 hover:bg-gray-700' +
+                                          item.current ? 'bg-gray-200 text-white' : 'text-gray-700 hover:bg-gray-700' +
                                               ' cursor-pointer' +
                                               ' hover:text-white',
                                           'rounded-md px-3 py-2 text-sm font-medium'
@@ -274,7 +272,7 @@ export function NavBar() {
                           <button
                               onClick={() => redir('/notepage')}
                               type="button"
-                              className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                              className="rounded-full bg-gray-800 p-1 text-gray-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                           >
                             <span className="sr-only">View notifications</span>
                             <BellIcon className="h-6 w-6" aria-hidden="true"/>
@@ -374,7 +372,8 @@ export function NavBar() {
                     </Disclosure.Panel>
                   </>
               )}
-            </Disclosure></>)
+            </Disclosure>
+            )
       }
       <Register/>
       <Login/>
@@ -382,3 +381,4 @@ export function NavBar() {
     </>
   );
 }
+

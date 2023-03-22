@@ -8,21 +8,24 @@ import {CheckIcon, ChevronUpDownIcon} from '@heroicons/react/20/solid'
 import {Combobox} from '@headlessui/react'
 import {DoctorList} from "../../components/DoctorList";
 import {useSelector} from "react-redux";
-
+import {ClinicList} from "../../components/ClinicList";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export function SearchPage(props) {
+export function SearchPage() {
   const [queryPerson, setPersonQuery] = useState('')
   const [queryLocation, setLocationQuery] = useState('')
   const [selectedSpeciality, setSelectedSpeciality] = useState()
   const [selectedLocation, setSelectedLocation] = useState()
   const [doctors, setDoctors] = useState([])
+  const [topDoctorsClinics, setTopDoctorsClinics] = useState([])
+  const topDoctors = topDoctorsClinics?.readyDoctorList
+  const topClinics = topDoctorsClinics?.readyClinicList
 
-  const speciality = useSelector((state) => state?.speciality?.speciality)
-  const getAllAddressArray = useSelector((state) => state?.addresClinics?.addresClinics)
+  const speciality = useSelector((state) => [{id: 0, name: ''}, ...state?.speciality?.speciality])
+  const getAllAddressArray = useSelector((state) => [{id: 0, name: ''}, ...state?.addresClinics?.addresClinics])
   const location = [...new Set(getAllAddressArray.map(item => item.countryName))]
 
   // Checked children
@@ -56,15 +59,11 @@ export function SearchPage(props) {
         return place.countryName.toLowerCase().includes(queryLocation.toLowerCase())
       })
 
-  const navigate = useNavigate();
-
-  const {
-    setData
-  } = useContext(SearchResultsContext)
-
 
   // TODO: Продолжить логику
   const handleButtonClick = async () => {
+    setDoctors([])
+    setTopDoctorsClinics([])
     let query = `?adultPatients=${isCheckedParent}&childrenPatients=${isCheckedChildren}`
 
     if (selectedSpeciality) {
@@ -75,27 +74,15 @@ export function SearchPage(props) {
     }
     if (isCheckedRandom) {
       fetch(`/main/random${query}`)
-        .then(response =>response.json())
-        .then(data => setDoctors(data))
+        .then(response => response.json())
+        .then(data => setTopDoctorsClinics(data))
         .catch(error => console.log(error))
     } else {
       fetch(`/main/somedoctors${query}`)
-        .then(response =>response.json())
+        .then(response => response.json())
         .then(data => setDoctors(data))
         .catch(error => console.log(error))
     }
-
-    // try {
-    //   // const response =  await fetch(`/main/alldata/${searchTerm}`)
-    //   // const results = await response.json();
-    //   // // console.log("-> results", results);
-    //   // // const getClinicsAndDoctors = [...results.readyClinicList, ...results.readyDoctorList]
-    //   // // console.log("-> getClinicsAndDoctors", getClinicsAndDoctors);
-    //   // setData(results)
-    //   // navigate("/listpage")
-    // } catch (error) {
-    //   console.error(error)
-    // }
   }
 
 
@@ -268,27 +255,22 @@ export function SearchPage(props) {
               </div>
             </div>
           </div>
-          <button className="mt-6 border rounded px-8 py-2 bg-green-700 text-white hover:bg-green-800" onClick={handleButtonClick}>Search</button>
+          <button className="mt-6 border rounded px-8 py-2 bg-green-700 text-white hover:bg-green-800"
+                  onClick={handleButtonClick}>Search
+          </button>
         </div>
         <div className="flex-col px-6 py-6">
-          <DoctorList props={doctors}/>
+          {(topDoctorsClinics.length === 0)
+            ? (<DoctorList props={doctors}/>)
+            : (
+              <>
+                <DoctorList props={topDoctors}/>
+                <ClinicList props={topClinics}/>
+              </>
+            )
+          }
         </div>
       </div>
-      {/*<div>search</div>*/}
-      {/*<div className="main-col-left flex flex-col w-2/5 px-8 pt-4 bg-white">*/}
-      {/*    <SelectSpecialization />*/}
-      {/*    <div className="flex flex-row justify-around">*/}
-      {/*        <div className="flex flex-col w-full"><CheckBoxes label={"Детский"}/></div>*/}
-      {/*        <div className="flex flex-col w-full"><CheckBoxes label={"Взрослый"} /></div>*/}
-      {/*    </div>*/}
-      {/*    <br />*/}
-      {/*    <SelectLocation />*/}
-      {/*</div>*/}
-      {/*<button*/}
-      {/*    className="border rounded ml-2 px-8 py-2 bg-green-700 text-white hover:bg-green-800"*/}
-      {/*    onClick={handleButtonClick}>*/}
-      {/*    Search*/}
-      {/*</button>*/}
     </div>
   );
 }
