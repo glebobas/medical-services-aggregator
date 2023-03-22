@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Rating from '../Rating/Rating';
 import usePagination from '../../hooks/usePagination';
+import {FormattedMessage} from "react-intl";
 
 export function ClinicList({props}) {
 
@@ -49,35 +50,50 @@ export function ClinicList({props}) {
 
   return (
     <div className="mt-4 flex flex-col">
-      <h3 className="font-semibold text-xl mb-2">List of all the clinics</h3>
+      <h3 className="font-semibold text-xl mb-2"><FormattedMessage
+          id='List of all the clinics'
+          defaultMessage="Default error message"
+      /></h3>
       <div className="overflow-auto rounded-lg shadow hidden lg:block">
         <table className="w-full divide-y divide-gray-300">
-          <thead className="bg-gray-200 border-b-2 border-gray-200">
-          <tr>
-            <th
-              scope="col"
-              className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold tracking-wide text-gray-900 sm:pl-6"
-            >
-              Клиника
-            </th>
-            <th
-              scope="col"
-              className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
-            >
-              Адрес
-            </th>
-            <th
-              scope="col"
-              className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
-            >
-              Телефон
-            </th>
-            <th
-              scope="col"
-              className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900">
-              Рейтинг
-            </th>
-          </tr>
+          <thead className="bg-gray-50 border-b-2 border-gray-200">
+            <tr>
+              <th
+                scope="col"
+                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold tracking-wide text-gray-900 sm:pl-6"
+              >
+                <FormattedMessage
+                    id='Clinic'
+                    defaultMessage="Default error message"
+                />
+              </th>
+              <th
+                scope="col"
+                className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
+              >
+                <FormattedMessage
+                    id='Address'
+                    defaultMessage="Default error message"
+                />
+              </th>
+              <th
+                scope="col"
+                className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
+              >
+                <FormattedMessage
+                    id='Telephone'
+                    defaultMessage="Default error message"
+                />
+              </th>
+              <th
+                scope="col"
+                className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900">
+                <FormattedMessage
+                    id='Rating'
+                    defaultMessage="Default error message"
+                />
+              </th>
+            </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
           {allClinicsData?.slice(firstContentIndex, lastContentIndex).map(field => {
@@ -139,6 +155,8 @@ export function ClinicList({props}) {
           </div>
         </div>
       ))}
+
+
 
 
       <div className="flex justify-center mt-4 space-x-1">

@@ -1,9 +1,10 @@
-import {useContext, useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {Select} from 'antd';
 import {SearchResultsContext} from "../../context/context";
 import {ShedulRecModal} from "../Modal/ShedulRecModal";
+import {FormattedMessage} from "react-intl";
 
 export function CommonInput({setData}) {
 
@@ -81,7 +82,12 @@ export function CommonInput({setData}) {
           </ul>
         )}
       </div>
-      <button className="border rounded ml-2 px-8 py-2 bg-green-700 text-white hover:bg-green-800" onClick={handleButtonClick}>Search</button>
+      <button className="border rounded ml-2 px-8 py-2 bg-green-700 text-white hover:bg-green-800" onClick={handleButtonClick}>
+        <FormattedMessage
+            id='Search'
+            defaultMessage="Default error message"
+        />
+      </button>
     </div>
   )
 
