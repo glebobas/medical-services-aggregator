@@ -22,11 +22,11 @@ exports.CheckUserAndCreateToken = async (req, res) => {
         const { username, password } = req.body;
         const user = await User.findOne({ where: { username } })
         if (!user?.username) {
-            return res.status(401).json({ message: 'Authentication failed: Invalid username or password' });
+            return res.status(401).json({error: 'Authentication failed: Invalid username or password'});
         }
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
-            return res.status(401).json({ message: 'Authentication failed: Invalid username or password' });
+            return res.status(401).json({error: 'Authentication failed: Invalid username or password'});
         }
         const token = jwt.sign(
             { id: user.id, username: user.username },
@@ -35,11 +35,11 @@ exports.CheckUserAndCreateToken = async (req, res) => {
         );
         const userReady = await User.findOne({ where: { username }, attributes: { exclude: ['password'] }, })
         if (userReady.username) {
-            res.json({ token, userReady, message: `Welcome, ${req.body.username}!` });
+            res.json({token, userReady, message: `Welcome, ${username}!`});
         }
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({error: 'Server error'});
     }
 };
 
@@ -52,43 +52,43 @@ exports.CreateUser = async (req, res) => {
         const existingUser = await User.findOne({ where: { username }, attributes: { exclude: ['password'] }, });
 
         if (existingUser) {
-            return res.status(409).json({ message: 'Username already exists' });
+            return res.status(409).json({error: 'Username already exists'});
         }
 
         if (!(username && password && firstName && lastName && email && telephone)) {
-            return res.status(409).json({ message: "Fields couldn't be empty!" });
+            return res.status(409).json({error: "Fields couldn't be empty!"});
         }
 
         if (!username || !username.match(/^[A-Za-z]\w+$/)) {
-            return res.status(400).send({ message: 'Invalid login format' });
+            return res.status(400).send({error: 'Invalid login format'});
         }
 
         if (username.length < 4) {
             return res
                 .status(400)
-                .send({ message: 'Login must be at least 4 characters long' });
+                .send({error: 'Login must be at least 4 characters long'});
         }
 
 
         const regexTel = /^[0-9+-]+$/;
         if (!regexTel.test(telephone)) {
-            return res.status(409).json({ message: "Phone number consists of numbers (123), plus sign (+), and minus sign (-)." });
+            return res.status(409).json({error: "Phone number consists of numbers (123), plus sign (+), and minus sign (-)."});
         }
 
         const regexName = /^[a-zA-Z]+(\s+[a-zA-Z]+)*$/;
         if (!regexName.test(firstName) || !regexName.test(lastName)) {
-            return res.status(409).json({ message: "String consists only of words." });
+            return res.status(409).json({error: "String consists only of words."});
         }
 
 
         if (!/^[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\.[A-Za-z]{2,}$/.test(email)) {
-            return res.status(400).send({ message: 'Invalid email address' });
+            return res.status(400).send({error: 'Invalid email address'});
         }
 
         if (!password || password.length < 3) {
             return res
                 .status(400)
-                .send({ message: 'Password must be at least 3 characters long' });
+                .send({error: 'Password must be at least 3 characters long'});
         }
 
         const saltRounds = 10;
@@ -116,7 +116,7 @@ exports.CreateUser = async (req, res) => {
         res.json({ message: 'Registration successful!' });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Failed to register user' });
+        res.status(500).json({error: 'Failed to register user'});
     }
 };
 
@@ -129,7 +129,7 @@ exports.VerifyUser = async (req, res) => {
 
         jwt.verify(token, jwtSecret, async (err, decodedToken) => {
             if (err) {
-                return res.status(401).json({ message: 'Authentication failed: Invalid token' });
+                return res.status(401).json({error: 'Authentication failed: Invalid token'});
             }
             const { username } = decodedToken
 
@@ -138,7 +138,7 @@ exports.VerifyUser = async (req, res) => {
         });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({error: 'Server error'});
     }
 };
 

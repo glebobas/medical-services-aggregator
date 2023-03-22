@@ -1,5 +1,11 @@
 import React, {useState} from 'react'
 
+interface IModalText {
+    error: string,
+    message: string,
+    username: string
+}
+
 export interface AuthContextType {
   showModalLogin: boolean;
   setShowModalLogin: React.Dispatch<React.SetStateAction<boolean>>;
@@ -7,12 +13,12 @@ export interface AuthContextType {
   setShowModalRegister: React.Dispatch<React.SetStateAction<boolean>>;
   showModalMini: boolean;
   setShowModalMini: React.Dispatch<React.SetStateAction<boolean>>;
-  showModalMiniText: string;
-  setShowModalMiniText: React.Dispatch<React.SetStateAction<string>>;
+  showModalMiniText: IModalText;
+  setShowModalMiniText: React.Dispatch<React.SetStateAction<IModalText>>;
   errorAuth: string;
   setErrorAuth: React.Dispatch<React.SetStateAction<string>>
-  showModalShedulRec: boolean;
-  setShowModalShedulRec: React.Dispatch<React.SetStateAction<boolean>>;
+  showModalSheduleRec: boolean;
+  setShowModalSheduleRec: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface AuthProviderProps {
@@ -29,14 +35,14 @@ export const AuthContext = React.createContext<AuthContextType>({
   showModalMini: false,
   setShowModalMini: () => {
   },
-  showModalMiniText: '',
+  showModalMiniText: {error: '', message: '', username: ''},
   setShowModalMiniText: () => {
   },
   errorAuth: '',
   setErrorAuth: () => {
   },
-  showModalShedulRec: false,
-  setShowModalShedulRec: () => {
+  showModalSheduleRec: false,
+  setShowModalSheduleRec: () => {
   },
 });
 
@@ -44,9 +50,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   const [showModalLogin, setShowModalLogin] = React.useState(false);
   const [showModalRegister, setShowModalRegister] = React.useState(false);
   const [showModalMini, setShowModalMini] = React.useState(false)
-  const [showModalMiniText, setShowModalMiniText] = React.useState('')
+  const [showModalMiniText, setShowModalMiniText] = React.useState({error: '', message: '', username: ''})
   const [errorAuth, setErrorAuth] = useState('');
-  const [showModalShedulRec, setShowModalShedulRec] = React.useState(false)
+  const [showModalSheduleRec, setShowModalSheduleRec] = React.useState(false)
 
   return (
     <AuthContext.Provider value={{
@@ -59,8 +65,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
       showModalMiniText,
       setShowModalMiniText,
       errorAuth, setErrorAuth,
-      showModalShedulRec,
-      setShowModalShedulRec,
+      showModalSheduleRec,
+      setShowModalSheduleRec,
     }}>
       {children}
     </AuthContext.Provider>

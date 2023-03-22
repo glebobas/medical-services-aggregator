@@ -1,24 +1,25 @@
-import {Fragment, useContext, useEffect, useState} from 'react'
+import React, {Fragment, useContext, useEffect, useState} from 'react'
 import {Disclosure, Menu, Transition} from '@headlessui/react'
 import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
 import {Login} from "../Modal/Login/login";
 import {AuthContext, AuthContextType} from "../../context";
-import {Register} from '../Modal/Register/Register'
+import {Register} from "../Modal/Register/Register";
 import {MiniModal} from "../Modal/Confirm/MiniModal";
 import {useDispatch, useSelector} from "react-redux";
 import {Types} from "../../redux/types/types";
 import {Link, useNavigate} from 'react-router-dom';
+import {FormattedMessage} from "react-intl";
 
 
 const navigationUserTrue = [
-  { name: 'Клиники', path: '/clinics', current: false },
-  { name: 'Врачи', path: '/doctors', current: false },
-  { name: 'Календарь', path: '/calendar', current: false },
+  { name: 'Clinics', path: '/clinics', current: false },
+  { name: 'Doctors', path: '/doctors', current: false },
+  { name: 'Calendar', path: '/calendar', current: false },
 ]
 
 const navigationUserFalse = [
-  {name: 'Войти', id: 'loginButton', current: false},
-  {name: 'Зарегистироваться', id: 'registerButton', current: false}
+  {name: 'Login', id: 'loginButton', current: false},
+  {name: 'Register', id: 'registerButton', current: false}
 ]
 
 
@@ -137,7 +138,10 @@ export function NavBar() {
                             )}
                             aria-current={item.current ? 'page' : undefined}
                           >
-                            {item.name}
+                            <FormattedMessage
+                                id={item.name}
+                                defaultMessage="Default error message"
+                            />
                           </button>
                           // <a
                           //   key={item.name}
@@ -171,7 +175,10 @@ export function NavBar() {
                       )}
                       aria-current={item.current ? 'page' : undefined}
                     >
-                      {item.name}
+                      <FormattedMessage
+                          id={item.name}
+                          defaultMessage="Default error message"
+                      />
                     </Disclosure.Button>
                   ))}
                 </div>
@@ -226,7 +233,10 @@ export function NavBar() {
                             )}
                             aria-current={item.current ? 'page' : undefined}
                           >
-                            {item.name}
+                            <FormattedMessage
+                                id={item.name}
+                                defaultMessage="Default error message"
+                            />
                           </div>
                         ))}
                       </div>
@@ -235,6 +245,7 @@ export function NavBar() {
                   <div
                     className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                     <button
+                    onClick={() => redir('/notepage')}
                       type="button"
                       className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                     >
@@ -271,7 +282,11 @@ export function NavBar() {
                               <div
                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 cursor-pointer')}
                               >
-                                Профиль
+
+                                <FormattedMessage
+                                    id="Profile"
+                                    defaultMessage="Default error message"
+                                />
                               </div>
                             )}
                           </Menu.Item>
@@ -281,7 +296,10 @@ export function NavBar() {
                                 <div
                                   className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 cursor-pointer')}
                                 >
-                                  Редактирование
+                                  <FormattedMessage
+                                      id="Edit Profile Info"
+                                      defaultMessage="Default error message"
+                                  />
                                 </div>
                               </Link>
                             )}
@@ -292,7 +310,10 @@ export function NavBar() {
                                 onClick={logOut}
                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 cursor-pointer')}
                               >
-                                Выход
+                                <FormattedMessage
+                                    id="Logout"
+                                    defaultMessage="Default error message"
+                                />
                               </div>
                             )}
                           </Menu.Item>
@@ -309,14 +330,17 @@ export function NavBar() {
                     <Disclosure.Button
                       key={item.name}
                       as="a"
-                      href={item.href}
+                      // href={item.href}
                       className={classNames(
                         item.current ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-700 hover:text-white',
                         'block rounded-md px-3 py-2 text-base font-medium'
                       )}
                       aria-current={item.current ? 'page' : undefined}
                     >
-                      {item.name}
+                      <FormattedMessage
+                          id={item.name}
+                          defaultMessage="Default error message"
+                      />
                     </Disclosure.Button>
                   ))}
                 </div>

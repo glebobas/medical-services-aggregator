@@ -14,8 +14,8 @@ const minutes = ['00', '30'];
 
 export function DayView() {
   const {
-    showModalShedulRec,
-    setShowModalShedulRec,
+    showModalSheduleRec,
+    setShowModalSheduleRec,
   } = useContext(AuthContext)
 
   const [selectedDate, setSelectedDate] = useState(dayjs());
@@ -93,7 +93,7 @@ export function DayView() {
   function handleClickReg(block) {
     console.log("-> block", block);
     setSheduleIdOneBlock(block)
-    setShowModalShedulRec(true)
+    setShowModalSheduleRec(true)
   }
 
   // TODO: Запрос на блоки расписания

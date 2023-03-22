@@ -25,7 +25,8 @@ module.exports = (sequelize, DataTypes) => {
     clinic_review: DataTypes.TEXT,
     userId: DataTypes.INTEGER,
     doctorId: DataTypes.INTEGER,
-    clinicId: DataTypes.INTEGER
+    clinicId: DataTypes.INTEGER,
+    date: DataTypes.DATEONLY
   }, {
     sequelize,
     modelName: 'Review',

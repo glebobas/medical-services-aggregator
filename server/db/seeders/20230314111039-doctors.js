@@ -21,8 +21,8 @@ module.exports = {
 
     const getRandomGeneralTiming = () => {
       const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-      const startHour = hoaxer.random.number({ min: 10, max: 12 });
-      const endHour = hoaxer.random.number({ min: 13, max: 18 });
+      const startHour = hoaxer.datatype.number({ min: 10, max: 12 });
+      const endHour = hoaxer.datatype.number({ min: 13, max: 18 });
       const startTime = `${startHour}am`;
       const endTime = `${endHour - 12}pm`;
       const days = hoaxer.random.arrayElements(daysOfWeek, hoaxer.random.number({ min: 1, max: 5 }));
@@ -81,7 +81,7 @@ module.exports = {
       const lastName = hoaxer.name.lastName();
       const email = hoaxer.internet.email(firstName, lastName);
       const phone = hoaxer.phone.phoneNumber('+1 ### ### ####');
-      const specialityId = hoaxer.random.number({ min: 1, max: 5 });
+      const specialityId = hoaxer.datatype.number({ min: 1, max: 5 });
       const clinicId = hoaxer.random.arrayElement(clinics);
       const generalTiming = getRandomGeneralTiming();
       const adultPatients = isAdult || isChild ? isAdult : true;

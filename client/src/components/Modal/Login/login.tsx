@@ -6,6 +6,7 @@ import React, {Fragment, useContext, useRef, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
 import {AuthContext, AuthContextType} from "../../../context";
 import GoogleAuth from "../Google/Google";
+import { FormattedMessage } from 'react-intl';
 
 
 
@@ -18,6 +19,8 @@ interface ResponseData {
   token: string;
   userReady: IUser;
   message: string;
+  error: string;
+  username: string
 }
 
 export function Login(): JSX.Element {
@@ -25,12 +28,12 @@ export function Login(): JSX.Element {
 
   const [userData, setUserData] = useState<LoginData>({username: '', password: ''});
 
-  const {
-    showModalLogin,
-    setShowModalLogin,
-    setShowModalMiniText,
-    setShowModalMini, errorAuth, setErrorAuth
-  } = useContext<AuthContextType>(AuthContext)
+    const {
+      showModalLogin,
+      setShowModalLogin,
+      setShowModalMiniText,
+      setShowModalMini, errorAuth, setErrorAuth
+    } = useContext<AuthContextType>(AuthContext)
 
   // const [errorAuth, setErrorAuth] = useState('');
 
@@ -41,7 +44,6 @@ export function Login(): JSX.Element {
 
   const login = (data: LoginData): ThunkAction<Promise<ResponseData>, IGeneralState, unknown, UserActionTypes> => async (dispatch: Dispatch<UserActionTypes>): Promise<ResponseData> => {
     const {username, password} = data;
-
 
     try {
       dispatch({
@@ -55,18 +57,18 @@ export function Login(): JSX.Element {
         body: JSON.stringify({username, password}),
       });
       const responseData = await response.json();
-      const {token, userReady, message} = responseData
+      const {token, userReady, message, error} = responseData
 
       if (responseData.token) {
         localStorage.setItem('jwtToken', responseData.token);
         dispatch({type: Types.LOGIN_SUCCESS, payload: userReady});
       } else {
-        setErrorAuth('Invalid username or password')
+        // setErrorAuth(error)
         dispatch({type: Types.LOGIN_FAILURE, payload: {error: 'Invalid username or password'}});
       }
-      return {token, userReady, message};
+      return {token, userReady, message, error, username};
     } catch (error: any) {
-      const errorMessage = error.response?.responseData?.error || 'An errorAuth occurred';
+      const errorMessage = error.response?.responseData?.error || 'An error occurred';
       setErrorAuth(errorMessage);
       dispatch({type: Types.LOGIN_FAILURE, payload: {error: errorMessage}});
       return Promise.reject(errorMessage);
@@ -80,15 +82,15 @@ export function Login(): JSX.Element {
         const response = await dispatch(login(userData))
         if (response?.userReady?.username) {
           setShowModalLogin(false)
-          setShowModalMiniText(response?.message)
+          setShowModalMiniText(response)
           setShowModalMini(true)
         }
 
         if (!response?.userReady?.username) {
           // setShowModalLogin(false)
-          setShowModalMiniText(response?.message)
+          setShowModalMiniText(response)
           setShowModalMini(true)
-          setErrorAuth(response?.message)
+          setErrorAuth(response?.error)
         }
 
 
@@ -168,7 +170,10 @@ export function Login(): JSX.Element {
                           {errorAuth &&
                             <div className='flex flex-column justify-center align-items-center'>
                               <span className="top-0 right-0 py-3 px-4 text-sm text-red-600">
-                                {errorAuth}
+                                <FormattedMessage
+                                    id={errorAuth}
+                                    defaultMessage="Default error message"
+                                />
                               </span>
                             </div>
                           }
