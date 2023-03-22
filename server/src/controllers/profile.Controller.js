@@ -1,6 +1,7 @@
 const {Shedule, Doctor, Clinic, Address, Speciality, Rating, Slot, User} = require("../../db/models");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const { sendMail } = require("../nodeMailer");
 
 const jwtSecret = process.env.JWT_SECRET
 
@@ -342,7 +343,7 @@ exports.EditProfile = async (req, res) => {
         }
 
         delete updatedUser.dataValues.password;
-
+        // sendMail('slavpolichev@gmail.com', 'Information update', 'You have sucsessfuly updated Your profile information!');
         res.status(200).json({user: updatedUser, message: 'You have successfully edited your profile!'})
 
 
