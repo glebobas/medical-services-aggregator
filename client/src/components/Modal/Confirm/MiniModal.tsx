@@ -15,8 +15,8 @@ export function MiniModal(): JSX.Element {
         event.preventDefault();
         setShowModalMini(false)
     }
-    const regMessage = showModalMiniText.message.includes('Registration') ? 'Registration successful!' : '';
-    const loginMessage = showModalMiniText.message.includes('Welcome') ? `Welcome, {username}!` : '';
+    const regMessage = showModalMiniText?.message.includes('Registration') ? 'Registration successful!' : '';
+    const loginMessage = showModalMiniText?.message.includes('Welcome') ? `Welcome, {username}!` : '';
 
     const cancelButtonRef = useRef(null)
 
@@ -53,9 +53,9 @@ export function MiniModal(): JSX.Element {
                                             <div className="flex flex-column justify-center align-items-center w-full px-3">
                                                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                                                     <FormattedMessage
-                                                        id={loginMessage || regMessage || showModalMiniText.error}
+                                                        id={loginMessage || regMessage || showModalMiniText?.error}
                                                         defaultMessage="Default error message"
-                                                        values={{ username: showModalMiniText.username }}
+                                                        values={{ username: showModalMiniText?.username }}
                                                     />
                                                     {/*{showModalMiniText.message || showModalMiniText.error}*/}
                                                 </label>
@@ -66,7 +66,7 @@ export function MiniModal(): JSX.Element {
 
                                         <div className='flex flex-column justify-center align-items-center'>
                                             <button type="submit"
-                                                className={`left-20 focus:outline-none text-white ${showModalMiniText.message ? 'bg-green-500 hover:bg-green-800 focus:ring-4 focus:ring-green-300' : 'bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300'} font-medium rounded-lg text-sm px-5 py-2.5`}>
+                                                className={`left-20 focus:outline-none text-white ${showModalMiniText?.message ? 'bg-green-500 hover:bg-green-800 focus:ring-4 focus:ring-green-300' : 'bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300'} font-medium rounded-lg text-sm px-5 py-2.5`}>
                                                 <FormattedMessage
                                                     id='OK'
                                                     defaultMessage="Default error message"
