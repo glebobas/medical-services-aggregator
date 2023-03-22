@@ -54,7 +54,7 @@ export function DoctorList({props}) {
         <h3 className="font-semibold text-xl mb-2">List of all the doctors</h3>
         <div className="overflow-auto rounded-lg shadow hidden lg:block">
           <table className="w-full divide-y divide-gray-300">
-            <thead className="bg-gray-50 border-b-2 border-gray-200">
+            <thead className="bg-gray-200 border-b-2 border-gray-200">
             <tr>
               <th
                 scope="col"
