@@ -18,6 +18,8 @@ interface RegData {
 
 interface ResponseData {
   message: string;
+  error: string;
+  username: string;
 }
 
 export function Register(): JSX.Element {
@@ -66,14 +68,15 @@ export function Register(): JSX.Element {
       });
       const responseData = await response.json();
 
-      const {message} = responseData
+      const {message, error} = responseData
 
       if (responseData.message === 'Registration successful!') {
         dispatch({type: Types.REGISTER_SUCCESS, payload: {message}});
       } else {
-        setErrorAuth(message)
-        dispatch({type: Types.REGISTER_FAILURE, payload: {message}});
+        setErrorAuth(error)
+        dispatch({type: Types.REGISTER_FAILURE, payload: {error}});
       }
+      // responseData.username = ''
       return responseData
     } catch (error: any) {
       const errorMessage = error.response?.responseData?.error || 'An errorAuth occurred';
@@ -92,17 +95,17 @@ export function Register(): JSX.Element {
         const data = await dispatch(register(userData))
         // console.log("-> data", data);
 
-        if (data?.message === 'Registration successful!') {
+        // if (data?.message === 'Registration successful!') {
           setShowModalRegister(false)
-          setShowModalMiniText('Registration successful!')
+          setShowModalMiniText(data)
           setShowModalMini(true)
-        }
+        // }
 
-        if (data?.message !== 'Registration successful!') {
-          // setShowModalRegister(false)
-          setShowModalMiniText(data?.message)
-          setShowModalMini(true)
-        }
+        // if (data?.message !== 'Registration successful!') {
+        //   // setShowModalRegister(false)
+        //   setShowModalMiniText(data)
+        //   setShowModalMini(true)
+        // }
       }
     } catch (error) {
       console.log(error)

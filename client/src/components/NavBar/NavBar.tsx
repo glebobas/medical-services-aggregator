@@ -12,7 +12,7 @@ import {FormattedMessage} from "react-intl";
 
 
 const navigationUserTrue = [
-  { name: 'Clinic', path: '/clinics', current: false },
+  { name: 'Clinics', path: '/clinics', current: false },
   { name: 'Doctors', path: '/doctors', current: false },
   { name: 'Calendar', path: '/calendar', current: false },
 ]
@@ -138,7 +138,6 @@ export function NavBar() {
                             )}
                             aria-current={item.current ? 'page' : undefined}
                           >
-                            {/*{item.name}*/}
                             <FormattedMessage
                                 id={item.name}
                                 defaultMessage="Default error message"
@@ -176,7 +175,6 @@ export function NavBar() {
                       )}
                       aria-current={item.current ? 'page' : undefined}
                     >
-                      {/*{item.name}*/}
                       <FormattedMessage
                           id={item.name}
                           defaultMessage="Default error message"
@@ -235,7 +233,10 @@ export function NavBar() {
                             )}
                             aria-current={item.current ? 'page' : undefined}
                           >
-                            {item.name}
+                            <FormattedMessage
+                                id={item.name}
+                                defaultMessage="Default error message"
+                            />
                           </div>
                         ))}
                       </div>
@@ -281,7 +282,11 @@ export function NavBar() {
                               <div
                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 cursor-pointer')}
                               >
-                                Профиль
+
+                                <FormattedMessage
+                                    id="Profile"
+                                    defaultMessage="Default error message"
+                                />
                               </div>
                             )}
                           </Menu.Item>
@@ -291,7 +296,10 @@ export function NavBar() {
                                 <div
                                   className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 cursor-pointer')}
                                 >
-                                  Редактирование
+                                  <FormattedMessage
+                                      id="Edit Profile Info"
+                                      defaultMessage="Default error message"
+                                  />
                                 </div>
                               </Link>
                             )}
@@ -302,7 +310,10 @@ export function NavBar() {
                                 onClick={logOut}
                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 cursor-pointer')}
                               >
-                                Выход
+                                <FormattedMessage
+                                    id="Logout"
+                                    defaultMessage="Default error message"
+                                />
                               </div>
                             )}
                           </Menu.Item>
@@ -326,7 +337,10 @@ export function NavBar() {
                       )}
                       aria-current={item.current ? 'page' : undefined}
                     >
-                      {item.name}
+                      <FormattedMessage
+                          id={item.name}
+                          defaultMessage="Default error message"
+                      />
                     </Disclosure.Button>
                   ))}
                 </div>
