@@ -1,7 +1,4 @@
-import React, {useContext} from 'react';
-import {SearchResultsContext} from "../../context/context";
-import {useNavigate} from "react-router-dom";
-
+import React from 'react';
 
 import {useState} from 'react'
 import {CheckIcon, ChevronUpDownIcon} from '@heroicons/react/20/solid'
@@ -10,6 +7,7 @@ import {DoctorList} from "../../components/DoctorList";
 import {useSelector} from "react-redux";
 import {ClinicList} from "../../components/ClinicList";
 import {FormattedMessage} from "react-intl";
+import {nanoid} from "nanoid";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -19,15 +17,15 @@ export function SearchPage() {
   const [queryPerson, setPersonQuery] = useState('')
   const [queryLocation, setLocationQuery] = useState('')
   const [selectedSpeciality, setSelectedSpeciality] = useState()
-  const [selectedLocation, setSelectedLocation] = useState()
+  const [selectedLocation, setSelectedLocation] = useState('')
   const [doctors, setDoctors] = useState([])
   const [topDoctorsClinics, setTopDoctorsClinics] = useState([])
   const topDoctors = topDoctorsClinics?.readyDoctorList
   const topClinics = topDoctorsClinics?.readyClinicList
 
-  const speciality = useSelector((state) => [{id: 0, name: ''}, ...state?.speciality?.speciality])
-  const getAllAddressArray = useSelector((state) => [{id: 0, name: ''}, ...state?.addresClinics?.addresClinics])
-  const location = [...new Set(getAllAddressArray.map(item => item.countryName))]
+  const speciality = useSelector((state) => [{id: 0, name: ''}, ...state?.speciality?.speciality || []])
+  const getAllAddressArray = useSelector((state) => [{id: 0, countryName: ''}, ...state?.addresClinics?.addresClinics || []])
+  const location = [...new Set(getAllAddressArray.map(item => item?.countryName))]
 
   // Checked children
   const [isCheckedChildren, setIsCheckedChildren] = useState(false);
@@ -57,7 +55,7 @@ export function SearchPage() {
     queryLocation === ''
       ? location
       : location.filter((place) => {
-        return place.countryName.toLowerCase().includes(queryLocation.toLowerCase())
+        return place?.toLowerCase()?.includes(queryLocation.toLowerCase())
       })
 
 
@@ -87,10 +85,11 @@ export function SearchPage() {
   }
 
 
+
+
   return (
     <div className="flex flex-col flex-grow mt-4 w-full">
       <div className="title flex flex-row font-semibold text-xl">
-        Расширенный поиск
         <FormattedMessage
             id="Extended search"
             defaultMessage="Default error message"
@@ -122,7 +121,7 @@ export function SearchPage() {
                   className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                   {filteredSpeciality.map((person) => (
                     <Combobox.Option
-                      key={person.id}
+                      key={nanoid()}
                       value={person}
                       className={({active}) =>
                         classNames(
@@ -226,7 +225,7 @@ export function SearchPage() {
                   className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                   {filteredLocation.map((place) => (
                     <Combobox.Option
-                      key={place}
+                      key={nanoid()}
                       value={place}
                       className={({active}) =>
                         classNames(
