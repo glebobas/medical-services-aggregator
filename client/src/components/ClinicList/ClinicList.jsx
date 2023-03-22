@@ -1,11 +1,19 @@
 //@ts-ignore
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import usePagination from '../../hooks/usePagination';
 import Rating from '../Rating/Rating';
+=======
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import Rating from '../Rating/Rating';
+import usePagination from '../../hooks/usePagination';
+import {FormattedMessage} from "react-intl";
+>>>>>>> 362062d187c78f5b4f560441d2ade0b70739bfba
 
-export function ClinicList() {
+export function ClinicList({props}) {
 
   const [allClinicsData, setAllClinicsData] = useState([]);
 
@@ -13,6 +21,7 @@ export function ClinicList() {
   console.log(log);
 
   useEffect(() => {
+<<<<<<< HEAD
     const fetchData = async () => {
       const response = await fetch('/main/alldataquery', {
         method: "GET",
@@ -26,6 +35,27 @@ export function ClinicList() {
     };
     fetchData();
   }, [])
+=======
+
+    if (props === undefined) {
+      const fetchData = async () => {
+        const response = await fetch('/main/alldataquery', {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        })
+        const data = await response.json();
+        setAllClinicsData(data.readyClinicList);
+      };
+      fetchData();
+    }
+    if (props !== undefined) {
+      setAllClinicsData(props)
+    }
+  }, [props])
+>>>>>>> 362062d187c78f5b4f560441d2ade0b70739bfba
 
   const navigate = useNavigate()
   const handleClick = (field) => {
@@ -47,7 +77,10 @@ export function ClinicList() {
 
   return (
     <div className="mt-4 flex flex-col">
-      <h3 className="font-semibold text-xl mb-2">List of all the clinics</h3>
+      <h3 className="font-semibold text-xl mb-2"><FormattedMessage
+          id='List of all the clinics'
+          defaultMessage="Default error message"
+      /></h3>
       <div className="overflow-auto rounded-lg shadow hidden lg:block">
         <table className="w-full divide-y divide-gray-300">
           <thead className="bg-gray-50 border-b-2 border-gray-200">
@@ -56,61 +89,74 @@ export function ClinicList() {
                 scope="col"
                 className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold tracking-wide text-gray-900 sm:pl-6"
               >
-                Клиника
+                <FormattedMessage
+                    id='Clinic'
+                    defaultMessage="Default error message"
+                />
               </th>
               <th
                 scope="col"
                 className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
               >
-                Адрес
+                <FormattedMessage
+                    id='Address'
+                    defaultMessage="Default error message"
+                />
               </th>
               <th
                 scope="col"
                 className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
               >
-                Телефон
+                <FormattedMessage
+                    id='Telephone'
+                    defaultMessage="Default error message"
+                />
               </th>
               <th
                 scope="col"
                 className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900">
-                Рейтинг
+                <FormattedMessage
+                    id='Rating'
+                    defaultMessage="Default error message"
+                />
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {allClinicsData?.slice(firstContentIndex, lastContentIndex).map(field => {
-              return (
-                <tr key={field.email} name={`clinic ${field.id}`} className="hover:bg-gray-100 cursor-pointer" onClick={() => handleClick(field.clinicId)}>
-                  <td className="py-4 pl-4 pr-3 text-sm sm:pl-6">
-                    <div className="flex items-center">
-                      <div className="h-10 w-10 flex-shrink-0">
-                        <img
-                          className="h-10 w-10 rounded-full"
-                          src="https://cdn-icons-png.flaticon.com/512/3799/3799073.png"
-                          alt=""
-                        />
+          {allClinicsData?.slice(firstContentIndex, lastContentIndex).map(field => {
+            return (
+              <tr key={field.email} name={`clinic ${field.id}`} className="hover:bg-gray-100 cursor-pointer"
+                  onClick={() => handleClick(field.clinicId)}>
+                <td className="py-4 pl-4 pr-3 text-sm sm:pl-6">
+                  <div className="flex items-center">
+                    <div className="h-10 w-10 flex-shrink-0">
+                      <img
+                        className="h-10 w-10 rounded-full"
+                        src="https://cdn-icons-png.flaticon.com/512/3799/3799073.png"
+                        alt=""
+                      />
+                    </div>
+                    <div className="ml-4">
+                      <div className="font-medium text-gray-900">
+                        {field.name}
                       </div>
-                      <div className="ml-4">
-                        <div className="font-medium text-gray-900">
-                          {field.name}
-                        </div>
-                        <div className="text-gray-500">
-                          {field.email}
-                        </div>
+                      <div className="text-gray-500">
+                        {field.email}
                       </div>
                     </div>
-                  </td>
-                  <td className="py-4 px-2 pl-4 text-sm">{field.address}</td>
-                  <td className="py-4 px-2 pl-4 text-sm">{field.phone}</td>
-                  <td className="py-4 px-2 text-sm text-gray-500">
-                    {/* <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
+                  </div>
+                </td>
+                <td className="py-4 px-2 pl-4 text-sm">{field.address}</td>
+                <td className="py-4 px-2 pl-4 text-sm">{field.phone}</td>
+                <td className="py-4 px-2 text-sm text-gray-500">
+                  {/* <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
                                 Active
                               </span> */}
-                    <Rating rat={field.clinicRating} />
-                  </td>
-                </tr>
-              )
-            })}
+                  <Rating rat={field.clinicRating}/>
+                </td>
+              </tr>
+            )
+          })}
           </tbody>
         </table>
       </div>
@@ -119,7 +165,8 @@ export function ClinicList() {
       {allClinicsData?.slice(firstContentIndex, lastContentIndex).map(field => (
         <div key={field.id} className="grid space-y-3 grid-cols-1 gap-4 lg:hidden">
           <div className="space-y-2 py-2">
-            <div className="bg-white space-y-3 p-4 rounded-lg shadow hover:bg-gray-100 cursor-pointer" onClick={() => (handleClick(field.clinicId))}>
+            <div className="bg-white space-y-3 p-4 rounded-lg shadow hover:bg-gray-100 cursor-pointer"
+                 onClick={() => (handleClick(field.clinicId))}>
               <div className="flex justify-between space-x-2 text-sm">
                 <div className="flex-col w-1/2 space-y-3">
                   <div className="font-semibold">{field.name}</div>

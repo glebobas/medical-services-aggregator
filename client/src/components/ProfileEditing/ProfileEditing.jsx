@@ -56,15 +56,16 @@ export function ProfileEditing() {
             })
 
             const responseData = await response.json();
+            console.log("-> responseData", responseData);
 
             if (response.status === 200) {
                 dispatch({type: Types.UPDATE_USERDATA_SUCCESS, payload: responseData.user});
-                setShowModalMiniText(responseData?.message)
+                setShowModalMiniText(responseData)
                 setShowModalMini(true)
             }
             if (response.status !== 200) {
                 dispatch({type: Types.UPDATE_USERDATA_FAILURE, payload: {error: responseData}});
-                setShowModalMiniText(responseData?.message)
+                setShowModalMiniText(responseData)
                 setShowModalMini(true)
                 setError(responseData.message)
             }

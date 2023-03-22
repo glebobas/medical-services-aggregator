@@ -1,3 +1,8 @@
+import React, {useContext} from 'react';
+import {SearchResultsContext} from "../../context/context";
+import {useNavigate} from "react-router-dom";
+
+
 import {useState} from 'react'
 import {CheckIcon, ChevronUpDownIcon} from '@heroicons/react/20/solid'
 import {Combobox} from '@headlessui/react'

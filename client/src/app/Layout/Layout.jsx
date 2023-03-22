@@ -14,6 +14,8 @@ export const Layout = ({title}) => {
   const [data, setData] = useState({})
 
 
+
+
   return (
     <div className="bg-gray-50 dark:bg-gray-900 flex flex-col min-h-screen">
       <NavBar/>
