@@ -20,6 +20,7 @@ import GoogleAuth from "../components/Modal/Google/Google";
 import {ClinicList} from '../components/ClinicList';
 import { DoctorList } from '../components/DoctorList';
 import {SearchPage} from "../pages/SearchPage/SearchPage";
+import{NotePage} from '../pages/NotePage/NotePage';
 
 function App() {
 
@@ -63,6 +64,7 @@ function App() {
             <Route path='/doctors' element={<DoctorList />}></Route>
             <Route path='/calendar' element={<h1>Календарь</h1>}/>
             <Route path='/listpage' element={<ListPage/>}/>
+            <Route path='/notepage' element={<NotePage/>}/>
             <Route path='/profileEditing' element={<ProfileEditing/>}/>
             <Route path='/doctor/:id' element={<DoctorCard/>}/>
             <Route path='/clinic/:id' element={<ClinicalCard/>}/>
