@@ -1,10 +1,7 @@
 import React, {useContext} from 'react';
-import {AuthContext} from "../../context";
 import {SearchResultsContext} from "../../context/context";
 import {useNavigate} from "react-router-dom";
-import {SelectSpecialization} from "../../components/SelectSpecialization/SelectSpecialization";
-import {CheckBoxes} from "../../components/CheckBoxes/CheckBoxes";
-import {SelectLocation} from "../../components/SelectLocation/SelectLocation";
+
 
 import {useState} from 'react'
 import {CheckIcon, ChevronUpDownIcon} from '@heroicons/react/20/solid'
@@ -12,20 +9,6 @@ import {Combobox} from '@headlessui/react'
 import {DoctorList} from "../../components/DoctorList";
 import {useSelector} from "react-redux";
 
-// const speciality = [
-//   {id: 1, name: ''},
-//   {id: 2, name: 'Cardiologist'},
-//   {id: 3, name: 'Dermatologist'},
-//   {id: 4, name: 'Surgeon'},
-//   // More users...
-// ]
-
-// const location = [
-//   {id: 1, name: 'Turkey'},
-//   {id: 2, name: 'Australia'},
-//   {id: 3, name: 'Vietnam'},
-//   // More users...
-// ]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')

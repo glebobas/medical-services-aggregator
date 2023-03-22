@@ -4,6 +4,7 @@ import 'dayjs/locale/ru';
 import {useParams} from "react-router-dom";
 import {ShedulRecModal} from "../Modal/ShedulRecModal";
 import {AuthContext} from "../../context";
+import {FormattedMessage} from "react-intl";
 // import '../../index.css'; // стили для компонента
 
 // массив возможных часов
@@ -128,7 +129,12 @@ export function DayView() {
   return (
     <div className="mt-4 border-y py-4">
       <div className="flex justify-between">
-        <h4 className="font-semibold">Расписание</h4>
+        <h4 className="font-semibold">
+          <FormattedMessage
+              id='Shedule'
+              defaultMessage="Default error message"
+          />
+        </h4>
       </div>
       {/* блок выбора даты */}
       <input className="bg-gray-100 w-full rounded border p-2 my-4"

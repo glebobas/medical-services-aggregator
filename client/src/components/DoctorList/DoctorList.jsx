@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom';
 import usePagination from '../../hooks/usePagination';
 import Rating from '../Rating/Rating'
+import {FormattedMessage} from "react-intl";
 
 export function DoctorList({props}) {
   const [allDoctorsData, setAllDoctorsData] = useState([]);
@@ -51,7 +52,11 @@ export function DoctorList({props}) {
     <>
     {(allDoctorsData?.length > 0)
       ? (<div className="mt-4 flex flex-col">
-        <h3 className="font-semibold text-xl mb-2">List of all the doctors</h3>
+        <h3 className="font-semibold text-xl mb-2">
+          <FormattedMessage
+              id='List of all the doctors'
+              defaultMessage="Default error message"
+          /></h3>
         <div className="overflow-auto rounded-lg shadow hidden lg:block">
           <table className="w-full divide-y divide-gray-300">
             <thead className="bg-gray-50 border-b-2 border-gray-200">
@@ -60,31 +65,46 @@ export function DoctorList({props}) {
                 scope="col"
                 className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold tracking-wide text-gray-900 sm:pl-6"
               >
-                Доктор
+                <FormattedMessage
+                    id='Doctor'
+                    defaultMessage="Default error message"
+                />
               </th>
               <th
                 scope="col"
                 className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
               >
-                Специализация
+                <FormattedMessage
+                    id='Speciality'
+                    defaultMessage="Default error message"
+                />
               </th>
               <th
                 scope="col"
                 className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
               >
-                Клиника
+                <FormattedMessage
+                    id='Clinic'
+                    defaultMessage="Default error message"
+                />
               </th>
               <th
                 scope="col"
                 className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
               >
-                Телефон
+                <FormattedMessage
+                    id='Phone number'
+                    defaultMessage="Default error message"
+                />
               </th>
               <th
                 scope="col"
                 className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
               >
-                Рейтинг
+                <FormattedMessage
+                    id='Rating'
+                    defaultMessage="Default error message"
+                />
               </th>
             </tr>
             </thead>
@@ -134,7 +154,10 @@ export function DoctorList({props}) {
                 <div className="flex justify-between space-x-2 text-sm">
                   <div className="flex-col w-1/2 space-y-3">
                     <div className="font-semibold">{field.name}</div>
-                    <div className="py-2">{field.speciality}</div>
+                    <div className="py-2"><FormattedMessage
+                        id={field.speciality}
+                        defaultMessage="Default error message"
+                    /></div>
                     <div>{field.clinic}</div>
                   </div>
                   <div className="flex-col space-y-3">
@@ -168,7 +191,10 @@ export function DoctorList({props}) {
           </button>
         </div>
       </div>)
-      : (<div className="mt-4 flex flex-col font-semibold text-2xl">Записи не найдены</div>)
+      : (<div className="mt-4 flex flex-col font-semibold text-2xl"><FormattedMessage
+            id='Records not found'
+            defaultMessage="Default error message"
+        /></div>)
     }
     </>
   )

@@ -45,7 +45,10 @@ export function ClinicList() {
 
   return (
     <div className="mt-4 flex flex-col">
-      <h3 className="font-semibold text-xl mb-2">List of all the clinics</h3>
+      <h3 className="font-semibold text-xl mb-2"><FormattedMessage
+          id='List of all the clinics'
+          defaultMessage="Default error message"
+      /></h3>
       <div className="overflow-auto rounded-lg shadow hidden lg:block">
         <table className="w-full divide-y divide-gray-300">
           <thead className="bg-gray-50 border-b-2 border-gray-200">
@@ -80,7 +83,10 @@ export function ClinicList() {
               <th
                 scope="col"
                 className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900">
-                Рейтинг
+                <FormattedMessage
+                    id='Rating'
+                    defaultMessage="Default error message"
+                />
               </th>
             </tr>
           </thead>

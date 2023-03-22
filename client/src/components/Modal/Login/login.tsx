@@ -102,6 +102,10 @@ export function Login(): JSX.Element {
   }
 
   const cancelButtonRef = useRef(null)
+  let text = `${<FormattedMessage
+      id='Please, type your login here'
+      defaultMessage="Default error message"
+  />}`
 
   return (
     <Transition.Root show={showModalLogin} as={Fragment}>
@@ -136,13 +140,19 @@ export function Login(): JSX.Element {
                     <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                       <h1
                         className="text-xl text-left font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                        Sign in
+                        <FormattedMessage
+                            id='Sign In'
+                            defaultMessage="Default error message"
+                        />
                       </h1>
                       <form onSubmit={onSubmit} className="space-y-2 md:space-y-4">
                         <div>
                           <label
                             className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            User name
+                            <FormattedMessage
+                                id='Username'
+                                defaultMessage="Default error message"
+                            />
                           </label>
                           <input
                             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
@@ -150,7 +160,7 @@ export function Login(): JSX.Element {
                             id="grid_password"
                             type="text"
                             autoComplete="off"
-                            placeholder="Please, type your login"
+                            placeholder={text}
                             onChange={signIn}
                             required/>
                         </div>
