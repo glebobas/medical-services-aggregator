@@ -15,8 +15,8 @@ export function MiniModal(): JSX.Element {
         event.preventDefault();
         setShowModalMini(false)
     }
-    const regMessage = showModalMiniText?.message.includes('Registration') ? 'Registration successful!' : '';
-    const loginMessage = showModalMiniText?.message.includes('Welcome') ? `Welcome, {username}!` : '';
+    const regMessage = showModalMiniText?.message?.includes('Registration') ? 'Registration successful!' : '';
+    const loginMessage = showModalMiniText?.message?.includes('Welcome') ? `Welcome, {username}!` : '';
 
     const cancelButtonRef = useRef(null)
 
