@@ -181,7 +181,7 @@ exports.GetProfileArrays = async (req, res) => {
     } catch
         (err) {
         console.error(err);
-        res.status(500).json({message: 'Server error'});
+        res.status(500).json({error: 'Server error'});
     }
 }
 
@@ -203,7 +203,7 @@ exports.EditRecordsInProfile = async (req, res) => {
                 }
             );
             if (numUpdated === 0) {
-                return res.status(404).json({message: 'Clinic\'s rating not found'});
+                return res.status(404).json({error: 'Clinic\'s rating not found'});
             }
             res.status(200).json({rating: updatedRating});
         }
@@ -241,7 +241,7 @@ exports.EditRecordsInProfile = async (req, res) => {
             );
 
             if (numUpdated === 0) {
-                return res.status(404).json({message: 'Schedule not found'});
+                return res.status(404).json({error: 'Schedule not found'});
             }
             res.status(200).json({schedule: updatedSchedule});
         }
@@ -249,7 +249,7 @@ exports.EditRecordsInProfile = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Internal server error'});
+        res.status(500).json({error: 'Internal server error'});
     }
 }
 
@@ -267,7 +267,7 @@ exports.DeleteRecordsFromProfile = async (req, res) => {
             );
 
             if (deletedShedule === 0) {
-                return res.status(404).json({message: 'Error while deleting'});
+                return res.status(404).json({error: 'Error while deleting'});
             }
             res.status(200).json({message: 'Deleting was successful'});
         }
@@ -275,7 +275,7 @@ exports.DeleteRecordsFromProfile = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Internal server error'});
+        res.status(500).json({error: 'Internal server error'});
     }
 }
 
@@ -296,26 +296,26 @@ exports.EditProfile = async (req, res) => {
         if (newPassword && newPassword.length < 3) {
             return res
                 .status(400)
-                .send({ message: 'Password must be at least 3 characters long' });
+                .send({ error: 'Password must be at least 3 characters long' });
         }
         if (!/^[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\.[A-Za-z]{2,}$/.test(email) && email) {
-            return res.status(400).send({ message: 'Invalid email address' });
+            return res.status(400).send({ error: 'Invalid email address' });
         }
 
         const regexName = /^[a-zA-Z]+(\s+[a-zA-Z]+)*$/;
         if (!regexName.test(firstName) || !regexName.test(lastName)) {
-            return res.status(409).json({message: "Name could consist only of words."});
+            return res.status(409).json({error: "Name could consist only of words"});
         }
 
         const regexTel = /^[0-9+-]+$/;
         if (!regexTel.test(telephone) && telephone) {
-            return res.status(409).json({message: "Phone number consists of numbers (123), plus sign (+) and minus sign (-)."});
+            return res.status(409).json({error: "Phone number consists of numbers (123), plus sign (+), and minus sign (-)."});
         }
 
         const user = await User.findOne({where: {id}});
         const passwordMatch = await bcrypt.compare(oldPassword, user.password);
         if (!passwordMatch) {
-            return res.status(401).json({message: 'Please, enter correct password'});
+            return res.status(401).json({error: 'Please, enter correct password'});
         }
 
         const updateData = {
@@ -339,7 +339,7 @@ exports.EditProfile = async (req, res) => {
             });
 
         if (nmbOfUpdatedRows === 0) {
-            return res.status(404).json({message: 'Error while updating user'});
+            return res.status(404).json({error: 'Error while updating user'});
         }
 
         delete updatedUser.dataValues.password;
@@ -349,6 +349,6 @@ exports.EditProfile = async (req, res) => {
 
     } catch (error) {
         console.log(error)
-        res.status(500).json({message: 'Internal server error'})
+        res.status(500).json({error: 'Internal server error'})
     }
 };

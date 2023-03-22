@@ -1,9 +1,9 @@
 import React, {Fragment, useContext, useEffect, useState} from 'react'
 import {Disclosure, Menu, Transition} from '@headlessui/react'
 import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
-import {Login} from "../Modal/Login/login";
+import Login from "../Modal/Login/login";
 import {AuthContext, AuthContextType} from "../../context";
-import {Register} from "../Modal/Register/Register";
+import Register from "../Modal/Register/Register";
 import {MiniModal} from "../Modal/Confirm/MiniModal";
 import {useDispatch, useSelector} from "react-redux";
 import {Types} from "../../redux/types/types";
@@ -15,7 +15,7 @@ import {Toggle} from "../Toggle";
 const navigationUserTrue = [
   {name: 'Clinics', path: '/clinics', current: false},
   {name: 'Doctors', path: '/doctors', current: false},
-  {name: 'Schedule', path: '/schedule', current: false},
+  {name: 'Shedule', path: '/schedule', current: false},
 ]
 
 const navigationUserFalse = [
@@ -34,6 +34,7 @@ export function NavBar() {
   const dispatch = useDispatch()
   const [user, setUser] = useState<string | undefined>('')
   const navigate = useNavigate();
+  const {locale, setLocale} = useContext<AuthContextType>(AuthContext)
 
   useEffect(() => {
     // Обновляет информацию в хранилище после того как юзер залогинился

@@ -77,7 +77,7 @@ exports.CreateUser = async (req, res) => {
 
         const regexName = /^[a-zA-Z]+(\s+[a-zA-Z]+)*$/;
         if (!regexName.test(firstName) || !regexName.test(lastName)) {
-            return res.status(409).json({error: "String consists only of words."});
+            return res.status(409).json({error: "Name could consist only of words"});
         }
 
 
