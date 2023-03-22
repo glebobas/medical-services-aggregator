@@ -30,6 +30,7 @@ function App() {
     const messages = locale === 'ru' ? ruMessages : enMessages;
 
 
+
   useEffect(() => {
     fetch('/main/specialities')
         .then(response => response.json())

@@ -17,6 +17,7 @@ export function MiniModal(): JSX.Element {
     }
     const regMessage = showModalMiniText?.message?.includes('Registration') ? 'Registration successful!' : '';
     const loginMessage = showModalMiniText?.message?.includes('Welcome') ? `Welcome, {username}!` : '';
+    const editSuccessMsg = showModalMiniText?.message?.includes('You have successfully edited your profile!') ? 'You have successfully edited your profile!' : '';
 
     const cancelButtonRef = useRef(null)
 
@@ -53,7 +54,7 @@ export function MiniModal(): JSX.Element {
                                             <div className="flex flex-column justify-center align-items-center w-full px-3">
                                                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                                                     <FormattedMessage
-                                                        id={loginMessage || regMessage || showModalMiniText?.error}
+                                                        id={loginMessage || regMessage || showModalMiniText?.error || editSuccessMsg}
                                                         defaultMessage="Default error message"
                                                         values={{ username: showModalMiniText?.username }}
                                                     />

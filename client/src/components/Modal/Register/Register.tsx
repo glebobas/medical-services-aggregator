@@ -2,10 +2,11 @@ import {Dispatch} from 'redux';
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {useDispatch} from 'react-redux';
 import {UserActionTypes, Types, IGeneralState} from '../../../redux/types/types';
-import React, {Fragment, useContext, useRef, useState} from 'react'
+import React, {Fragment, useContext, useEffect, useRef, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
 import {AuthContext, AuthContextType} from "../../../context";
 import GoogleAuth from "../Google/Google";
+import {FormattedMessage} from "react-intl";
 
 interface RegData {
   username: string;
@@ -22,7 +23,7 @@ interface ResponseData {
   username: string;
 }
 
-export function Register(): JSX.Element {
+function Register(): JSX.Element {
   const dispatch = useDispatch<ThunkDispatch<IGeneralState, unknown, UserActionTypes>>()
   // const dispatch = useDispatch()
 
@@ -34,10 +35,6 @@ export function Register(): JSX.Element {
     firstName: '',
     email: ''
   });
-
-  // const [open, setOpen] = useState(true)
-
-  // const [errorAuth, setErrorAuth] = useState('');
 
   const {
     showModalRegister,
@@ -86,7 +83,36 @@ export function Register(): JSX.Element {
     }
   };
 
-  // const checkIsUser = useSelector((state: any) => state.login?.user);
+
+  const {placeholderText, setPlaceholderText, locale} = useContext(AuthContext);
+
+
+  useEffect(()=>{
+    if (locale === 'ru') {
+      setPlaceholderText({
+        loginName: 'Пожалуйста, введите логин здесь',
+        password: 'Пожалуйста, введите пароль здесь',
+        username: 'Пожалуйста, введите логин',
+        firstName: 'Пожалуйста, введите своё имя',
+        lastName: 'Пожалуйста, введите свою фамилию',
+        email: 'Пожалуйста введите свою электронную почту',
+        phoneNumber: 'Пожалуйста введите свой номер телефона'
+      })
+    }
+    if (locale === 'en') {
+      setPlaceholderText({
+        loginName: 'Please enter your login here',
+        password: 'Please enter your password here',
+        username: 'Please enter your username',
+        firstName: 'Please enter your first name',
+        lastName: 'Please enter your last name',
+        email: 'Please enter your email',
+        phoneNumber: 'Please enter your phone number'
+      })
+    }
+  },[locale])
+
+
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -148,20 +174,27 @@ export function Register(): JSX.Element {
                     <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                       <h1
                         className="text-xl text-left font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                        Create and account
+                        <FormattedMessage
+                            id='Create an account'
+                            defaultMessage="Default error message"
+                        />
                       </h1>
                       <form onSubmit={onSubmit} className="space-y-2 md:space-y-4">
                         <div>
                           <label
                             className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Login
+
+                            <FormattedMessage
+                                id='Login '
+                                defaultMessage="Default error message"
+                            />
                           </label>
                           <input
                             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                             name='username'
                             type="text"
                             autoComplete="off"
-                            placeholder="Please, type your login"
+                            placeholder={placeholderText.username}
                             onChange={signUp}
                             required/>
 
@@ -170,14 +203,18 @@ export function Register(): JSX.Element {
                           <div className="w-full px-3">
                             <label
                               className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                              First name
+
+                              <FormattedMessage
+                                  id='First name'
+                                  defaultMessage="Default error message"
+                              />
                             </label>
                             <input
                               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                               name='firstName'
                               type="text"
                               autoComplete="off"
-                              placeholder="Please, type your first name"
+                              placeholder={placeholderText.firstName}
                               onChange={signUp}
                               required/>
                           </div>
@@ -186,14 +223,17 @@ export function Register(): JSX.Element {
                           <div className="w-full px-3">
                             <label
                               className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                              Last name
+                              <FormattedMessage
+                                  id='Last name'
+                                  defaultMessage="Default error message"
+                              />
                             </label>
                             <input
                               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                               name='lastName'
                               type="text"
                               autoComplete="off"
-                              placeholder="Please, type your  Last name"
+                              placeholder={placeholderText.lastName}
                               onChange={signUp}
                               required/>
                           </div>
@@ -202,14 +242,17 @@ export function Register(): JSX.Element {
                           <div className="w-full px-3">
                             <label
                               className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                              Email
+                              <FormattedMessage
+                                  id='Email'
+                                  defaultMessage="Default error message"
+                              />
                             </label>
                             <input
                               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                               name='email'
                               type="email"
                               autoComplete="off"
-                              placeholder="Please, type your email"
+                              placeholder={placeholderText.email}
                               // value={value}
                               onChange={signUp}
                               // onBlur={handleBlur}
@@ -220,13 +263,16 @@ export function Register(): JSX.Element {
                           <div className="w-full px-3">
                             <label
                               className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                              Phone number
+                              <FormattedMessage
+                                  id='Phone number'
+                                  defaultMessage="Default error message"
+                              />
                             </label>
                             <input
                               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                               name='telephone'
                               type="text"
-                              placeholder="Please, type your Phone number"
+                              placeholder={placeholderText.phoneNumber}
                               onChange={signUp}
                               required/>
                           </div>
@@ -274,3 +320,5 @@ export function Register(): JSX.Element {
 
   );
 }
+
+export default React.memo(Register)

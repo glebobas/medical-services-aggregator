@@ -1,9 +1,9 @@
 import React, {Fragment, useContext, useEffect, useState} from 'react'
 import {Disclosure, Menu, Transition} from '@headlessui/react'
 import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
-import {Login} from "../Modal/Login/login";
+import Login from "../Modal/Login/login";
 import {AuthContext, AuthContextType} from "../../context";
-import {Register} from "../Modal/Register/Register";
+import Register from "../Modal/Register/Register";
 import {MiniModal} from "../Modal/Confirm/MiniModal";
 import {useDispatch, useSelector} from "react-redux";
 import {Types} from "../../redux/types/types";
@@ -14,7 +14,7 @@ import {FormattedMessage} from "react-intl";
 const navigationUserTrue = [
   { name: 'Clinics', path: '/clinics', current: false },
   { name: 'Doctors', path: '/doctors', current: false },
-  { name: 'Schedule', path: '/schedule', current: false },
+  { name: 'Shedule', path: '/schedule', current: false },
 ]
 
 const navigationUserFalse = [
@@ -361,7 +361,7 @@ export function NavBar() {
                                     'block rounded-md px-3 py-2 text-base font-medium'
                                 )}
                                 aria-current={item.current ? 'page' : undefined}
-                            >
+                             >
                               <FormattedMessage
                                   id={item.name}
                                   defaultMessage="Default error message"

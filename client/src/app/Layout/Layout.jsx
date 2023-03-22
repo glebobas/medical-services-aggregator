@@ -4,8 +4,6 @@ import {NavBar} from "../../components/NavBar";
 import {Footer} from "../../components/Footer";
 import {CommonInput} from "../../components/CommonInput/CommonInput";
 import {SearchResultsContext} from "../../context/context";
-import ruMessages from "../../messages/ru.json";
-import enMessages from "../../messages/en.json";
 
 
 // interface LayoutProps {
