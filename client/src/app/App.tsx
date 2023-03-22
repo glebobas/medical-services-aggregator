@@ -25,37 +25,56 @@ import {ShedulePage} from "../pages/ShedulePage";
 function App() {
 
   const dispatch = useDispatch()
-
+    const [isLoading, setIsLoading] = useState(true);
     const [locale, setLocale] = useState('en');
     const messages = locale === 'ru' ? ruMessages : enMessages;
 
 
 
-  useEffect(() => {
-    fetch('/main/specialities')
-        .then(response => response.json())
-        .then(data => dispatch({type: Types.GET_DOCTORS_SPECIALITY_SUCCESS, payload: data}))
-        .catch(error => {
-          console.log(error)
-        })
-    fetch('/main/addresses')
-        .then(response => response.json())
-        .then(data => dispatch({type: Types.GET_ADDRES_CLINICS_SUCCESS, payload: data}))
-        .catch(error => {
-          console.log(error)
-        })
-    fetch('/main/alldataquery')
-        .then(response => response.json())
-        .then(data => [...data.readyClinicList, ...data.readyDoctorList])
+  // useEffect(() => {
+  //   fetch('/main/specialities')
+  //       .then(response => response.json())
+  //       .then(data => dispatch({type: Types.GET_DOCTORS_SPECIALITY_SUCCESS, payload: data}))
+  //       .catch(error => {
+  //         console.log(error)
+  //       })
+  //   fetch('/main/addresses')
+  //       .then(response => response.json())
+  //       .then(data => dispatch({type: Types.GET_ADDRES_CLINICS_SUCCESS, payload: data}))
+  //       .catch(error => {
+  //         console.log(error)
+  //       })
+  //   fetch('/main/alldataquery')
+  //       .then(response => response.json())
+  //       .then(data => [...data.readyClinicList, ...data.readyDoctorList])
+  //       .then(data => dispatch({type: Types.ADD_CLINICS_AND_DOCTORS_SUCCESS, payload: data}))
+  //       .catch(error => {
+  //         console.error(error);
+  //       })
+  // }, [])
+
+    useEffect(() => {
+        Promise.all([
+            fetch('/main/specialities').then((response) => response.json()),
+            fetch('/main/addresses').then((response) => response.json()),
+            fetch('/main/alldataquery').then((response) => response.json()),
+        ])
+            .then(([specialities, addresses, data]) => {
+                dispatch({ type: Types.GET_DOCTORS_SPECIALITY_SUCCESS, payload: specialities });
+                dispatch({ type: Types.GET_ADDRES_CLINICS_SUCCESS, payload: addresses });
+                dispatch({ type: Types.ADD_CLINICS_AND_DOCTORS_SUCCESS, payload: [...data.readyClinicList, ...data.readyDoctorList] });
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    }, []);
 
 
-        .then(data => dispatch({type: Types.ADD_CLINICS_AND_DOCTORS_SUCCESS, payload: data}))
-        .catch(error => {
-          console.error(error);
-        })
-  }, [])
-
-  const user = useSelector(state => state.login?.user?.id);
+    const user = useSelector(state => state.login?.user?.id);
+  console.log("-> user", user);
 
 
   return (
