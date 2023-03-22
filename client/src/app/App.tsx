@@ -62,7 +62,7 @@ function App() {
 
   return (
     <AuthProvider>
-      <IntlProvider locale='ru' messages={ruMessages}>{!user
+      <IntlProvider  messages={ruMessages}>{!user
           ?
           <Routes>
             <Route path="/" element={<Layout/>}>

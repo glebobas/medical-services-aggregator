@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Rating from '../Rating/Rating';
 import usePagination from '../../hooks/usePagination';
+import {FormattedMessage} from "react-intl";
 
 export function ClinicList() {
 
@@ -53,19 +54,28 @@ export function ClinicList() {
                 scope="col"
                 className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold tracking-wide text-gray-900 sm:pl-6"
               >
-                Клиника
+                <FormattedMessage
+                    id='Clinic'
+                    defaultMessage="Default error message"
+                />
               </th>
               <th
                 scope="col"
                 className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
               >
-                Адрес
+                <FormattedMessage
+                    id='Address'
+                    defaultMessage="Default error message"
+                />
               </th>
               <th
                 scope="col"
                 className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
               >
-                Телефон
+                <FormattedMessage
+                    id='Telephone'
+                    defaultMessage="Default error message"
+                />
               </th>
               <th
                 scope="col"
