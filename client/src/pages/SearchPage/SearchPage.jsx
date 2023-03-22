@@ -10,21 +10,22 @@ import {useState} from 'react'
 import {CheckIcon, ChevronUpDownIcon} from '@heroicons/react/20/solid'
 import {Combobox} from '@headlessui/react'
 import {DoctorList} from "../../components/DoctorList";
+import {useSelector} from "react-redux";
 
-const speciality = [
-  {id: 1, name: ''},
-  {id: 2, name: 'Cardiologist'},
-  {id: 3, name: 'Dermatologist'},
-  {id: 4, name: 'Surgeon'},
-  // More users...
-]
+// const speciality = [
+//   {id: 1, name: ''},
+//   {id: 2, name: 'Cardiologist'},
+//   {id: 3, name: 'Dermatologist'},
+//   {id: 4, name: 'Surgeon'},
+//   // More users...
+// ]
 
-const location = [
-  {id: 1, name: 'Turkey'},
-  {id: 2, name: 'Australia'},
-  {id: 3, name: 'Vietnam'},
-  // More users...
-]
+// const location = [
+//   {id: 1, name: 'Turkey'},
+//   {id: 2, name: 'Australia'},
+//   {id: 3, name: 'Vietnam'},
+//   // More users...
+// ]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -36,6 +37,10 @@ export function SearchPage(props) {
   const [selectedSpeciality, setSelectedSpeciality] = useState()
   const [selectedLocation, setSelectedLocation] = useState()
   const [doctors, setDoctors] = useState([])
+
+  const speciality = useSelector((state) => state?.speciality?.speciality)
+  const getAllAddressArray = useSelector((state) => state?.addresClinics?.addresClinics)
+  const location = [...new Set(getAllAddressArray.map(item => item.countryName))]
 
   // Checked children
   const [isCheckedChildren, setIsCheckedChildren] = useState(false);
@@ -65,7 +70,7 @@ export function SearchPage(props) {
     queryLocation === ''
       ? location
       : location.filter((place) => {
-        return place.name.toLowerCase().includes(queryLocation.toLowerCase())
+        return place.countryName.toLowerCase().includes(queryLocation.toLowerCase())
       })
 
   const navigate = useNavigate();
@@ -83,7 +88,7 @@ export function SearchPage(props) {
       query += `&specialityName=${selectedSpeciality.name}`;
     }
     if (selectedLocation) {
-      query += `&countryName=${selectedLocation.name}`;
+      query += `&countryName=${selectedLocation}`;
     }
     if (isCheckedRandom) {
       fetch(`/main/random${query}`)
@@ -216,7 +221,7 @@ export function SearchPage(props) {
               <Combobox.Input
                 className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 sm:text-sm"
                 onChange={(event) => setLocationQuery(event.target.value)}
-                displayValue={(person) => person?.name}
+                displayValue={(person) => person}
               />
               <Combobox.Button
                 className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
@@ -228,7 +233,7 @@ export function SearchPage(props) {
                   className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                   {filteredLocation.map((place) => (
                     <Combobox.Option
-                      key={place.id}
+                      key={place}
                       value={place}
                       className={({active}) =>
                         classNames(
@@ -240,7 +245,7 @@ export function SearchPage(props) {
                       {({active, selected}) => (
                         <>
                           <span
-                            className={classNames('block truncate', selected && 'font-semibold')}>{place.name}</span>
+                            className={classNames('block truncate', selected && 'font-semibold')}>{place}</span>
 
                           {selected && (
                             <span
