@@ -213,6 +213,7 @@ exports.ExactDoctor = async (req, res) => {
             }
 
             return {
+                date: el.date,
                 reviewId: el.id,
                 reviewText: el.doctor_review,
                 doctorId: el.doctorId,

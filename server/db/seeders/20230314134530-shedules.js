@@ -8,16 +8,16 @@ module.exports = {
       const statuses = ['pending', 'done', 'cancelled', 'vacant'];
       const dates = {
         pendingOrVacant: {
-          min: '2023-04-01',
-          max: '2023-06-30',
+          min: '2023-03-25',
+          max: '2023-03-27',
         },
         cancelled: {
-          min: '2022-01-01',
+          min: '2022-03-01',
           max: '2023-12-31',
         },
         done: {
-          min: '2020-01-01',
-          max: '2022-02-28',
+          min: '2023-03-17',
+          max: '2022-02-21',
         },
       };
       const rows = [];

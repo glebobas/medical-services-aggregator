@@ -5,21 +5,19 @@ import './App.css';
 import { Layout } from "./Layout";
 import ClinicalCard from '../pages/ClinicalCard/ClinicalCard';
 import ErrorPage from '../pages/ErrorPage/ErrorPage';
-
-
 import { MainPage } from "../pages/MainPage/MainPage";
 import { AuthProvider } from '../context';
 import { useDispatch, useSelector } from "react-redux";
-import { store } from './../redux'
-import { IGeneralState, IUser, Types } from "../redux/types/types";
+import { Types } from "../redux/types/types";
 import { ProfileEditing } from '../components/ProfileEditing';
 import { ListPage } from "../pages/ListPage";
 import { DoctorCard } from "../pages/DoctorCard";
-import { DayView } from "../components/DayView/DayView";
-import GoogleAuth from "../components/Modal/Google/Google";
 import {ClinicList} from '../components/ClinicList';
 import { DoctorList } from '../components/DoctorList';
 import {SearchPage} from "../pages/SearchPage/SearchPage";
+import { IntlProvider } from 'react-intl';
+import enMessages from '../messages/en.json';
+import ruMessages from '../messages/ru.json';
 
 function App() {
 
@@ -42,36 +40,36 @@ function App() {
 
   return (
     <AuthProvider>
-      {!user
-        ?
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<MainPage />} />
-            <Route path='/listpage' element={<ListPage />} />
-            <Route path='/error' element={<ErrorPage />} />
-            <Route path='/doctor/:id' element={<DoctorCard />} />
-            <Route path='/search' element={<SearchPage />}/>
-            <Route path='/clinic/:id' element={<ClinicalCard />} />
-            <Route path='*' element={<ErrorPage />} />
-          </Route>
-        </Routes>
-        :
-        <Routes>
-          <Route path="/" element={<Layout/>}>
-            <Route index element={<MainPage/>}/>
-            <Route path='/clinics' element={<ClinicList />}/>
-            <Route path='/doctors' element={<DoctorList />}></Route>
-            <Route path='/calendar' element={<h1>Календарь</h1>}/>
-            <Route path='/listpage' element={<ListPage/>}/>
-            <Route path='/profileEditing' element={<ProfileEditing/>}/>
-            <Route path='/doctor/:id' element={<DoctorCard/>}/>
-            <Route path='/clinic/:id' element={<ClinicalCard/>}/>
-            <Route path='/search' element={<SearchPage />}/>
-            <Route path='/error' element={<ErrorPage/>}/>
-            <Route path='*' element={<ErrorPage/>}/>
-          </Route>
-        </Routes>
-      }
+      <IntlProvider locale='ru' messages={ruMessages}>{!user
+          ?
+          <Routes>
+            <Route path="/" element={<Layout/>}>
+              <Route index element={<MainPage/>}/>
+              <Route path='/listpage' element={<ListPage/>}/>
+              <Route path='/error' element={<ErrorPage/>}/>
+              <Route path='/doctor/:id' element={<DoctorCard/>}/>
+              <Route path='/search' element={<SearchPage/>}/>
+              <Route path='/clinic/:id' element={<ClinicalCard/>}/>
+              <Route path='*' element={<ErrorPage/>}/>
+            </Route>
+          </Routes>
+          :
+          <Routes>
+            <Route path="/" element={<Layout/>}>
+              <Route index element={<MainPage/>}/>
+              <Route path='/clinics' element={<ClinicList/>}/>
+              <Route path='/doctors' element={<DoctorList/>}></Route>
+              <Route path='/calendar' element={<h1>Календарь</h1>}/>
+              <Route path='/listpage' element={<ListPage/>}/>
+              <Route path='/profileEditing' element={<ProfileEditing/>}/>
+              <Route path='/doctor/:id' element={<DoctorCard/>}/>
+              <Route path='/clinic/:id' element={<ClinicalCard/>}/>
+              <Route path='/search' element={<SearchPage/>}/>
+              <Route path='/error' element={<ErrorPage/>}/>
+              <Route path='*' element={<ErrorPage/>}/>
+            </Route>
+          </Routes>
+      }</IntlProvider>
 
     </AuthProvider>
   );

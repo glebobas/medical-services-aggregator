@@ -18,6 +18,8 @@ exports.ExactClinic = async (req, res) => {
             raw: true,
             nest: true})
 
+
+
       const reviewsReady = reviewsNative.map(el => {
           let fullname = el.User.firstName + ' ' + el.User.lastName
           if (el.User.firstName === null || el.User.lastName === null) {
@@ -25,6 +27,7 @@ exports.ExactClinic = async (req, res) => {
           }
 
           return {
+              date: el.date,
               reviewId: el.id,
               reviewText: el.clinic_review,
               clinicId: el.clinicId,

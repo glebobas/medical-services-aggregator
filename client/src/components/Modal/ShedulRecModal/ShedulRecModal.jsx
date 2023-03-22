@@ -7,8 +7,8 @@ export function ShedulRecModal({props}) {
   const {idDoctor, sheduleIdOneBlock, setStaff} = props
   // console.log("-> idDoctor", shedule);
   const {
-    showModalShedulRec,
-    setShowModalShedulRec,
+    showModalSheduleRec,
+    setShowModalSheduleRec,
   } = useContext(AuthContext)
 
   const token = localStorage.getItem("jwtToken")
@@ -28,12 +28,12 @@ export function ShedulRecModal({props}) {
       .then(response => response.json())
       .then(data => setStaff(data))
       .catch(error => console.log(error));
-    setShowModalShedulRec(false)
+    setShowModalSheduleRec(false)
   }
 
   return (
-    <Transition.Root show={showModalShedulRec} as={Fragment}>
-      <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setShowModalShedulRec}>
+    <Transition.Root show={showModalSheduleRec} as={Fragment}>
+      <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setShowModalSheduleRec}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -83,7 +83,7 @@ export function ShedulRecModal({props}) {
                   <button
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                    onClick={() => setShowModalShedulRec(false)}
+                    onClick={() => setShowModalSheduleRec(false)}
                     ref={cancelButtonRef}
                   >
                     Отменить
