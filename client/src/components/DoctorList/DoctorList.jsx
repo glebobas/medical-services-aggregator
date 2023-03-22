@@ -154,10 +154,12 @@ export function DoctorList({props}) {
                 <div className="flex justify-between space-x-2 text-sm">
                   <div className="flex-col w-1/2 space-y-3">
                     <div className="font-semibold">{field.name}</div>
-                    <div className="py-2"><FormattedMessage
+                    <div className="py-2">
+                      <FormattedMessage
                         id={field.speciality}
                         defaultMessage="Default error message"
-                    /></div>
+                    />
+                    </div>
                     <div>{field.clinic}</div>
                   </div>
                   <div className="flex-col space-y-3">

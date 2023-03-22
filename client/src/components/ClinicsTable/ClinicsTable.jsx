@@ -45,7 +45,7 @@ export function ClinicsTable({data}) {
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
                       <FormattedMessage
-                          id='Telephone'
+                          id='Phone number'
                           defaultMessage="Default error message"
                       />
                   </th>
