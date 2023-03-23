@@ -29,29 +29,6 @@ function App() {
   const [locale, setLocale] = useState('en');
   const messages = locale === 'ru' ? ruMessages : enMessages;
 
-
-  // useEffect(() => {
-  //   fetch('/main/specialities')
-  //       .then(response => response.json())
-  //       .then(data => dispatch({type: Types.GET_DOCTORS_SPECIALITY_SUCCESS, payload: data}))
-  //       .catch(error => {
-  //         console.log(error)
-  //       })
-  //   fetch('/main/addresses')
-  //       .then(response => response.json())
-  //       .then(data => dispatch({type: Types.GET_ADDRES_CLINICS_SUCCESS, payload: data}))
-  //       .catch(error => {
-  //         console.log(error)
-  //       })
-  //   fetch('/main/alldataquery')
-  //       .then(response => response.json())
-  //       .then(data => [...data.readyClinicList, ...data.readyDoctorList])
-  //       .then(data => dispatch({type: Types.ADD_CLINICS_AND_DOCTORS_SUCCESS, payload: data}))
-  //       .catch(error => {
-  //         console.error(error);
-  //       })
-  // }, [])
-
   useEffect(() => {
     Promise.all([
       fetch('/main/specialities').then((response) => response.json()),
