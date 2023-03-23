@@ -16,7 +16,8 @@ export default function ClinicalCard() {
   const data = {id: 1};
   useEffect(() => {
     (async () => {
-      const response = await fetch(`/main/clinic/${id}`);
+      const response = await fetch(`/main/clinic?clinicId=${id}&lang=ru`);
+
       response.json().then((r) => (setClinic(r)))
     })();
   }, []);
@@ -64,7 +65,11 @@ console.log(clinic)
               />
             </h2>
             <p className="text-3xs tracking-tight text-gray-600">
-              {clinic.readyClinic[0]?.generalInfo}
+              {/*{clinic.readyClinic[0]?.generalInfo}*/}
+              <FormattedMessage
+                  id={clinic.readyClinic[0]?.generalInfo}
+                  defaultMessage="Default error message"
+              />
             </p>
           </div>
         </div>

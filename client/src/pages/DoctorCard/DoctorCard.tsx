@@ -63,7 +63,13 @@ export const DoctorCard = () => {
                                     defaultMessage="Default error message"
                                 />
                             </td>
-                            <td className="pl-4 font-semibold">{doctor.speciality}</td>
+                            <td className="pl-4 font-semibold">
+
+                                <FormattedMessage
+                                    id={doctor.speciality}
+                                    defaultMessage="Default error message"
+                                />
+                            </td>
                         </tr>
                         {/*<tr className="border-b">*/}
                         {/*    <td className="text-gray-500 pt-2">Стаж</td>*/}
@@ -110,7 +116,11 @@ export const DoctorCard = () => {
                     />
                 </div>
                 <div className="doctor__card-row-2-doctor-params text-sm tracking-wide mt-2">
-                    {doctor.generalInfo}
+                    {/*{doctor.generalInfo}*/}
+                    <FormattedMessage
+                        id={doctor.generalInfo}
+                        defaultMessage="Default error message"
+                    />
                 </div>
             </div>
             <DayView/>
