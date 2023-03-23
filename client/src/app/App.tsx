@@ -113,14 +113,6 @@ function App() {
             <Route path='*' element={<ErrorPage/>}/>
           </Route>
         </Routes>
-          <div>
-            <button onClick={() => setLocale('en')} disabled={locale === 'en'}>
-              English
-            </button>
-            <button onClick={() => setLocale('ru')} disabled={locale === 'ru'}>
-              Русский
-            </button>
-          </div>
         </>
 
       }</IntlProvider>
