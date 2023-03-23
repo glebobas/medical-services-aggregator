@@ -20,7 +20,7 @@ export default function ClinicalCard() {
   const [clinic, setClinic] = useState({ readyClinic: [], doctors: [] });
   const [reviews, setReviews] = useState();
   const [dataRes, setDataRes] = useState();
-  
+
   const data = { id: 1 };
   const loc = clinic.readyClinic[0]?.address.split(', ')[2]
 console.log(loc)
@@ -32,9 +32,9 @@ console.log(loc)
       setClinic(r);
       });
     })();
-    
+
   }, []);
- 
+
 
   const handleClick2 = (e) => {
     const profile = e.target.innerHTML;

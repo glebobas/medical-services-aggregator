@@ -105,12 +105,13 @@ exports.EditReviewWithRating = async (req, res) => {
 exports.NewReview = async (req, res) => {
     const {doctorId, clinicId, reviewText} = req.body;
     const userId = res?.locals?.user?.id
+    const date = new Date().toISOString().slice(0, 10)
 
     try {
         if (doctorId) {
             const review = await Review.findOne({where: {userId, doctorId}})
             if (!review) {
-                const data = await Review.create({userId, doctorId, doctor_review: reviewText})
+                const data = await Review.create({userId, doctorId, doctor_review: reviewText, date})
                 if (data) {
                     return res.status(200).json({message: 'success adding review for doctor'})
                 }
@@ -125,7 +126,7 @@ exports.NewReview = async (req, res) => {
         if (clinicId) {
             const review = await Review.findOne({where: {userId, clinicId}})
             if (!review) {
-                const data = await Review.create({userId, clinicId, clinic_review: reviewText})
+                const data = await Review.create({userId, clinicId, clinic_review: reviewText, date})
                 if (data) {
                     return res.status(200).json({message: 'success adding review for clinic'})
                 }
@@ -135,6 +136,49 @@ exports.NewReview = async (req, res) => {
             }
             if (review) {
                 return res.status(404).json({message: 'You have already added review for this clinic'})
+            }
+        }
+        else return res.status(409).json({message: 'Fill necessary data'})
+    } catch (e) {
+        console.error(e)
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+
+exports.NewRating = async (req, res) => {
+    const {doctorId, clinicId, clinicRating, doctorRating} = req.body;
+    const userId = res?.locals?.user?.id
+
+    try {
+        if (doctorId && doctorRating) {
+            const rating = await Rating.findOne({where: {userId, doctorId}})
+            if (!rating) {
+                const data = await Rating.create({userId, doctorId, doctorRating})
+                if (data) {
+                    return res.status(200).json({message: 'success adding rating for doctor'})
+                }
+                if (!data) {
+                    return res.status(404).json({message: 'Error adding rating for doctor'})
+                }
+            }
+            if(rating) {
+                return res.status(404).json({message: 'You have already rate this doctor'})
+            }
+        }
+        if (clinicId && clinicRating) {
+            const rating = await Rating.findOne({where: {userId, clinicId}})
+            if (!rating) {
+                const data = await Rating.create({userId, clinicId, clinicRating})
+                if (data) {
+                    return res.status(200).json({message: 'success adding rating for clinic'})
+                }
+                if (!data) {
+                    return res.status(404).json({message: 'Error creating rating for clinic'})
+                }
+            }
+            if (rating) {
+                return res.status(404).json({message: 'You have already added rating for this clinic'})
             }
         }
         else return res.status(409).json({message: 'Fill necessary data'})

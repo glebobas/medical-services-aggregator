@@ -4,7 +4,7 @@ const router = express.Router();
 
 const {
     GetAllClinicAndDoctors, GetAllClinicAndDoctorsQuery, GetAllSpecialities, GetAllAddresses, NewEntry, GetInfoAboutSlot,
-    GetSlotsToDate, ToCurrentTimeSlots, RandomDocClinic
+    GetSlotsToDate, ToCurrentTimeSlots, RandomDocClinic, DoctorsShedule
 } = require("../controllers/main.Controller");
 const tokenToLocals = require("../middleware/reslocalsToken.middleware");
 const {DoctorsFromSearch, ExactDoctor, GetAllDoctors} = require("../controllers/doctor.Controller");
@@ -25,7 +25,7 @@ router.get("/somedoctors", tokenToLocals, DoctorsFromSearch); //* получае
 
 router.get('/doctor/:doctorId', tokenToLocals, ExactDoctor); //* получаем доктора после выбора из поисковой выдачи, его расписание, включая приёмы юзера, если последний залогинен
 
-router.get("/clinic/:clinicId", tokenToLocals, ExactClinic); //* получаем клинику после выбора из поисковой выдачи
+router.get("/clinic", tokenToLocals, ExactClinic); //* получаем клинику после выбора из поисковой выдачи
 
 router.get('/slot/:sheduleId', authenticate, GetInfoAboutSlot) //* инфа о слоте расписания
 
@@ -34,6 +34,8 @@ router.get('/date', tokenToLocals, GetSlotsToDate) //* инфа о слотах 
 router.patch('/shedule/slots', ToCurrentTimeSlots); //* для эндпоинта со слотами, обновляем старые записи по дате
 
 router.get('/random', RandomDocClinic) //* рандомайзер поиска врача или клиник
+
+router.get('/shedule', DoctorsShedule) //* расписание врачей на текущий день
 
 
 module.exports = router;
