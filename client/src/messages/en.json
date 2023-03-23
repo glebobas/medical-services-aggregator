@@ -13,6 +13,7 @@
   "Failed to register user": "Failed to register user",
   "Authentication failed: Invalid username or password": "Authentication failed: Invalid username or password",
   "Fill all fields": "Fill all fields!",
+  "Clinic information": "Clinic information",
   "Welcome, {username}!": "Welcome, {username}!",
   "Error while updating user": "Error while updating user",
   "You have successfully edited your profile!": "You have successfully edited your profile!",
