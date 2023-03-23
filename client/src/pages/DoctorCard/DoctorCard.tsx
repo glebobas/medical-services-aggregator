@@ -56,6 +56,7 @@ export const DoctorCard = () => {
                 <div className="row-1__column-left flex flex-col w-2/5 justify-between">
                     <div className="doctor__card-title text-3xl font-semibold">{doctor.name}</div>
                     <table className="mt-4 w-full">
+                        <tbody>
                         <tr className="border-b">
                             <td className="text-gray-500">
                                 <FormattedMessage
@@ -102,6 +103,7 @@ export const DoctorCard = () => {
                             </td>
                             <td className="pl-4 font-semibold pt-2">{doctor.address}</td>
                         </tr>
+                        </tbody>
                     </table>
                 </div>
                 <div

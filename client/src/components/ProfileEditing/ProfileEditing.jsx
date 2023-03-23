@@ -1,14 +1,14 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {Types} from '../../redux/types/types';
-import {AuthContext} from "../../context";
+import React, { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Types } from '../../redux/types/types';
+import { AuthContext } from "../../context";
 
 
 export function ProfileEditing() {
     const dispatch = useDispatch();
     const currentData = useSelector(state => state.login.user);
 
-    const loading = useSelector(state => state.loading);
+    const loading = useSelector(state => state.login.loading);
 
     const token = localStorage.getItem("jwtToken");
     const [error, setError] = useState('');
@@ -28,7 +28,7 @@ export function ProfileEditing() {
     }, [currentData, token, dispatch])
 
     const getUserData = (event) => {
-        setUserData({...userData, [event.target.name]: event.target.value});
+        setUserData({ ...userData, [event.target.name]: event.target.value });
     }
     const {
         setShowModalMiniText,
@@ -51,19 +51,16 @@ export function ProfileEditing() {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + token
                 },
-                body: JSON.stringify({...userData, currentData}),
+                body: JSON.stringify({ ...userData, currentData }),
             })
-
             const responseData = await response.json();
-            console.log("-> responseData", responseData);
-
             if (response.status === 200) {
-                dispatch({type: Types.UPDATE_USERDATA_SUCCESS, payload: responseData.user});
+                dispatch({ type: Types.UPDATE_USERDATA_SUCCESS, payload: responseData.user });
                 setShowModalMiniText(responseData)
                 setShowModalMini(true)
             }
             if (response.status !== 200) {
-                dispatch({type: Types.UPDATE_USERDATA_FAILURE, payload: {error: responseData}});
+                dispatch({ type: Types.UPDATE_USERDATA_FAILURE, payload: { error: responseData } });
                 setShowModalMiniText(responseData)
                 setShowModalMini(true)
                 setError(responseData.message)
@@ -78,7 +75,20 @@ export function ProfileEditing() {
 
     return (
         <>
-            {Number(userData.username) ? (
+            {loading
+                ?
+                <div className="flex items-center justify-center h-screen">
+                    <div
+                        className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                        role="status">
+                        <span
+                            className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                        >Loading...</span
+                        >
+                    </div>
+                </div>
+                :
+                Number(userData.username) ? (
                     <>
                         <div className='flex item-center justify-center'>
                             <h1> Информация о профиле Google-аккаунта </h1>
@@ -135,129 +145,131 @@ export function ProfileEditing() {
                         </div>
                     </>
                 )
-                :
-                (
-                    <>
-                        <div className='flex item-center justify-center'>
-                            <h1> Изменить личную информацию </h1>
-                        </div>
-                        <div className=" min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-                            <div className="flex flex-wrap -mx-3 mb-6">
-                                <div className="w-full px-3">
-                                    <label
-                                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                        Изменить имя
-                                    </label>
-                                    <input
-                                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                        name='firstName'
-                                        type="text"
-                                        placeholder="Please, type your first name"
-                                        onChange={getUserData}
-                                        value={userData.firstName || ''}
-                                    />
-                                </div>
+                    :
+                    (
+                        <>
+                            <div className='flex item-center justify-center'>
+                                <h1> Изменить личную информацию </h1>
                             </div>
-                            <div className="flex flex-wrap -mx-3 mb-6">
-                                <div className="w-full px-3">
-                                    <label
-                                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                        Изменить фамилию
-                                    </label>
-                                    <input
-                                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                        name='lastName'
-                                        type="text"
-                                        placeholder="Please, type your  Last name"
-                                        onChange={getUserData}
-                                        value={userData.lastName || ''}
-                                    />
+                            <div className=" min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+                                <div className="flex flex-wrap -mx-3 mb-6">
+                                    <div className="w-full px-3">
+                                        <label
+                                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                                            Изменить имя
+                                        </label>
+                                        <input
+                                            className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                            name='firstName'
+                                            type="text"
+                                            placeholder="Please, type your first name"
+                                            onChange={getUserData}
+                                            value={userData.firstName || ''}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="flex flex-wrap -mx-3 mb-6">
-                                <div className="w-full px-3">
-                                    <label
-                                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                        Изменить email
-                                    </label>
-                                    <input
-                                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                        name='email'
-                                        type="email"
-                                        placeholder="Please, type your email"
-                                        onChange={getUserData}
-                                        value={userData.email || ''}
-                                    />
+                                <div className="flex flex-wrap -mx-3 mb-6">
+                                    <div className="w-full px-3">
+                                        <label
+                                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                                            Изменить фамилию
+                                        </label>
+                                        <input
+                                            className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                            name='lastName'
+                                            type="text"
+                                            placeholder="Please, type your  Last name"
+                                            onChange={getUserData}
+                                            value={userData.lastName || ''}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="flex flex-wrap -mx-3 mb-6">
-                                <div className="w-full px-3">
-                                    <label
-                                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                        Изменить номер телефонa
-                                    </label>
-                                    <input
-                                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                        name='telephone'
-                                        type="text"
-                                        placeholder="Please, type your Phone number"
-                                        onChange={getUserData}
-                                        value={userData.telephone || ''}
-                                    />
+                                <div className="flex flex-wrap -mx-3 mb-6">
+                                    <div className="w-full px-3">
+                                        <label
+                                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                                            Изменить email
+                                        </label>
+                                        <input
+                                            className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                            name='email'
+                                            type="email"
+                                            placeholder="Please, type your email"
+                                            onChange={getUserData}
+                                            value={userData.email || ''}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="flex flex-wrap -mx-3 mb-6">
-                                <div className="w-full px-3">
-                                    <label
-                                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                        Новый пароль
-                                    </label>
-                                    <input
-                                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                        name='newPassword'
-                                        type="password"
-                                        value={userData.newPassword || ''}
-                                        onChange={getUserData}
-                                    />
+                                <div className="flex flex-wrap -mx-3 mb-6">
+                                    <div className="w-full px-3">
+                                        <label
+                                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                                            Изменить номер телефонa
+                                        </label>
+                                        <input
+                                            className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                            name='telephone'
+                                            type="text"
+                                            placeholder="Please, type your Phone number"
+                                            onChange={getUserData}
+                                            value={userData.telephone || ''}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <div/>
-                            <div className="flex flex-wrap -mx-3 mb-6">
-                                <div className="w-full px-3">
-                                    <label
-                                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                        Введите ваш текущий пароль для вступления изменений в силу
-                                    </label>
-                                    <input
-                                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                        name='oldPassword'
-                                        type="password"
-                                        value={userData.oldPassword || ''}
-                                        onChange={getUserData}
-                                    />
+                                <div className="flex flex-wrap -mx-3 mb-6">
+                                    <div className="w-full px-3">
+                                        <label
+                                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                                            Новый пароль
+                                        </label>
+                                        <input
+                                            className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                            name='newPassword'
+                                            type="password"
+                                            value={userData.newPassword || ''}
+                                            onChange={getUserData}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                                <div />
+                                <div className="flex flex-wrap -mx-3 mb-6">
+                                    <div className="w-full px-3">
+                                        <label
+                                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                                            Введите ваш текущий пароль для вступления изменений в силу
+                                        </label>
+                                        <input
+                                            className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                            name='oldPassword'
+                                            type="password"
+                                            value={userData.oldPassword || ''}
+                                            onChange={getUserData}
+                                        />
+                                    </div>
+                                </div>
 
-                            <div className='flex flex-column justify-center align-items-center'>
-                                <button
-                                    type="submit"
-                                    className=' left-20 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5'
-                                    onClick={updateData}
-                                >
-                                    Изменить
-                                </button>
-                            </div>
-                            {error &&
                                 <div className='flex flex-column justify-center align-items-center'>
-                <span className="top-0 right-0 py-3 px-4 text-sm text-red-600">
-            {error}
-                </span>
+                                    <button
+                                        type="submit"
+                                        className=' left-20 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5'
+                                        onClick={updateData}
+                                    >
+                                        Изменить
+                                    </button>
                                 </div>
-                            }
-                        </div>
-                    </>
-                )
+                                {error &&
+                                    <div className='flex flex-column justify-center align-items-center'>
+                                        <span className="top-0 right-0 py-3 px-4 text-sm text-red-600">
+                                            {error}
+                                        </span>
+                                    </div>
+                                }
+                            </div>
+                        </>
+                    )
             }
+
+
 
         </>
     )
