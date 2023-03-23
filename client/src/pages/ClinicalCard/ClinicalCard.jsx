@@ -23,8 +23,6 @@ export default function ClinicalCard() {
   
   const data = { id: 1 };
   const loc = clinic.readyClinic[0]?.address.split(', ')[2]
-console.log(loc)
-  console.log(location[`${loc}`])
   useEffect(() => {
     (async () => {
       const response = await fetch(`/main/clinic/${id}`);
