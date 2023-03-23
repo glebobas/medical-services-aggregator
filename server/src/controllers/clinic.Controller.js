@@ -7,6 +7,7 @@ const {User, Doctor, Clinic, Address, Speciality, Rating, Review} = require('../
 exports.ExactClinic = async (req, res) => {
     try {
         const {clinicId, lang} = req.query;
+        console.log("-> req.query", req.query);
 
 
         const reviewsNative = await Review.findAll({where: {clinicId}, include: [

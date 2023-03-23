@@ -19,19 +19,22 @@ const location = {
 export default function ClinicalCard() {
   const { id } = useParams();
   const [clinic, setClinic] = useState({ readyClinic: [], doctors: [] });
+  console.log("-> clinic", clinic);
   const [reviews, setReviews] = useState();
   const [dataRes, setDataRes] = useState();
 
   const data = { id: 1 };
-  const loc = clinic.readyClinic[0]?.address.split(', ')[2]
-console.log(loc)
-  console.log(location[`${loc}`])
+  const loc = clinic?.readyClinic[0]?.address.split(', ')[2]
+// console.log(loc)
+//   console.log(location[`${loc}`])
   useEffect(() => {
     (async () => {
-      const response = await fetch(`/main/clinic/${id}`);
+      const response = await fetch(`/main/clinic?clinicId=${id}`);
+
       response.json().then((r) => {
       setClinic(r);
-      });
+      })
+          // .catch((err) => {console.error(err)})
     })();
 
   }, []);
@@ -45,12 +48,15 @@ console.log(loc)
         const fill = clinic?.readyDoctorList?.filter(
           (el) => el.speciality === profile
         );
+        console.log("-> clinic", clinic);
+        console.log("-> fill", fill);
         setDataRes(fill);
       } else if (profile === "All doctors") {
-        setDataRes(clinic.readyDoctorList);
+        setDataRes(clinic?.readyDoctorList);
       }
     }
   };
+
 
   return (
     <ContextAddReview.Provider value={{ setClinic }}>
@@ -60,7 +66,7 @@ console.log(loc)
           {/* <!-- Title --> */}
           <div className="title">
             <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-              {clinic.readyClinic[0]?.name}
+              {clinic?.readyClinic[0]?.name}
             </h1>
           </div>
 
@@ -77,7 +83,7 @@ console.log(loc)
                         />
                       </td>
                       <td className="pl-4 font-semibold pt-2">
-                        {clinic.readyClinic[0]?.address}
+                        {clinic?.readyClinic[0]?.address}
                       </td>
                     </tr>
                     <tr className="border-b">
@@ -88,7 +94,7 @@ console.log(loc)
                         />
                       </td>
                       <td className="pl-4 font-semibold pt-2">
-                        {clinic.readyClinic[0]?.phone}
+                        {clinic?.readyClinic[0]?.phone}
                       </td>
                     </tr>
                     <tr className="border-b">
@@ -99,7 +105,7 @@ console.log(loc)
                         />
                       </td>
                       <td className="pl-4 font-semibold pt-2">
-                        {clinic.readyClinic[0]?.email}
+                        {clinic?.readyClinic[0]?.email}
                       </td>
                     </tr>
                     <tr className="border-b">
@@ -112,7 +118,7 @@ console.log(loc)
                       <td className="pl-4 font-semibold pt-2">
                         <div className="flex items-center">
                           <Rating
-                            rat={clinic.readyClinic[0]?.averageClinicRating}
+                            rat={clinic?.readyClinic[0]?.averageClinicRating}
                           />
                         </div>
                       </td>
@@ -138,15 +144,14 @@ console.log(loc)
                 />
               </h2>
               <p className="text-3xs tracking-tight text-gray-600">
-
                 <FormattedMessage
-                    id={clinic.readyClinic[0]?.generalInfo}
+                    id={clinic?.readyClinic[0]?.generalInfo || ' '}
                     defaultMessage="Default error message"
                 />
               </p>
             </div>
             <div className="flex-col">
-              {/* <!-- Reviews --> */}
+               {/*// <!-- Reviews -->*/}
               <div className="mt-6"></div>
             </div>
           </div>
@@ -162,7 +167,7 @@ console.log(loc)
           ) : (
             <></>
           )}
-          <ReviewsMenu rev={clinic.reviewsReady} />
+          <ReviewsMenu rev={clinic?.reviewsReady} />
           <div className="ymaps w-full mt-4">
             <div className="ymap">
               <YandexMap geo={location[`${loc}`]}/>

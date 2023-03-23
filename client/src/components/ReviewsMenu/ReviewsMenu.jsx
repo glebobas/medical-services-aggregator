@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useState } from "react";
+import React, { Fragment, useCallback, useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import {
@@ -16,6 +16,7 @@ import Rating from "../Rating/Rating";
 import AddButton from "../AddButton/AddButton";
 import AddReview from "../AddReview/AddReview";
 import { ContextReview } from "../../context/context";
+import {FormattedMessage} from "react-intl";
 
 
 function classNames(...classes) {
@@ -35,7 +36,7 @@ export default function ReviewsMenu(props) {
   return (
     <ContextReview.Provider value={{close}}>
     <Popover className="relative z-0 mt-10">
-      
+
       {({ open }) => (
         <>
         <AddReview showed={show}/>
@@ -47,7 +48,10 @@ export default function ReviewsMenu(props) {
                   "group inline-flex items-center rounded-md bg-white text-base font-medium hover:text-gray-900 focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500  "
                 )}
               >
-                <span>Reviews</span>
+                <span><FormattedMessage
+                    id='Reviews'
+                    defaultMessage="Default error message"
+                /></span>
                 <ChevronDownIcon
                   className={classNames(
                     open ? "text-gray-600" : "text-yellow-400",
@@ -73,12 +77,12 @@ export default function ReviewsMenu(props) {
                 <div className="w-1/2 bg-white" />
                 <div className="w-1/2 bg-gray-50" />
               </div>
-              
+
               <div className="relative mx-auto grid max-w-7xl grid-cols-1 ">
                 <div className="bg-gray-50 px-4 py-8 sm:py-12 sm:px-6 lg:px-8 xl:pl-12">
                 <div className="mt-6 text-sm font-medium">
                     <a
-                    
+
                       className=" flex text-gray-600 transition duration-150 ease-in-out hover:text-gray-500"
                     >
                      Add a review
@@ -114,7 +118,7 @@ export default function ReviewsMenu(props) {
                       ))}
                     </ul>
                   </div>
-                 
+
                 </div>
               </div>
             </Popover.Panel>

@@ -7,22 +7,24 @@ import {object} from "yup";
 import {FormattedMessage} from "react-intl";
 
 interface IDoctor {
-    id: number,
-    name: string,
-    firstName: string,
-    lastName: string,
-    email: string,
-    adultPatients: boolean,
-    avatar: string,
-    averageDocRating: string,
-    childrenPatients: boolean,
-    clinic: boolean,
-    clinicId: number
+    id: number;
+    name: string;
+    firstName: string;
+    lastName: string;
+    speciality: string;
+    generalInfo: string;
+    address: string;
+    email: string;
+    adultPatients: boolean;
+    avatar: string;
+    averageDocRating: string;
+    childrenPatients: boolean;
+    clinic: boolean;
+    clinicId: number;
 }
 
-
 export const DoctorCard = () => {
-    const [doctor, setDoctor] = useState({
+    const [doctor, setDoctor] = useState<IDoctor>({
         id: 0,
         name: '',
         firstName: '',
@@ -37,24 +39,33 @@ export const DoctorCard = () => {
         childrenPatients: false,
         clinic: false,
         clinicId: 0,
-        message: ''
     });
+    console.log("-> doctor", doctor);
+
     const location = useLocation()
     const {id} = location.state
 
     useEffect(() => {
-        fetch(`/main/doctor/${id}`)
-            .then(response => response.json())
-            .then(response => setDoctor(response.readyDocOne))
-            .catch(err => console.error(err))
+        (async () => {
+                const response = await fetch(`/main/doctor?doctorId=${id}`)
+                const data = await response.json()
+                setDoctor(data.readyDocOne)
+            }
+        )()
     }, [])
 
-
+    // useEffect(() => {
+    //     fetch(`/main/doctor/${id}`)
+    //         .then(response => response.json())
+    //         .then(data => setDoctor(data.readyDocOne))
+    //         .catch(error => console.error(error));
+    // }, []);
+    // console.log("-> doctor", doctor);
     return (
         <div className="doctor__cad flex flex-col bg-white w-full mx-auto border rounded py-6 px-6 mt-4">
             <div className="doctor__card-row-1 flex flex-row justify-between">
                 <div className="row-1__column-left flex flex-col w-2/5 justify-between">
-                    <div className="doctor__card-title text-3xl font-semibold">{doctor.name}</div>
+                    <div className="doctor__card-title text-3xl font-semibold">{doctor?.name}</div>
                     <table className="mt-4 w-full">
                         <tbody>
                         <tr className="border-b">
@@ -67,7 +78,7 @@ export const DoctorCard = () => {
                             <td className="pl-4 font-semibold">
 
                                 <FormattedMessage
-                                    id={doctor.speciality}
+                                    id={doctor?.speciality || ' '}
                                     defaultMessage="Default error message"
                                 />
                             </td>
@@ -83,7 +94,7 @@ export const DoctorCard = () => {
                                     defaultMessage="Default error message"
                                 />
                             </td>
-                            <td className="pl-4 font-semibold pt-2">{doctor.averageDocRating}</td>
+                            <td className="pl-4 font-semibold pt-2">{doctor?.averageDocRating}</td>
                         </tr>
                         <tr className="border-b">
                             <td className="text-gray-500 pt-2">
@@ -92,7 +103,7 @@ export const DoctorCard = () => {
                                     defaultMessage="Default error message"
                                 />
                             </td>
-                            <td className="pl-4 font-semibold pt-2">{doctor.clinic}</td>
+                            <td className="pl-4 font-semibold pt-2">{doctor?.clinic}</td>
                         </tr>
                         <tr className="border-b">
                             <td className="text-gray-500 pt-2">
@@ -101,14 +112,14 @@ export const DoctorCard = () => {
                                     defaultMessage="Default error message"
                                 />
                             </td>
-                            <td className="pl-4 font-semibold pt-2">{doctor.address}</td>
+                            <td className="pl-4 font-semibold pt-2">{doctor?.address}</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
                 <div
                     className="row-1__column-right flex border w-[150px] h-[150px] rounded bg-blue-200 items-center justify-center">
-                    <img src={doctor.avatar}/></div>
+                    <img src={doctor?.avatar}/></div>
             </div>
             <div className="doctor__card-row-2 mt-4">
                 <div className="text-gray-500">
@@ -118,9 +129,8 @@ export const DoctorCard = () => {
                     />
                 </div>
                 <div className="doctor__card-row-2-doctor-params text-sm tracking-wide mt-2">
-                    {/*{doctor.generalInfo}*/}
                     <FormattedMessage
-                        id={doctor.generalInfo}
+                        id={doctor?.generalInfo || ' '}
                         defaultMessage="Default error message"
                     />
                 </div>
