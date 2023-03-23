@@ -37,15 +37,15 @@ export function Note() {
   };
 
   return (
-    <div className='ml-1'>
-      <h3 className='font-sans text-slate-300 font-semibold text-lg subpixel-antialiased not-italic text-center'>
+    <div className='mt-4'>
+      <h3 className='font-sans font-semibold text-lg subpixel-antialiased not-italic text-center'>
 
         <FormattedMessage
             id="Incoming messages"
             defaultMessage="Default error message"
         />
       </h3>
-      <div className='p-2 w-full justify-center aligoverflow-hidden bg-white shadow sm:rounded-md'>
+      <div className=' mt-4 p-2 w-full justify-center aligoverflow-hidden bg-white shadow sm:rounded-md'>
         <ul role='list' className='divide-y divide-gray-200'>
           {positions.map((position) => (
             <li key={position.id}>
@@ -74,7 +74,7 @@ export function Note() {
                     <div className='mt-4 flex-shrink-0 sm:mt-0 sm:ml-5'>
                       <button
                         type='button'
-                        className='justify-around items-center px-2 py-1 border border-transparent text-base font-medium shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                        className='rounded py-2 px-5 justify-around items-center px-2 py-1 border border-transparent text-base font-medium shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
                         onClick={() => setShowModal(true)}
                       >
                         <FormattedMessage
