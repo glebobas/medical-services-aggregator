@@ -5,7 +5,7 @@ import Rating from "../Rating/Rating";
 import { useNavigate } from "react-router-dom";
 
 export function DoctorsTable({ data }) {
-  console.log("-> data", data);
+  // console.log("-> data", data);
 
   const navigate = useNavigate();
 
