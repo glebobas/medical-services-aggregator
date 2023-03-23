@@ -16,23 +16,23 @@ export function ClinicList({ props }) {
   console.log(log);
 
   useEffect(() => {
-  (async () => {
-    if (props === undefined) {
-      const response = await fetch('/main/alldataquery', {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      })
-      const data = await response.json();
-      console.log(data);
-      setAllClinicsData(data.readyClinicList);
-    }
-    if (props !== undefined) {
-      setAllClinicsData(props)
-    }
-  })()
+    (async () => {
+      if (props === undefined) {
+        const response = await fetch('/main/alldataquery', {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        })
+        const data = await response.json();
+        console.log(data);
+        setAllClinicsData(data.readyClinicList);
+      }
+      if (props !== undefined) {
+        setAllClinicsData(props)
+      }
+    })()
   }, [props])
 
   const navigate = useNavigate()
@@ -63,24 +63,24 @@ export function ClinicList({ props }) {
           defaultMessage="Default error message"
         />
       </h3>
-      {/*Spiner*/}
-      {/*{!shownClinicsSlice.length &&*/}
-      {/*  <div className="flex items-center justify-center h-screen">*/}
-      {/*    <div*/}
-      {/*      className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"*/}
-      {/*      role="status"*/}
-      {/*    >*/}
-      {/*      <span*/}
-      {/*        className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"*/}
-      {/*      >*/}
-      {/*        Loading...*/}
-      {/*      </span>*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*}*/}
+      {/* Spiner */}
+      {!shownClinicsSlice.length &&
+        <div className="flex items-center justify-center h-screen">
+          <div
+            className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+            role="status"
+          >
+            <span
+              className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+            >
+              Loading...
+            </span>
+          </div>
+        </div>
+      }
       <div className="overflow-auto rounded-lg shadow hidden lg:block">
         <table className="w-full divide-y divide-gray-300">
-          <thead className="bg-gray-50 border-b-2 border-gray-200">
+          <thead className="bg-gray-200 border-b-2 border-gray-200">
             <tr>
               <th
                 scope="col"

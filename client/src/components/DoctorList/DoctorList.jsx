@@ -3,13 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import usePagination from '../../hooks/usePagination';
 import Rating from '../Rating/Rating'
 import { FormattedMessage } from "react-intl";
+import { useSelector } from 'react-redux';
 
 export function DoctorList({ props }) {
   const [allDoctorsData, setAllDoctorsData] = useState([]);
 
+  const x = useSelector(state => state);
+  console.log(x);
 
   useEffect(() => {
-    if (props === undefined) {
+    if (!props) {
       const fetchData = async () => {
         const response = await fetch('/main/doctors', {
           method: "GET",
@@ -24,7 +27,7 @@ export function DoctorList({ props }) {
       };
       fetchData();
     }
-    if (props !== undefined) {
+    if (!!props) {
       setAllDoctorsData(props)
     }
   }, [props]);
@@ -49,32 +52,31 @@ export function DoctorList({ props }) {
   });
 
   const shownDoctorsSlice = allDoctorsData?.slice(firstContentIndex, lastContentIndex);
-  console.log(shownDoctorsSlice);
 
   return (
     <>
-            {/*Spiner*/}
-            {/*{!shownDoctorsSlice.length &&*/}
-            {/*  <div className="flex items-center justify-center h-screen">*/}
-            {/*    <div*/}
-            {/*      className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"*/}
-            {/*      role="status"*/}
-            {/*    >*/}
-            {/*      <span*/}
-            {/*        className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"*/}
-            {/*      >*/}
-            {/*        Loading...*/}
-            {/*      </span>*/}
-            {/*    </div>*/}
-            {/*  </div>*/}
-            {/*}*/}
+      {/*Spiner*/}
+      {!props && !shownDoctorsSlice.length &&
+        <div className="flex items-center justify-center h-screen">
+          <div
+            className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+            role="status"
+          >
+            <span
+              className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+            >
+              Loading...
+            </span>
+          </div>
+        </div>
+      }
       {(allDoctorsData?.length > 0)
         ? (<div className="mt-4 flex flex-col">
           <h3 className="font-semibold text-xl mb-2">
             <FormattedMessage
               id='List of all the doctors'
               defaultMessage="Default error message"
-              /></h3>
+            /></h3>
           <div className="overflow-auto rounded-lg shadow hidden lg:block">
             <table className="w-full divide-y divide-gray-300">
               <thead className="bg-gray-200 border-b-2 border-gray-200">
@@ -209,11 +211,14 @@ export function DoctorList({ props }) {
             </button>
           </div>
         </div>)
-        : (<div className="mt-4 flex flex-col font-semibold text-2xl"><FormattedMessage
+        :
+        (<div className="mt-4 flex flex-col font-semibold text-2xl"><FormattedMessage
           id='Records not found'
           defaultMessage="Default error message"
-        /></div>)
+        />
+        </div>)
       }
     </>
   )
 }
+
