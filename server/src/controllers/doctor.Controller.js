@@ -192,7 +192,8 @@ exports.DoctorsFromSearch = async (req, res) => {
 
 exports.ExactDoctor = async (req, res) => {
     try {
-        const {doctorId} = req.params;
+        const {doctorId} = req.query;
+        console.log("-> req.params", req.query);
 
         const reviewsNative = await Review.findAll({where: {doctorId}, include: [
                 {
@@ -221,7 +222,6 @@ exports.ExactDoctor = async (req, res) => {
                 rating: el.User.Ratings.doctorRating || 0
             }
         })
-        console.log("-> reviewsReady", reviewsReady);
 
         const doctor = await Doctor.findOne({where: {id: doctorId}, include: [
                 {
@@ -322,6 +322,7 @@ exports.ExactDoctor = async (req, res) => {
 
 
         if (!res?.locals?.user?.id) {
+            const fulladdress = `${doctor.Clinic.Address.countryName}, ${doctor.Clinic.Address.cityName}, ${doctor.Clinic.Address.streetName}`
             readyDoc = [doctor].map((el) => {
                 const fullName = el.firstName + ' ' + el.lastName
                 return {
@@ -331,6 +332,7 @@ exports.ExactDoctor = async (req, res) => {
                     lastName: el.lastName,
                     email: el.email,
                     phone: el.phone,
+                    address: fulladdress,
                     specialityId: el.specialityId,
                     speciality: el.Speciality.name,
                     clinic: el.Clinic.name,

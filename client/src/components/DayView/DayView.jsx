@@ -30,7 +30,7 @@ export function DayView() {
   const [selectedHour, setSelectedHour] = useState(hours[0]);
   const [selectedMinute, setSelectedMinute] = useState(minutes[0]);
   const [shedule, setShedule] = useState({})
-  console.log("-> shedule", shedule);
+
   const [staff, setStaff] = useState()
   const [sheduleIdOneBlock, setSheduleIdOneBlock] = useState('')
   const {doctorShedule} = shedule

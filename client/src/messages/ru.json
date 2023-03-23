@@ -1,4 +1,6 @@
 {
+  "": "",
+  " ": " ",
   "Username already exists": "Имя пользователя уже существует",
   "Fields couldn't be empty!": "Поля не могут быть пустыми",
   "Invalid login format": "Неверный формат логина",
@@ -69,6 +71,7 @@
   "Phone:": "Номер телефона:",
   "Email:": "Электронная почта:",
   "Reviews": "Отзывы",
+  "Rewiews:": "Отзывы:",
   "About doctor:": "О враче:",
   "Page not found": "Страница не найдена",
   "Sorry, we couldn’t find the page you’re looking for.": "Извините, запрашиваемая страница не найдена",
