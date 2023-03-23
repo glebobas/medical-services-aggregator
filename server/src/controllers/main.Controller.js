@@ -1,9 +1,10 @@
 const {Doctor, Clinic, Address, Speciality, Rating, Slot, Shedule} = require("../../db/models");
-const {Op} = require("sequelize");
+const {Op, Sequelize} = require("sequelize");
 const express = require('express');
 const jwt = require("jsonwebtoken");
 const app = express();
 const dayjs = require('dayjs')
+const moment = require("moment/moment");
 
 
 const jwtSecret = process.env.JWT_SECRET
@@ -60,8 +61,12 @@ exports.GetAllClinicAndDoctors = async (req, res) => { //* ПО ИНПУТУ п�
             ],
             raw: true,
             nest: true
-        });
-
+        }
+        );
+        // const doctors = await Doctor.findAll({raw: true, nest: true});
+        // console.log("-> doctors", doctors);
+        // const clinics = await Clinic.findAll({raw: true, nest: true})
+        // console.log("-> clinics", clinics);
         const clinics = await Clinic.findAll({
             where: {
                 name: {
@@ -509,6 +514,181 @@ exports.GetAllAddresses = async (req, res) => {
         res.json(allAddresses)
     } catch (e) {
         console.error(e);
+    }
+}
+
+exports.DoctorsShedule = async (req, res) => { //* расписание всех врачей
+
+    const moment = require('moment'); // require
+    const date = moment().format('YYYY-MM-DD HH:mm:ss.SSS Z');
+
+    try {
+        const doctors = await Doctor.findAll({
+            include: [
+                {
+                    model: Clinic,
+                    include: [
+                        {model: Address}
+                    ]
+                },
+                {
+                    model: Speciality,
+
+                },
+                {
+                    model: Shedule, where: {
+                        date
+                    }, include: [{model: Slot}]
+                }
+            ],
+            raw: true,
+            nest: true
+        });
+
+
+        const groupedDoctors = doctors.reduce((acc, doctor) => {
+            const { id, firstName, lastName, phone, adultPatients, childrenPatients } = doctor;
+            const doctorName = `${firstName} ${lastName}`;
+            const speciality = doctor.Speciality.name;
+            const { countryName, cityName, streetName } = doctor.Clinic.Address;
+            const address = `${countryName}, ${cityName}, ${streetName}`;
+            const clinicName = doctor.Clinic.name;
+            const timeGap = doctor.Shedules.Slot.timeGap
+            const slotId = doctor.Shedules.Slot.id
+            const slots = [{timeGap, slotId}];
+            const avatar = doctor.avatar
+
+            const existingDoctor = acc.find(d => d.doctorId === id);
+            if (existingDoctor) {
+                existingDoctor.slots = existingDoctor.slots.concat(slots);
+            } else {
+                acc.push({
+                    doctorName,
+                    phone,
+                    clinicName,
+                    doctorId: id,
+                    adultPatients,
+                    childrenPatients,
+                    speciality,
+                    address,
+                    slots,
+                    avatar
+                });
+            }
+
+            return acc;
+        }, []);
+
+
+
+        const doctorRating = await Rating.findAll({attributes: ['doctorRating', 'doctorId']})
+
+        const doctorRatings = {};
+        doctorRating.forEach(rating => {
+
+            if (doctorRatings[rating.doctorId]) {
+                doctorRatings[rating.doctorId].total += rating.doctorRating;
+                doctorRatings[rating.doctorId].count += 1;
+            } else {
+                doctorRatings[rating.doctorId] = {
+                    total: rating.doctorRating,
+                    count: 1
+                };
+            }
+        });
+
+        const doctorRatingAverages = {};
+
+        for (const [id, rating] of Object.entries(doctorRatings)) {
+            doctorRatingAverages[id] = (rating.total / rating.count).toLocaleString('en-US', {maximumFractionDigits: 1});
+        }
+        const arrDoc = Object.entries(doctorRatingAverages)
+
+        let readyDoctorList;
+
+
+        if (res?.locals?.user?.id) {
+
+            const ratingToUser = await Rating.findAll({where: {userId: res.locals.user.id}})
+
+            readyDoctorList = groupedDoctors.map(
+                doctor => {
+
+                    let docRate;
+                    arrDoc.forEach(el => {
+                        if (Number(el[0]) === doctor.doctorId) {
+                            docRate = el[1]
+                        }
+                    })
+                    let ownRatingUserDoc;
+                    ratingToUser?.forEach(element => {
+                        if (element.userId === res.locals.user.id && doctor.doctorId === element.doctorId) {
+                            ownRatingUserDoc = element.doctorRating
+                        }
+                    })
+                    return {
+                        doctorId: doctor.id,
+                        doctorName: doctor.doctorName,
+                        phone: doctor.phone,
+                        address: doctor.address,
+                        speciality: doctor.speciality,
+                        clinic: doctor.clinicName,
+                        adultPatients: doctor.adultPatients,
+                        childrenPatients: doctor.childrenPatients,
+                        doctorRating: docRate,
+                        alreadyScoredPoints: ownRatingUserDoc,
+                        avatar: doctor.avatar,
+                        slots: doctor.slots
+
+                    }
+                }
+            )
+
+        }
+
+        if (!res?.locals?.user?.id) {
+
+
+
+            readyDoctorList = groupedDoctors.map(
+                doctor => {
+                    let docRate;
+                    arrDoc.forEach(el => {
+                        if (Number(el[0]) === doctor.doctorId) {
+                            docRate = el[1]
+                        }
+                    })
+
+                    return {
+                        doctorId: doctor.id,
+                        doctorName: doctor.doctorName,
+                        phone: doctor.phone,
+                        address: doctor.address,
+                        speciality: doctor.speciality,
+                        clinic: doctor.clinicName,
+                        adultPatients: doctor.adultPatients,
+                        childrenPatients: doctor.childrenPatients,
+                        doctorRating: docRate,
+                        avatar: doctor.avatar,
+                        slots: doctor.slots
+                    }
+                }
+            )
+
+        }
+
+        if (!readyDoctorList.length) {
+            return res.status(409).json({error: "No doctors were found!"});
+        }
+
+        res.json({readyDoctorList})
+
+
+
+    } catch
+        (err) {
+        console.error(err);
+        res.status(500).json({error: 'Server error'});
     }
 }
 
@@ -998,8 +1178,6 @@ exports.RandomDocClinic = async (req, res) => { //* получаем РАНДО�
         if (readyDoctorListNotGrouped.length <=3) {
             readyDoctorList = [...readyDoctorListNotGrouped]
         }
-
-
 
 
         // if (!readyClinicList.length && !readyDoctorList.length) {

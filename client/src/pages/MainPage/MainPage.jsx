@@ -36,14 +36,36 @@ export function MainPage() {
           }}
 
           className="flex-col my-auto bg-white w-2/6 px-8 py-28 shadow-lg">
-          <div className="title flex-row font-semibold text-2xl">
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: -30
+            }}
+            animate={{
+              opacity: 1,
+              y: 0
+            }}
+            transition={{
+              delay: 1.4
+            }}
+            className="title flex-row font-semibold text-2xl">
             <FormattedMessage
               id="Looking for the best doctors from all over the world?"
               defaultMessage="Default error message"
             />
-          </div>
+          </motion.div>
           <motion.div
-
+            initial={{
+              opacity: 0,
+              y: -30
+            }}
+            animate={{
+              opacity: 1,
+              y: 0
+            }}
+            transition={{
+              delay: 1.8
+            }}
             className="title flex-row font-normal mt-6">
 
             <FormattedMessage
@@ -51,7 +73,16 @@ export function MainPage() {
               defaultMessage="Default error message"
             />
           </motion.div>
-          <button
+          <motion.button
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            transition={{
+              delay: 2.2
+            }}
             className="border rounded mt-6 px-8 py-2 bg-green-700 text-white hover:bg-green-800"
             onClick={handleButtonClick}>
 
@@ -59,7 +90,7 @@ export function MainPage() {
               id="Extended Search"
               defaultMessage="Default error message"
             />
-          </button>
+          </motion.button>
         </motion.div>
         <div className="flex-col"></div>
       </div>

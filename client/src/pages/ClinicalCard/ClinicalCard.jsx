@@ -8,6 +8,7 @@ import Rating from "../../components/Rating/Rating";
 import { ContextAddReview } from "../../context/context";
 import { useParams } from "react-router-dom";
 import ReviewsMenu from "../../components/ReviewsMenu/ReviewsMenu";
+import {FormattedMessage} from "react-intl";
 
 const location = {
   "Turkey":[39.920756, 32.854049],
@@ -20,7 +21,7 @@ export default function ClinicalCard() {
   const [clinic, setClinic] = useState({ readyClinic: [], doctors: [] });
   const [reviews, setReviews] = useState();
   const [dataRes, setDataRes] = useState();
-  
+
   const data = { id: 1 };
   const loc = clinic.readyClinic[0]?.address.split(', ')[2]
 console.log(loc)
@@ -32,9 +33,9 @@ console.log(loc)
       setClinic(r);
       });
     })();
-    
+
   }, []);
- 
+
 
   const handleClick2 = (e) => {
     const profile = e.target.innerHTML;
@@ -69,25 +70,45 @@ console.log(loc)
                 <table className="mt-4 w-full">
                   <tbody>
                     <tr className="border-b">
-                      <td className="text-gray-500">Address:</td>
+                      <td className="text-gray-500">
+                        <FormattedMessage
+                            id='Address:'
+                            defaultMessage="Default error message"
+                        />
+                      </td>
                       <td className="pl-4 font-semibold pt-2">
                         {clinic.readyClinic[0]?.address}
                       </td>
                     </tr>
                     <tr className="border-b">
-                      <td className="text-gray-500">Phone:</td>
+                      <td className="text-gray-500">
+                        <FormattedMessage
+                            id='Phone:'
+                            defaultMessage="Default error message"
+                        />
+                      </td>
                       <td className="pl-4 font-semibold pt-2">
                         {clinic.readyClinic[0]?.phone}
                       </td>
                     </tr>
                     <tr className="border-b">
-                      <td className="text-gray-500">Email:</td>
+                      <td className="text-gray-500">
+                        <FormattedMessage
+                            id='Email:'
+                            defaultMessage="Default error message"
+                        />
+                      </td>
                       <td className="pl-4 font-semibold pt-2">
                         {clinic.readyClinic[0]?.email}
                       </td>
                     </tr>
                     <tr className="border-b">
-                      <td className="text-gray-500">Rewiews:</td>
+                      <td className="text-gray-500">
+                        <FormattedMessage
+                            id='Rewiews:'
+                            defaultMessage="Default error message"
+                        />
+                        </td>
                       <td className="pl-4 font-semibold pt-2">
                         <div className="flex items-center">
                           <Rating
@@ -110,9 +131,18 @@ console.log(loc)
           </div>
           <div className="options flex flex-row justify-between mt-4">
             <div className="flex-col border-b">
-              <h2 className="text-gray-500">Clinic information</h2>
+              <h2 className="text-gray-500">
+                <FormattedMessage
+                    id='Clinic information'
+                    defaultMessage="Default error message"
+                />
+              </h2>
               <p className="text-3xs tracking-tight text-gray-600">
-                {clinic.readyClinic[0]?.generalInfo}
+
+                <FormattedMessage
+                    id={clinic.readyClinic[0]?.generalInfo}
+                    defaultMessage="Default error message"
+                />
               </p>
             </div>
             <div className="flex-col">

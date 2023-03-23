@@ -50,7 +50,6 @@ export interface IGeneralState {
 
 export interface IGeneralStateRegister {
 
-
   message: string;
   loading: boolean;
   error: null | string;

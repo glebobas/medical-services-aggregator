@@ -84,7 +84,7 @@ export function ClinicList({ props }) {
             <tr>
               <th
                 scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold tracking-wide text-gray-900 sm:pl-6"
+                className="bg-gray-200 py-3.5 pl-4 pr-3 text-left text-sm font-semibold tracking-wide text-gray-900 sm:pl-6"
               >
                 <FormattedMessage
                   id='Clinic'
@@ -93,7 +93,7 @@ export function ClinicList({ props }) {
               </th>
               <th
                 scope="col"
-                className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
+                className="bg-gray-200 px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
               >
                 <FormattedMessage
                   id='Address'
@@ -102,7 +102,7 @@ export function ClinicList({ props }) {
               </th>
               <th
                 scope="col"
-                className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
+                className="bg-gray-200 px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
               >
                 <FormattedMessage
                   id='Telephone'
@@ -111,7 +111,7 @@ export function ClinicList({ props }) {
               </th>
               <th
                 scope="col"
-                className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900">
+                className="bg-gray-200 px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900">
                 <FormattedMessage
                   id='Rating'
                   defaultMessage="Default error message"

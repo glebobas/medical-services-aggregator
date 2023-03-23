@@ -33,7 +33,8 @@ function Register(): JSX.Element {
     telephone: '',
     lastName: '',
     firstName: '',
-    email: ''
+    email: '',
+
   });
 
   const {
@@ -96,7 +97,8 @@ function Register(): JSX.Element {
         firstName: 'Пожалуйста, введите своё имя',
         lastName: 'Пожалуйста, введите свою фамилию',
         email: 'Пожалуйста введите свою электронную почту',
-        phoneNumber: 'Пожалуйста введите свой номер телефона'
+        phoneNumber: 'Пожалуйста введите свой номер телефона',
+        search: 'Поиск'
       })
     }
     if (locale === 'en') {
@@ -107,7 +109,8 @@ function Register(): JSX.Element {
         firstName: 'Please enter your first name',
         lastName: 'Please enter your last name',
         email: 'Please enter your email',
-        phoneNumber: 'Please enter your phone number'
+        phoneNumber: 'Please enter your phone number',
+        search: 'Search'
       })
     }
   },[locale])
@@ -121,17 +124,17 @@ function Register(): JSX.Element {
         const data = await dispatch(register(userData))
         // console.log("-> data", data);
 
-        // if (data?.message === 'Registration successful!') {
+        if (data?.message === 'Registration successful!') {
           setShowModalRegister(false)
           setShowModalMiniText(data)
           setShowModalMini(true)
-        // }
+        }
 
-        // if (data?.message !== 'Registration successful!') {
-        //   // setShowModalRegister(false)
-        //   setShowModalMiniText(data)
-        //   setShowModalMini(true)
-        // }
+        if (data?.message !== 'Registration successful!') {
+          // setShowModalRegister(false)
+          setShowModalMiniText(data)
+          setShowModalMini(true)
+        }
       }
     } catch (error) {
       console.log(error)
