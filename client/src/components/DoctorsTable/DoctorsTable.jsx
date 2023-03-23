@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import {FormattedMessage} from "react-intl";
 
 export function DoctorsTable({ data }) {
-  console.log("-> data", data);
+  // console.log("-> data", data);
 
   const navigate = useNavigate();
 

@@ -65,7 +65,7 @@ function SelectMenus() {
                       key={person.id}
                       className={({ active }) =>
                         classNames(
-                          active ? "text-white bg-indigo-600" : "text-gray-900",
+                          active ? "text-white bg-green-600" : "text-gray-900",
                           "relative cursor-default select-none py-2 pl-3 pr-9"
                         )
                       }
@@ -88,7 +88,7 @@ function SelectMenus() {
                           {selected ? (
                             <span
                               className={classNames(
-                                active ? "text-white" : "text-indigo-600",
+                                active ? "text-white" : "text-gray-600",
                                 "absolute inset-y-0 right-0 flex items-center pr-4"
                               )}
                             >
