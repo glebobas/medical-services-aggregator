@@ -5,12 +5,15 @@ import {Select} from 'antd';
 import {SearchResultsContext} from "../../context/context";
 import {ShedulRecModal} from "../Modal/ShedulRecModal";
 import {FormattedMessage} from "react-intl";
+import {AuthContext, AuthContextType} from "../../context";
 
 export function CommonInput({setData}) {
 
   const navigate = useNavigate();
 
   const getClinicsAndDoctors = useSelector((state) => state?.clinicsAndDoctors?.clinicsAndDoctors?.map(item => item.name))
+
+  const {placeholderText} = useContext(AuthContext);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
@@ -67,7 +70,7 @@ export function CommonInput({setData}) {
       <div className="relative w-full">
         <input
           type="text"
-          placeholder="Search"
+          placeholder={placeholderText.search}
           className="px-4 py-2 w-full border border-gray-300 rounded-md inline-block"
           value={searchTerm}
           onChange={handleInputChange}
