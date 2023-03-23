@@ -34,7 +34,8 @@ export function NavBar() {
   const dispatch = useDispatch()
   const [user, setUser] = useState<string | undefined>('')
   const navigate = useNavigate();
-  const {locale, setLocale} = useContext<AuthContextType>(AuthContext)
+  const {avatarGoogle} = useContext<AuthContextType>(AuthContext)
+
 
   useEffect(() => {
     // Обновляет информацию в хранилище после того как юзер залогинился
@@ -277,7 +278,7 @@ export function NavBar() {
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
-                              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                              src={avatarGoogle || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"}
                               alt=""
                             />
                           </Menu.Button>

@@ -12,7 +12,7 @@ function GoogleAuth(): JSX.Element {
     const dispatch = useDispatch<ThunkDispatch<IGeneralState, unknown, UserActionTypes>>()
 
 
-    const {setErrorAuth,  setShowModalLogin, setShowModalRegister} = useContext<AuthContextType>(AuthContext)
+    const {setErrorAuth,  setShowModalLogin, setShowModalRegister, setAvatarGoogle} = useContext<AuthContextType>(AuthContext)
 
     const login = useGoogleLogin({
         onSuccess: async (code) => {
@@ -28,11 +28,15 @@ function GoogleAuth(): JSX.Element {
                 return await response.json()
             };
             const result = await exchangeToken(tokenGoogle)
-            const {token, userReady, message} = result
+            console.log("-> result", result);
+            const {token, userReady} = result
+
+
             if (token) {
                 localStorage.setItem('jwtToken', token);
                 setShowModalLogin(false);
                 setShowModalRegister(false);
+                setAvatarGoogle(userReady.avatarGoogle)
                 dispatch({type: Types.LOGIN_SUCCESS, payload: userReady});
             } else {
                 setErrorAuth('Invalid username or password')
