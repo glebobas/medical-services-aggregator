@@ -31,6 +31,7 @@ export interface IUser {
   lastName: string;
   telephone: string;
   role: string;
+  avatarGoogle: string
 }
 
 export interface IGeneralState {
@@ -117,6 +118,7 @@ export interface IUserAction {
     telephone: string;
     role: string;
     error: string;
+    avatarGoogle: string;
   };
 }
 
