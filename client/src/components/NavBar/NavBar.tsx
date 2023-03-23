@@ -131,7 +131,7 @@ export function NavBar() {
                       </div>
                       <div className="hidden sm:ml-6 sm:block">
                         <div className="flex space-x-4">
-                          <Toggle/>
+
                           {navigationUserFalse.map((item) => (
                             <button
                               id={item.id}
@@ -165,6 +165,7 @@ export function NavBar() {
                         </div>
                       </div>
                     </div>
+                    <Toggle/>
                   </div>
                 </div>
 
@@ -256,7 +257,7 @@ export function NavBar() {
                         </div>
                       </div>
                     </div>
-                    <Toggle/>
+
                     <div
                       className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                       <button
@@ -336,6 +337,7 @@ export function NavBar() {
                         </Transition>
                       </Menu>
                     </div>
+                    <Toggle/>
                   </div>
                 </div>
 
