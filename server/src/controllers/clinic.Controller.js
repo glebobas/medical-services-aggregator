@@ -1,10 +1,12 @@
-const {User, Shedule, Doctor, Clinic, Address, Speciality, Rating, Slot, Review} = require('../../db/models')
-const {Op} = require("sequelize");
+const {User, Doctor, Clinic, Address, Speciality, Rating, Review} = require('../../db/models')
+
+
+
 
 
 exports.ExactClinic = async (req, res) => {
     try {
-        const {clinicId} = req.params;
+        const {clinicId, lang} = req.query;
 
 
         const reviewsNative = await Review.findAll({where: {clinicId}, include: [
