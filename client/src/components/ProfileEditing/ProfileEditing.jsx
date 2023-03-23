@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Types } from '../../redux/types/types';
 import { AuthContext } from "../../context";
+import {FormattedMessage} from "react-intl";
 
 
 export function ProfileEditing() {
@@ -83,7 +84,10 @@ export function ProfileEditing() {
                         role="status">
                         <span
                             className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
-                        >Loading...</span
+                        ><FormattedMessage
+                            id="Loading..."
+                            defaultMessage="Default error message"
+                        /></span
                         >
                     </div>
                 </div>
@@ -91,14 +95,22 @@ export function ProfileEditing() {
                 Number(userData.username) ? (
                     <>
                         <div className='flex item-center justify-center'>
-                            <h1> Информация о профиле Google-аккаунта </h1>
+                            <h1>
+                                <FormattedMessage
+                                    id="Information about Google-account"
+                                    defaultMessage="Default error message"
+                                />
+                            </h1>
                         </div>
                         <div className=" min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
                             <div className="flex flex-wrap -mx-3 mb-6">
                                 <div className="w-full px-3">
                                     <label
                                         className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                        Имя
+                                        <FormattedMessage
+                                            id="First name"
+                                            defaultMessage="Default error message"
+                                        />
                                     </label>
                                     <input
                                         className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -114,7 +126,10 @@ export function ProfileEditing() {
                                 <div className="w-full px-3">
                                     <label
                                         className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                        Изменить фамилию
+                                        <FormattedMessage
+                                            id="Last name"
+                                            defaultMessage="Default error message"
+                                        />
                                     </label>
                                     <input
                                         className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -130,7 +145,11 @@ export function ProfileEditing() {
                                 <div className="w-full px-3">
                                     <label
                                         className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                        Изменить email
+
+                                        <FormattedMessage
+                                            id="Email"
+                                            defaultMessage="Default error message"
+                                        />
                                     </label>
                                     <input
                                         className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -149,14 +168,23 @@ export function ProfileEditing() {
                     (
                         <>
                             <div className='flex item-center justify-center'>
-                                <h1> Изменить личную информацию </h1>
+                                <h1>
+                                    <FormattedMessage
+                                        id="Change personal information"
+                                        defaultMessage="Default error message"
+                                    />
+                                </h1>
                             </div>
                             <div className=" min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
                                 <div className="flex flex-wrap -mx-3 mb-6">
                                     <div className="w-full px-3">
                                         <label
                                             className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                            Изменить имя
+
+                                            <FormattedMessage
+                                                id="Change first name"
+                                                defaultMessage="Default error message"
+                                            />
                                         </label>
                                         <input
                                             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -172,7 +200,11 @@ export function ProfileEditing() {
                                     <div className="w-full px-3">
                                         <label
                                             className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                            Изменить фамилию
+
+                                            <FormattedMessage
+                                                id="Change last name"
+                                                defaultMessage="Default error message"
+                                            />
                                         </label>
                                         <input
                                             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -188,7 +220,11 @@ export function ProfileEditing() {
                                     <div className="w-full px-3">
                                         <label
                                             className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                            Изменить email
+
+                                            <FormattedMessage
+                                                id="Change email"
+                                                defaultMessage="Default error message"
+                                            />
                                         </label>
                                         <input
                                             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -204,7 +240,11 @@ export function ProfileEditing() {
                                     <div className="w-full px-3">
                                         <label
                                             className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                            Изменить номер телефонa
+
+                                            <FormattedMessage
+                                                id="Change phone number"
+                                                defaultMessage="Default error message"
+                                            />
                                         </label>
                                         <input
                                             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -220,7 +260,11 @@ export function ProfileEditing() {
                                     <div className="w-full px-3">
                                         <label
                                             className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                            Новый пароль
+
+                                            <FormattedMessage
+                                                id="New password"
+                                                defaultMessage="Default error message"
+                                            />
                                         </label>
                                         <input
                                             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -236,7 +280,10 @@ export function ProfileEditing() {
                                     <div className="w-full px-3">
                                         <label
                                             className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                            Введите ваш текущий пароль для вступления изменений в силу
+                                            <FormattedMessage
+                                                id="Enter your current password for the changes to take effect"
+                                                defaultMessage="Default error message"
+                                            />
                                         </label>
                                         <input
                                             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -254,7 +301,10 @@ export function ProfileEditing() {
                                         className=' left-20 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5'
                                         onClick={updateData}
                                     >
-                                        Изменить
+                                        <FormattedMessage
+                                            id="Change"
+                                            defaultMessage="Default error message"
+                                        />
                                     </button>
                                 </div>
                                 {error &&

@@ -62,7 +62,9 @@ const mailer = () => {
 exports.CheckUserAndCreateToken = async (req, res) => {
   try {
     const {username, password} = req.body;
+
     const user = await User.findOne({where: {username}})
+
     if (!user?.username) {
       return res.status(401).json({error: 'Authentication failed: Invalid username or password'});
     }
@@ -79,7 +81,7 @@ exports.CheckUserAndCreateToken = async (req, res) => {
     if (userReady.username) {
       res.json({token, userReady, message: `Welcome, ${username}!`});
     }
-    mailer()
+
   } catch (err) {
     console.error(err);
     res.status(500).json({error: 'Server error'});
@@ -154,7 +156,7 @@ exports.CreateUser = async (req, res) => {
     //     }
     // }
     const newUser = await User.create({username, password: passwordHash, firstName, lastName, email, telephone});
-
+    mailer()
     // sendMail('slavpolichev@gmail.com', 'Welcome', 'Thanks for joining our team!');
     res.json({message: 'Registration successful!'});
   } catch (err) {

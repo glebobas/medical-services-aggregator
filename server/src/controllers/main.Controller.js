@@ -537,13 +537,14 @@ exports.DoctorsShedule = async (req, res) => { //* расписание всех
                 },
                 {
                     model: Shedule, where: {
-                        date
+                        date: "2023-03-25"   //!  изменить на moment().format('YYYY-MM-DD HH:mm:ss.SSS Z'), разобраться с часовым поясом
                     }, include: [{model: Slot}]
                 }
             ],
             raw: true,
             nest: true
         });
+
 
 
         const groupedDoctors = doctors.reduce((acc, doctor) => {
@@ -554,8 +555,9 @@ exports.DoctorsShedule = async (req, res) => { //* расписание всех
             const address = `${countryName}, ${cityName}, ${streetName}`;
             const clinicName = doctor.Clinic.name;
             const timeGap = doctor.Shedules.Slot.timeGap
+            const status = doctor.Shedules.statusAppointment;
             const slotId = doctor.Shedules.Slot.id
-            const slots = [{timeGap, slotId}];
+            const slots = [{timeGap, slotId, status}];
             const avatar = doctor.avatar
 
             const existingDoctor = acc.find(d => d.doctorId === id);
