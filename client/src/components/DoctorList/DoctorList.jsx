@@ -4,12 +4,13 @@ import usePagination from '../../hooks/usePagination';
 import Rating from '../Rating/Rating'
 import { FormattedMessage } from "react-intl";
 import { useSelector } from 'react-redux';
+import SortButton from "../SortButton/SortButton";
+import SortButtonDefault from "../SortButton/SortButtonDefault";
 
 export function DoctorList({ props }) {
   const [allDoctorsData, setAllDoctorsData] = useState([]);
+  console.log("-> allDoctorsData", allDoctorsData);
 
-  const x = useSelector(state => state);
-  console.log(x);
 
   useEffect(() => {
     if (!props) {
@@ -51,6 +52,7 @@ export function DoctorList({ props }) {
     count: allDoctorsData?.length,
   });
 
+
   const shownDoctorsSlice = allDoctorsData?.slice(firstContentIndex, lastContentIndex);
 
   return (
@@ -65,11 +67,15 @@ export function DoctorList({ props }) {
             <span
               className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
             >
-              Loading...
+               <FormattedMessage
+                   id='Loading...'
+                   defaultMessage="Default error message"
+               />
             </span>
           </div>
         </div>
       }
+
       {(allDoctorsData?.length > 0)
         ? (<div className="mt-4 flex flex-col">
           <h3 className="font-semibold text-xl mb-2">
@@ -77,6 +83,7 @@ export function DoctorList({ props }) {
               id='List of all the doctors'
               defaultMessage="Default error message"
             /></h3>
+            <SortButtonDefault allDoctorsData={allDoctorsData} setAllDoctorsData={setAllDoctorsData}/>
           <div className="overflow-auto rounded-lg shadow hidden lg:block">
             <table className="w-full divide-y divide-gray-300">
               <thead className="bg-gray-200 border-b-2 border-gray-200">

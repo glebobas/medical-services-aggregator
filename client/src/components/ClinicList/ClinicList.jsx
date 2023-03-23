@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import usePagination from '../../hooks/usePagination';
 import Rating from '../Rating/Rating';
 import { FormattedMessage } from "react-intl";
+import SortButtonDefault from "../SortButton/SortButtonDefault";
 
 
 export function ClinicList({ props }) {
@@ -13,7 +14,7 @@ export function ClinicList({ props }) {
   const dispatch = useDispatch();
 
   const log = useSelector(state => state.login.loading);
-  console.log(log);
+
 
   useEffect(() => {
     (async () => {
@@ -54,6 +55,8 @@ export function ClinicList({ props }) {
   });
 
   const shownClinicsSlice = allClinicsData?.slice(firstContentIndex, lastContentIndex);
+  console.log("-> shownClinicsSlice", shownClinicsSlice);
+
 
   return (
     <div className="mt-4 flex flex-col">
@@ -81,6 +84,7 @@ export function ClinicList({ props }) {
           </div>
         </div>
       }
+      <SortButtonDefault allClinicsData={allClinicsData} setAllClinicsData={setAllClinicsData}/>
       <div className="overflow-auto rounded-lg shadow hidden lg:block">
 
         <table className="w-full divide-y divide-gray-300">

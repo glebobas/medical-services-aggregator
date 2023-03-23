@@ -18,6 +18,8 @@ interface IPlaceholderText {
 }
 
 export interface AuthContextType {
+    avatarGoogle: string;
+    setAvatarGoogle: React.Dispatch<React.SetStateAction<string>>;
     locale: string;
     setLocale: React.Dispatch<React.SetStateAction<string>>;
     showModalLogin: boolean;
@@ -43,6 +45,8 @@ interface AuthProviderProps {
 }
 
 export const AuthContext = React.createContext<AuthContextType>({
+    avatarGoogle: '',
+    setAvatarGoogle: () => {},
     locale: 'en',
     setLocale: () => {},
     showModalLogin: false,
@@ -94,9 +98,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children, locale, set
         phoneNumber: '',
         search: ''
     });
+    const [avatarGoogle, setAvatarGoogle] = React.useState('')
 
     return (
         <AuthContext.Provider value={{
+            avatarGoogle,
+            setAvatarGoogle,
             locale,
             setLocale,
             showModalLogin,
