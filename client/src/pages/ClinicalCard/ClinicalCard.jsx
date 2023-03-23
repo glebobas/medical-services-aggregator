@@ -9,14 +9,22 @@ import { ContextAddReview } from "../../context/context";
 import { useParams } from "react-router-dom";
 import ReviewsMenu from "../../components/ReviewsMenu/ReviewsMenu";
 
+const location = {
+  "Turkey":[39.920756, 32.854049],
+  "Australia":[-35.306907, 149.125531],
+ " Vietnam":[21.033999, 105.842113],
+}
+
 export default function ClinicalCard() {
   const { id } = useParams();
   const [clinic, setClinic] = useState({ readyClinic: [], doctors: [] });
   const [reviews, setReviews] = useState();
   const [dataRes, setDataRes] = useState();
-
-  const data = { id: 1 };
   
+  const data = { id: 1 };
+  const loc = clinic.readyClinic[0]?.address.split(', ')[2]
+console.log(loc)
+  console.log(location[`${loc}`])
   useEffect(() => {
     (async () => {
       const response = await fetch(`/main/clinic/${id}`);
@@ -24,6 +32,7 @@ export default function ClinicalCard() {
       setClinic(r);
       });
     })();
+    
   }, []);
  
 
@@ -126,7 +135,7 @@ export default function ClinicalCard() {
           <ReviewsMenu rev={clinic.reviewsReady} />
           <div className="ymaps w-full mt-4">
             <div className="ymap">
-              <YandexMap />
+              <YandexMap geo={location[`${loc}`]}/>
             </div>
           </div>
         </div>
