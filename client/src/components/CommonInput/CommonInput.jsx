@@ -1,15 +1,19 @@
-import {useContext, useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {Select} from 'antd';
 import {SearchResultsContext} from "../../context/context";
 import {ShedulRecModal} from "../Modal/ShedulRecModal";
+import {FormattedMessage} from "react-intl";
+import {AuthContext, AuthContextType} from "../../context";
 
 export function CommonInput({setData}) {
 
   const navigate = useNavigate();
 
   const getClinicsAndDoctors = useSelector((state) => state?.clinicsAndDoctors?.clinicsAndDoctors?.map(item => item.name))
+
+  const {placeholderText} = useContext(AuthContext);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
@@ -66,7 +70,7 @@ export function CommonInput({setData}) {
       <div className="relative w-full">
         <input
           type="text"
-          placeholder="Search"
+          placeholder={placeholderText.search}
           className="px-4 py-2 w-full border border-gray-300 rounded-md inline-block"
           value={searchTerm}
           onChange={handleInputChange}
@@ -81,7 +85,12 @@ export function CommonInput({setData}) {
           </ul>
         )}
       </div>
-      <button className="border rounded ml-2 px-8 py-2 bg-green-700 text-white hover:bg-green-800" onClick={handleButtonClick}>Search</button>
+      <button className="border rounded ml-2 px-8 py-2 bg-green-700 text-white hover:bg-green-800" onClick={handleButtonClick}>
+        <FormattedMessage
+            id='Search'
+            defaultMessage="Default error message"
+        />
+      </button>
     </div>
   )
 

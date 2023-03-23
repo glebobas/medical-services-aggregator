@@ -1,6 +1,7 @@
 import React, {useContext, useState} from "react";
 import Rating from "../Rating/Rating";
 import {useNavigate} from "react-router-dom";
+import {FormattedMessage} from "react-intl";
 
 export function ClinicsTable({data}) {
   console.log('clinictable', data)
@@ -12,7 +13,10 @@ export function ClinicsTable({data}) {
   return (
     <>
       {(!data?.length > 0)
-        ? (<h3 className="font-semibold text-xl">По вашему запросу клиники не найдены</h3>)
+        ? (<h3 className="font-semibold text-xl"><FormattedMessage
+              id='No clinics found at your request'
+              defaultMessage="Default error message"
+          /></h3>)
         : (<div className="mt-4 flex flex-col">
             <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
               <table className="min-w-full divide-y divide-gray-300">
@@ -22,24 +26,36 @@ export function ClinicsTable({data}) {
                     scope="col"
                     className="py-3 pl-4 pr-3 text-left text-sm font-semibold text-gray-900"
                   >
-                    Клиника
+                      <FormattedMessage
+                          id='Clinic'
+                          defaultMessage="Default error message"
+                      />
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Адрес
+                      <FormattedMessage
+                          id='Address'
+                          defaultMessage="Default error message"
+                      />
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Телефон
+                      <FormattedMessage
+                          id='Phone number'
+                          defaultMessage="Default error message"
+                      />
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                    Рейтинг
+                      <FormattedMessage
+                          id='Rating'
+                          defaultMessage="Default error message"
+                      />
                   </th>
                 </tr>
                 </thead>

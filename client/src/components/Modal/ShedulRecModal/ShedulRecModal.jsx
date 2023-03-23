@@ -1,6 +1,7 @@
-import {Fragment, useContext, useRef} from 'react'
+import React, {Fragment, useContext, useRef} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import {AuthContext} from "../../../context";
+import {FormattedMessage} from "react-intl";
 
 
 export function ShedulRecModal({props}) {
@@ -62,11 +63,18 @@ export function ShedulRecModal({props}) {
                   <div className="sm:flex sm:justify-center sm:items-center">
                     <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                       <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                        Хотите записаться на текущее время
+                        <FormattedMessage
+                            id='Would you like to book for the current time?'
+                            defaultMessage="Default error message"
+                        />
+
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500 text-center">
-                          Подтвердите запись
+                          <FormattedMessage
+                              id='Confirm appointment'
+                              defaultMessage="Default error message"
+                          />
                         </p>
                       </div>
                     </div>
@@ -78,7 +86,10 @@ export function ShedulRecModal({props}) {
                     className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto"
                     onClick={handleClickModalShedule}
                   >
-                    Записаться
+                    <FormattedMessage
+                        id='Make an appointment'
+                        defaultMessage="Default error message"
+                    />
                   </button>
                   <button
                     type="button"
@@ -86,7 +97,10 @@ export function ShedulRecModal({props}) {
                     onClick={() => setShowModalSheduleRec(false)}
                     ref={cancelButtonRef}
                   >
-                    Отменить
+                    <FormattedMessage
+                        id='Cancel'
+                        defaultMessage="Default error message"
+                    />
                   </button>
                 </div>
               </Dialog.Panel>

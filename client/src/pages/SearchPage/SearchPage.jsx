@@ -1,46 +1,31 @@
-import React, {useContext} from 'react';
-import {AuthContext} from "../../context";
-import {SearchResultsContext} from "../../context/context";
-import {useNavigate} from "react-router-dom";
-import {SelectSpecialization} from "../../components/SelectSpecialization/SelectSpecialization";
-import {CheckBoxes} from "../../components/CheckBoxes/CheckBoxes";
-import {SelectLocation} from "../../components/SelectLocation/SelectLocation";
+import React from 'react';
 
 import {useState} from 'react'
 import {CheckIcon, ChevronUpDownIcon} from '@heroicons/react/20/solid'
 import {Combobox} from '@headlessui/react'
 import {DoctorList} from "../../components/DoctorList";
 import {useSelector} from "react-redux";
-
-// const speciality = [
-//   {id: 1, name: ''},
-//   {id: 2, name: 'Cardiologist'},
-//   {id: 3, name: 'Dermatologist'},
-//   {id: 4, name: 'Surgeon'},
-//   // More users...
-// ]
-
-// const location = [
-//   {id: 1, name: 'Turkey'},
-//   {id: 2, name: 'Australia'},
-//   {id: 3, name: 'Vietnam'},
-//   // More users...
-// ]
+import {ClinicList} from "../../components/ClinicList";
+import {FormattedMessage} from "react-intl";
+import {nanoid} from "nanoid";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export function SearchPage(props) {
+export function SearchPage() {
   const [queryPerson, setPersonQuery] = useState('')
   const [queryLocation, setLocationQuery] = useState('')
   const [selectedSpeciality, setSelectedSpeciality] = useState()
-  const [selectedLocation, setSelectedLocation] = useState()
+  const [selectedLocation, setSelectedLocation] = useState('')
   const [doctors, setDoctors] = useState([])
+  const [topDoctorsClinics, setTopDoctorsClinics] = useState([])
+  const topDoctors = topDoctorsClinics?.readyDoctorList
+  const topClinics = topDoctorsClinics?.readyClinicList
 
-  const speciality = useSelector((state) => state?.speciality?.speciality)
-  const getAllAddressArray = useSelector((state) => state?.addresClinics?.addresClinics)
-  const location = [...new Set(getAllAddressArray.map(item => item.countryName))]
+  const speciality = useSelector((state) => [{id: 0, name: ''}, ...state?.speciality?.speciality || []])
+  const getAllAddressArray = useSelector((state) => [{id: 0, countryName: ''}, ...state?.addresClinics?.addresClinics || []])
+  const location = [...new Set(getAllAddressArray.map(item => item?.countryName))]
 
   // Checked children
   const [isCheckedChildren, setIsCheckedChildren] = useState(false);
@@ -70,18 +55,14 @@ export function SearchPage(props) {
     queryLocation === ''
       ? location
       : location.filter((place) => {
-        return place.countryName.toLowerCase().includes(queryLocation.toLowerCase())
+        return place?.toLowerCase()?.includes(queryLocation.toLowerCase())
       })
-
-  const navigate = useNavigate();
-
-  const {
-    setData
-  } = useContext(SearchResultsContext)
 
 
   // TODO: Продолжить логику
   const handleButtonClick = async () => {
+    setDoctors([])
+    setTopDoctorsClinics([])
     let query = `?adultPatients=${isCheckedParent}&childrenPatients=${isCheckedChildren}`
 
     if (selectedSpeciality) {
@@ -92,38 +73,38 @@ export function SearchPage(props) {
     }
     if (isCheckedRandom) {
       fetch(`/main/random${query}`)
-        .then(response =>response.json())
-        .then(data => setDoctors(data))
+        .then(response => response.json())
+        .then(data => setTopDoctorsClinics(data))
         .catch(error => console.log(error))
     } else {
       fetch(`/main/somedoctors${query}`)
-        .then(response =>response.json())
+        .then(response => response.json())
         .then(data => setDoctors(data))
         .catch(error => console.log(error))
     }
-
-    // try {
-    //   // const response =  await fetch(`/main/alldata/${searchTerm}`)
-    //   // const results = await response.json();
-    //   // // console.log("-> results", results);
-    //   // // const getClinicsAndDoctors = [...results.readyClinicList, ...results.readyDoctorList]
-    //   // // console.log("-> getClinicsAndDoctors", getClinicsAndDoctors);
-    //   // setData(results)
-    //   // navigate("/listpage")
-    // } catch (error) {
-    //   console.error(error)
-    // }
   }
+
+
 
 
   return (
     <div className="flex flex-col flex-grow mt-4 w-full">
-      <div className="title flex flex-row font-semibold text-xl">Расширенный поиск</div>
+      <div className="title flex flex-row font-semibold text-xl">
+        <FormattedMessage
+            id="Extended search"
+            defaultMessage="Default error message"
+        />
+      </div>
       <div className="flex flex-row flex-grow justify-start rounded border mt-4">
         <div className="flex-col bg-white w-1/3 px-6 py-6">
           <Combobox as="div" value={selectedSpeciality} onChange={setSelectedSpeciality}>
             <Combobox.Label
-              className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">Специальность</Combobox.Label>
+              className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <FormattedMessage
+                  id="Speciality"
+                  defaultMessage="Default error message"
+              />
+            </Combobox.Label>
             <div className="relative mt-1">
               <Combobox.Input
                 className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 sm:text-sm"
@@ -140,7 +121,7 @@ export function SearchPage(props) {
                   className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                   {filteredSpeciality.map((person) => (
                     <Combobox.Option
-                      key={person.id}
+                      key={nanoid()}
                       value={person}
                       className={({active}) =>
                         classNames(
@@ -188,7 +169,10 @@ export function SearchPage(props) {
                 </div>
                 <div className="ml-3 text-sm">
                   <label htmlFor="children" className="font-medium text-gray-700">
-                    Детский
+                    <FormattedMessage
+                        id="Pediatrician"
+                        defaultMessage="Default error message"
+                    />
                   </label>
                 </div>
               </div>
@@ -208,7 +192,10 @@ export function SearchPage(props) {
                 </div>
                 <div className="ml-3 text-sm">
                   <label htmlFor="parent" className="font-medium text-gray-700">
-                    Взрослый
+                    <FormattedMessage
+                        id="Adult"
+                        defaultMessage="Default error message"
+                    />
                   </label>
                 </div>
               </div>
@@ -216,7 +203,12 @@ export function SearchPage(props) {
           </div>
           <Combobox as="div" className="mt-4" value={selectedLocation} onChange={setSelectedLocation}>
             <Combobox.Label
-              className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">Местоположение</Combobox.Label>
+              className="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <FormattedMessage
+                  id="Location"
+                  defaultMessage="Default error message"
+              />
+            </Combobox.Label>
             <div className="relative mt-1">
               <Combobox.Input
                 className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500 sm:text-sm"
@@ -233,7 +225,7 @@ export function SearchPage(props) {
                   className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                   {filteredLocation.map((place) => (
                     <Combobox.Option
-                      key={place}
+                      key={nanoid()}
                       value={place}
                       className={({active}) =>
                         classNames(
@@ -280,32 +272,35 @@ export function SearchPage(props) {
               </div>
               <div className="ml-3 text-sm">
                 <label htmlFor="candidates" className="font-medium text-gray-700">
-                  Случайный поиск среди лучших клиник и врачей
+                  <FormattedMessage
+                      id="Random search among the best clinics and doctors"
+                      defaultMessage="Default error message"
+                  />
                 </label>
               </div>
             </div>
           </div>
-          <button className="mt-6 border rounded px-8 py-2 bg-green-700 text-white hover:bg-green-800" onClick={handleButtonClick}>Search</button>
+          <button className="mt-6 border rounded px-8 py-2 bg-green-700 text-white hover:bg-green-800"
+                  onClick={handleButtonClick}>
+            <FormattedMessage
+                id="Search"
+                defaultMessage="Default error message"
+            />
+
+          </button>
         </div>
         <div className="flex-col px-6 py-6">
-          <DoctorList props={doctors}/>
+          {(topDoctorsClinics.length === 0)
+            ? (<DoctorList props={doctors}/>)
+            : (
+              <>
+                <DoctorList props={topDoctors}/>
+                <ClinicList props={topClinics}/>
+              </>
+            )
+          }
         </div>
       </div>
-      {/*<div>search</div>*/}
-      {/*<div className="main-col-left flex flex-col w-2/5 px-8 pt-4 bg-white">*/}
-      {/*    <SelectSpecialization />*/}
-      {/*    <div className="flex flex-row justify-around">*/}
-      {/*        <div className="flex flex-col w-full"><CheckBoxes label={"Детский"}/></div>*/}
-      {/*        <div className="flex flex-col w-full"><CheckBoxes label={"Взрослый"} /></div>*/}
-      {/*    </div>*/}
-      {/*    <br />*/}
-      {/*    <SelectLocation />*/}
-      {/*</div>*/}
-      {/*<button*/}
-      {/*    className="border rounded ml-2 px-8 py-2 bg-green-700 text-white hover:bg-green-800"*/}
-      {/*    onClick={handleButtonClick}>*/}
-      {/*    Search*/}
-      {/*</button>*/}
     </div>
   );
 }
