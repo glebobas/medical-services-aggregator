@@ -21,6 +21,7 @@ export const loginReducer = (state: IGeneralState = initialState, action: IUserA
                     lastName: action?.payload?.lastName,
                     email: action?.payload?.email,
                     role: action?.payload?.role,
+                    avatarGoogle: action?.payload?.avatarGoogle,
                     telephone: action?.payload?.telephone
                 },
                 loading: false,
