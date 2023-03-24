@@ -537,7 +537,8 @@ exports.DoctorsShedule = async (req, res) => { //* расписание всех
                 },
                 {
                     model: Shedule, where: {
-                        date: "2023-03-25"   //!  изменить на moment().format('YYYY-MM-DD HH:mm:ss.SSS Z'), разобраться с часовым поясом
+                        date: "2023-03-25", //!  изменить на moment().format('YYYY-MM-DD HH:mm:ss.SSS Z'), разобраться с часовым поясом
+                        statusAppointment: 'vacant'
                     }, include: [{model: Slot}]
                 }
             ],
