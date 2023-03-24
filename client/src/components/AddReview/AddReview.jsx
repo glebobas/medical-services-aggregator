@@ -21,6 +21,7 @@ import ActiveRating from "../ActiveRating/ActiveRating";
 import { ContextReview } from "../../context/context";
 import { ContextAddReview } from "../../context/context";
 import styles from "../ActiveRating/activeRating.module.css";
+import { useSelector } from "react-redux";
 const assignees = [
   { name: "Unassigned", value: null },
   {
@@ -32,9 +33,8 @@ const assignees = [
   // More items...
 ];
 const labels = [
-  { name: "Unlabelled", value: null },
-  { name: "Engineering", value: "engineering" },
-  // More items...
+  { name: "Annonimus", value: null },
+  
 ];
 const dueDates = [
   { name: "Today", value: "today" },
@@ -58,7 +58,8 @@ function AddReview(props) {
   const dd = String(today.getDate()).padStart(2, "0");
   const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
   const yyyy = today.getFullYear();
-
+  const user = useSelector((state) => state.login.user)
+  console.log(user)
   today = yyyy + "-" + mm + "-" + dd;
   const [dataForm, setDataForm] = useState({
     date: today,
@@ -68,8 +69,11 @@ function AddReview(props) {
     clinicId: id,
     reviewerName: "Aaliyah Schaden",
   });
+  const token = localStorage.getItem("jwtToken")
+
+
   const handleChange = (event) => {
-    setDataForm({ ...dataForm, [event.target.name]: event.target.value });
+    setDataForm({ ...dataForm, [event.target.name]: event.target.value, reviewerName: `${user.firstName} ${user.lastName}`});
   };
   const handleClickStar = (event) => {
     console.log(event.target.value);
@@ -81,6 +85,27 @@ function AddReview(props) {
       ...prevState,
       reviewsReady: [dataForm, ...prevState.reviewsReady],
     }));
+    (async () => {
+      const responseOne = await fetch('/user/review/new', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'authorization': 'Bearer ' + token,
+        },
+        body: JSON.stringify({clinicId: id, reviewText: dataForm.reviewText}),
+    });
+    responseOne.json().then((r) => console.log('responseOne==========>',r))
+    const responseTwo = await fetch('/profile/edit', {
+      method: 'PATCH',
+      headers: {
+          'Content-Type': 'application/json',
+          'authorization': 'Bearer ' + token,
+      },
+      body: JSON.stringify({clinicRating: dataForm.rating, clinicId: id}),
+  });
+  responseTwo.json().then((r) => console.log('responseTwo==========>',r))
+    })()
+
   };
 
   return (
@@ -242,7 +267,7 @@ function AddReview(props) {
                                     )}
                                   >
                                     {assigned.value === null
-                                      ? "Assign"
+                                      ? `${user.firstName} ${user.lastName}`
                                       : assigned.name}
                                   </span>
                                 </Listbox.Button>
