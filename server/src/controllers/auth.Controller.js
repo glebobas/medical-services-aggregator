@@ -5,6 +5,7 @@ const express = require('express');
 const app = express();
 const {google} = require('googleapis');
 const {OAuth2Client} = require('google-auth-library');
+const {mailer} = require("./mailer.Controller");
 // const { sendMail } = require('../nodeMailer');
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 
@@ -16,47 +17,6 @@ const oauth2Client = new google.auth.OAuth2(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECR
 
 const jwtSecret = process.env.JWT_SECRET
 
-// setup nodemailer
-const nodemailer = require('nodemailer');
-
-const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    port: 465,
-    secure: true,
-    auth: {
-      type: 'OAuth2',
-      user: process.env.USER_MAIL,
-      clientId: process.env.YOUR_CLIENT_ID,
-      clientSecret: process.env.YOUR_CLIENT_SECRET,
-      accessToken: process.env.ACCESS_TOKEN,
-      expires: 1484314697598,
-      refreshToken: process.env.REFRESH_TOKEN,
-      accessUrl: process.env.ACCESS_URL
-    }
-  },
-  {
-    from: 'Medical AG <d.kovalenko174@gmail.com>'
-  }
-)
-
-transporter.verify((error, success) => {
-  if (error) return console.log(error)
-  console.log('Server is ready to take our message', success)
-  transporter.on("token", (token) => {
-    console.log("A new access token was generated");
-    console.log("User: %s", token.user);
-    console.log("Access Token: %s", token.accessToken);
-    console.log("Expires: %s", new Date(token.expires));
-  });
-})
-
-const mailer = () => {
-  transporter.sendMail({
-    to: 'medical.app.work@gmail.com',
-    subject: 'Test',
-    text: 'sdfdsfs'
-  })
-}
 
 
 exports.CheckUserAndCreateToken = async (req, res) => {
@@ -156,9 +116,18 @@ exports.CreateUser = async (req, res) => {
     //     }
     // }
     const newUser = await User.create({username, password: passwordHash, firstName, lastName, email, telephone});
-    mailer()
+
+    if (newUser) {
+      const textToEmail = 'Registration successful! You are welcome!'
+      const subject = 'Registration on medical agregator'
+      mailer(email, subject, textToEmail)
+      return res.json({message: 'Registration successful!'});
+    }
+    if (!newUser) {
+      return res.json({error: 'Registration failed!'});
+    }
     // sendMail('slavpolichev@gmail.com', 'Welcome', 'Thanks for joining our team!');
-    res.json({message: 'Registration successful!'});
+
   } catch (err) {
     console.error(err);
     res.status(500).json({error: 'Failed to register user'});
