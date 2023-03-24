@@ -108,7 +108,7 @@ export function ClinicList({props}) {
               className="bg-gray-200 px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
             >
               <FormattedMessage
-                id='Telephone'
+                id='Phone number'
                 defaultMessage="Default error message"
               />
             </th>
