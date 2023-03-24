@@ -20,6 +20,7 @@ import enMessages from '../messages/en.json';
 import ruMessages from '../messages/ru.json';
 import {ShedulePage} from "../pages/ShedulePage";
 import {NotePage} from "../pages/NotePage";
+import {Chat} from "../components/Chat/Chat";
 
 
 function App() {
@@ -93,7 +94,7 @@ function App() {
         </>
 
       }</IntlProvider>
-
+      <Chat />
     </AuthProvider>
   );
 }
