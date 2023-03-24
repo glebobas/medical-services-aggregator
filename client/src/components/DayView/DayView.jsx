@@ -93,7 +93,6 @@ export function DayView() {
 
   // Запрос в БД на запись
   function handleClickReg(block) {
-    console.log("-> block", block);
     setSheduleIdOneBlock(block)
     setShowModalSheduleRec(true)
   }

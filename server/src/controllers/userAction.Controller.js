@@ -28,7 +28,7 @@ exports.EditReviewWithRating = async (req, res) => {
     try {
         const {reviewId, doctorId, clinicId, reviewText, rating} = req.body;
         const userId = res?.locals?.user?.id
- 
+
         //* апдейтим отзыв
 
         if (reviewText && clinicId) {
@@ -190,6 +190,8 @@ exports.NewRating = async (req, res) => {
 
 
 exports.NewEntry = async (req, res) => {
+    console.log("-> req", req);
+
     const {sheduleId, statusAppointment} = req.body
 
     const userId = res?.locals?.user?.id

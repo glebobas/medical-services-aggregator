@@ -6,7 +6,7 @@ import {FormattedMessage} from "react-intl";
 
 export function ShedulRecModal({props}) {
   const {idDoctor, sheduleIdOneBlock, setStaff} = props
-  console.log("-> idDoctor", setStaff);
+
   const {
     showModalSheduleRec,
     setShowModalSheduleRec,
@@ -17,7 +17,7 @@ export function ShedulRecModal({props}) {
   const cancelButtonRef = useRef(null)
 
   function handleClickModalShedule() {
-    // console.log(idDoctor, sheduleIdOneBlock)
+    console.log(idDoctor, sheduleIdOneBlock)
     fetch('/user/shedule/visit', {
       method: "PATCH",
       headers: {

@@ -557,10 +557,10 @@ exports.DoctorsShedule = async (req, res) => { //* расписание всех
             const clinicName = doctor.Clinic.name;
             const timeGap = doctor.Shedules.Slot.timeGap
             const status = doctor.Shedules.statusAppointment;
+            const sheduleId = doctor.Shedules.id;
             const slotId = doctor.Shedules.Slot.id
-            const slots = [{timeGap, slotId, status}];
-            const avatar = doctor.avatar
-
+            const slots = [{timeGap, sheduleId, status}];
+            const avatar = doctor.avatar;
             const existingDoctor = acc.find(d => d.doctorId === id);
             if (existingDoctor) {
                 existingDoctor.slots = existingDoctor.slots.concat(slots);
@@ -575,7 +575,8 @@ exports.DoctorsShedule = async (req, res) => { //* расписание всех
                     speciality,
                     address,
                     slots,
-                    avatar
+                    avatar,
+                    sheduleId
                 });
             }
 
@@ -629,8 +630,9 @@ exports.DoctorsShedule = async (req, res) => { //* расписание всех
                             ownRatingUserDoc = element.doctorRating
                         }
                     })
+
                     return {
-                        doctorId: doctor.id,
+                        doctorId: doctor.doctorId,
                         doctorName: doctor.doctorName,
                         phone: doctor.phone,
                         address: doctor.address,
@@ -641,7 +643,8 @@ exports.DoctorsShedule = async (req, res) => { //* расписание всех
                         doctorRating: docRate,
                         alreadyScoredPoints: ownRatingUserDoc,
                         avatar: doctor.avatar,
-                        slots: doctor.slots
+                        slots: doctor.slots,
+                        sheduleId: doctor.sheduleId,
 
                     }
                 }
@@ -663,7 +666,7 @@ exports.DoctorsShedule = async (req, res) => { //* расписание всех
                     })
 
                     return {
-                        doctorId: doctor.id,
+                        doctorId: doctor.doctorId,
                         doctorName: doctor.doctorName,
                         phone: doctor.phone,
                         address: doctor.address,
@@ -673,7 +676,8 @@ exports.DoctorsShedule = async (req, res) => { //* расписание всех
                         childrenPatients: doctor.childrenPatients,
                         doctorRating: docRate,
                         avatar: doctor.avatar,
-                        slots: doctor.slots
+                        slots: doctor.slots,
+                        sheduleId: doctor.sheduleId,
                     }
                 }
             )
