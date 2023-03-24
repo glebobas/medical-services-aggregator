@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import usePagination from '../../hooks/usePagination';
 import Rating from '../Rating/Rating'
 import { FormattedMessage } from "react-intl";
-import { useSelector } from 'react-redux';
-import SortButton from "../SortButton/SortButton";
 import SortButtonDefault from "../SortButton/SortButtonDefault";
 
 export function DoctorList({ props }) {
@@ -78,12 +76,12 @@ export function DoctorList({ props }) {
 
       {(allDoctorsData?.length > 0)
         ? (<div className="mt-4 flex flex-col">
-          <h3 className="font-semibold text-xl mb-2">
+          <h3 className="font-semibold text-xl mb-2 dark:text-white">
             <FormattedMessage
               id='List of all the doctors'
               defaultMessage="Default error message"
             /></h3>
-            <SortButtonDefault allDoctorsData={allDoctorsData} setAllDoctorsData={setAllDoctorsData}/>
+
           <div className="overflow-auto rounded-lg shadow hidden lg:block">
             <table className="w-full divide-y divide-gray-300">
               <thead className="bg-gray-200 border-b-2 border-gray-200">
@@ -126,12 +124,13 @@ export function DoctorList({ props }) {
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
+                    className="flex flex-row items-center px-3 py-3.5 text-left text-sm font-semibold tracking-wide text-gray-900"
                   >
                     <FormattedMessage
                       id='Rating'
                       defaultMessage="Default error message"
                     />
+                    <SortButtonDefault allDoctorsData={allDoctorsData} setAllDoctorsData={setAllDoctorsData}/>
                   </th>
                 </tr>
               </thead>
@@ -197,29 +196,29 @@ export function DoctorList({ props }) {
             </div>
           ))}
 
-          <div className="flex justify-center mt-4 space-x-1">
+          <div className="flex justify-center mt-4 space-x-1 dark:text-white">
             <p className="text p-2">
               {page} / {totalPages}
             </p>
-            <button onClick={prevPage} className="page bg-white py-2 px-4 rounded-lg border">
+            <button onClick={prevPage} className="page bg-white py-2 px-4 rounded-lg border dark:text-gray-600">
               &larr;
             </button>
             {[...Array(totalPages)?.keys()].map((el) => (
               <button
                 onClick={() => setPage(el + 1)}
                 key={el}
-                className={`page ${page === el + 1 ? "active bg-green-600 py-2 px-4 border rounded-lg text-white" : "bg-white py-2 px-4 border rounded-lg"}`}
+                className={`page ${page === el + 1 ? "active bg-green-600 py-2 px-4 border rounded-lg text-white " : "bg-white py-2 px-4 border rounded-lg dark:text-gray-600"}`}
               >
                 {el + 1}
               </button>
             ))}
-            <button onClick={nextPage} className="page bg-white py-2 px-4 rounded-lg border">
+            <button onClick={nextPage} className="page bg-white py-2 px-4 rounded-lg border dark:text-gray-600">
               &rarr;
             </button>
           </div>
         </div>)
         :
-        (<div className="mt-4 flex flex-col font-semibold text-2xl"><FormattedMessage
+        (<div className="mt-4 flex flex-col font-semibold text-2xl dark:text-white"><FormattedMessage
           id='Records not found'
           defaultMessage="Default error message"
         />

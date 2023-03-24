@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {nanoid} from "nanoid";
 import {motion} from "framer-motion"
 import SortButtonDefault from "../../components/SortButton/SortButtonDefault";
+import Rating from "../../components/Rating/Rating";
 
 export function ShedulePage() {
 
@@ -31,14 +32,14 @@ export function ShedulePage() {
 
   return (
     <div className="head">
-      <div className="col-span-5 font-semibold text-xl mt-4">Свободные блоки на сегодня</div>
-      <SortButtonDefault shedule={shedule} setShedule={setShedule}/>
+      <div className="col-span-5 font-semibold text-xl mt-4 dark:text-white">Свободные блоки на сегодня</div>
+
       <div className="grid grid-cols-5 mt-4">
-        <div className="bg-gray-200 py-2 px-4 rounded-l">Доктор</div>
-        <div className="bg-gray-200 py-2 px-4">Специальность</div>
-        <div className="bg-gray-200 py-2 px-4">Клиника</div>
-        <div className="bg-gray-200 py-2 px-4">Телефон</div>
-        <div className="bg-gray-200 py-2 px-4 rounded-r">Рейтинг</div>
+        <div className="bg-gray-200 py-2 px-4 rounded-l flex flex-row items-center">Доктор</div>
+        <div className="bg-gray-200 py-2 px-4 flex flex-row items-center">Специальность</div>
+        <div className="bg-gray-200 py-2 px-4 flex flex-row items-center">Клиника</div>
+        <div className="bg-gray-200 py-2 px-4 flex flex-row items-center">Телефон</div>
+        <div className="bg-gray-200 py-2 px-4 rounded-r flex flex-row items-center">Рейтинг <SortButtonDefault shedule={shedule} setShedule={setShedule}/></div>
       </div>
 
       {shedule?.map((doctor, i) => (
@@ -52,7 +53,7 @@ export function ShedulePage() {
           <div className="px-2 py-2"><span className="bg-green-100 px-2 py-1 rounded">{doctor.speciality}</span></div>
           <div className="px-2 py-2">{doctor.clinic}</div>
           <div className="px-2 py-2">{doctor.phone}</div>
-          <div className="px-2 py-2">{doctor.doctorRating}</div>
+          <div className="px-2 py-2"><Rating rat={doctor.doctorRating} /></div>
           <div className="flex flex-row gap-2 pl-2">
             {doctor.slots.map(date => (
               <div key={date.slotId}

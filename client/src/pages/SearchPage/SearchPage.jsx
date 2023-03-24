@@ -89,7 +89,7 @@ export function SearchPage() {
 
   return (
     <div className="flex flex-col flex-grow mt-4 w-full">
-      <div className="title flex flex-row font-semibold text-xl">
+      <div className="title flex flex-row font-semibold text-xl dark:text-white">
         <FormattedMessage
             id="Extended search"
             defaultMessage="Default error message"

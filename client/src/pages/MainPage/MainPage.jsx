@@ -23,7 +23,7 @@ export function MainPage() {
   return (
     <div
       className="flex flex-col flex-grow mt-4 w-full bg-[url('https://source.unsplash.com/random/?hospitals')] bg-cover">
-      <div className="flex flex-row flex-grow my-auto justify-between">
+      <div className="flex flex-row flex-grow my-auto justify-between ">
         <motion.div
           initial={{
             x: -1000,
