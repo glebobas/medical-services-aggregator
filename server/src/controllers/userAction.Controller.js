@@ -268,7 +268,7 @@ exports.NewEntry = async (req, res) => {
                 clinicId
             })
 
-            // mailer(email, subject, textToEmail)
+            mailer(email, subject, textToEmail)
             return res.status(200).json({user: updatedShedule})
         }
 
