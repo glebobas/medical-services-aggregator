@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       Clinic.belongsToMany(models.User, { through: 'UserClinic', foreignKey: 'clinicId' });
       Clinic.hasMany(models.Doctor, { foreignKey: 'clinicId' });
       Clinic.hasMany(models.Rating, { foreignKey: 'clinicId' });
+      Clinic.hasMany(models.Message, { foreignKey: 'clinicId' });
       Clinic.belongsTo(models.Address, { foreignKey: 'addressId' });
       Clinic.hasMany(models.Review, { foreignKey: 'clinicId' });
 

@@ -1,39 +1,72 @@
-import React, { useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { CalendarIcon } from '@heroicons/react/20/solid';
 import {FormattedMessage} from "react-intl";
+import {AuthContext} from "../../context";
+import {nanoid} from "nanoid";
 
 export function Note() {
   const [showModal, setShowModal] = useState(false);
-  const [selectedPositionId, setSelectedPositionId] = useState(null);
-  const [positions, setPositions] = useState([
-    {
-      id: 1,
-      title: 'Запись к хирургу',
-      department: 'Клиника Рассвет создана',
-      closeDate: '2020-01-07',
-      closeDateFull: 'January 7, 2020',
-    },
-    {
-      id: 2,
-      title: 'Запись к хирургу',
-      department: 'Клиника Рассвет создана',
-      closeDate: '2020-01-07',
-      closeDateFull: 'January 7, 2020',
-    },
-    {
-      id: 3,
-      title: 'Запись к хирургу',
-      department: 'Клиника Рассвет создана',
-      closeDate: '2020-01-07',
-      closeDateFull: 'January 7, 2020',
-    },
-  ]);
+  const [selectedPositionId, setSelectedPositionId] = useState(0);
+  const [positions, setPositions] = useState([]);
+  const [elementId, setElementId] = useState('')
+
+    const {
+        showModalSheduleRec,
+        setShowModalSheduleRec,
+        setShowModalMini,
+        setShowModalMiniText,
+    } = useContext(AuthContext)
 
 
-  const handleDelete = () => {
-    const updatedPositions = positions.filter((position) => position.id !== selectedPositionId);
-    setPositions(updatedPositions);
-    setShowModal(false);
+  const token = localStorage.getItem("jwtToken")
+
+  useEffect(() => {
+      const fetchData = async () => {
+        const response = await  fetch('/user/messages', {
+          headers: {
+            'authorization': 'Bearer ' + token,
+          }
+        })
+        const data = await response.json();
+        if(data.length) {
+            setPositions(data);
+        }
+      };
+      fetchData();
+    }, []);
+
+const handlerFirstRemove = async (e) => {
+
+    setElementId(e.target.id)
+    setSelectedPositionId(Number(e.target.id));
+    setShowModal(true)
+}
+  const handleDelete = async (e) => {
+
+      const token = localStorage.getItem("jwtToken")
+
+      const response = await fetch('/user/messages', {
+          method: "DELETE",
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({messageId: elementId})
+      })
+
+      const data = await response.json()
+
+      if (response.status === 200) {
+          const updatedPositions = positions.filter((position) => Number(position.id) !== selectedPositionId);
+          setPositions(updatedPositions);
+          setShowModal(false);
+      }
+      if (response.status !== 200) {
+          setShowModalMini(true)
+          setShowModalMiniText(data)
+          setShowModalSheduleRec(false)
+      }
+
   };
 
   return (
@@ -46,49 +79,52 @@ export function Note() {
         />
       </h3>
       <div className=' mt-4 p-2 w-full justify-center aligoverflow-hidden bg-white shadow sm:rounded-md'>
-        <ul role='list' className='divide-y divide-gray-200'>
-          {positions.map((position) => (
-            <li key={position.id}>
-              <a className='block hover:bg-gray-50'>
-                <div className='flex items-center px-4 py-4 sm:px-6'>
-                  <div className='min-w-0 flex-1 sm:flex sm:items-center sm:justify-between'>
-                    <div className='truncate'>
-                      <div className='flex text-sm'>
-                        <p className='truncate font-medium text-green-600'>{position.title}</p>
-                        <p className='ml-1 flex-shrink-0 font-normal text-gray-500'>в {position.department}</p>
-                      </div>
-                      <div className='mt-2 flex'>
-                        <div className='flex items-center text-sm text-gray-500'>
-                          <CalendarIcon className='mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400' aria-hidden='true' />
-                          <p>
+          {positions && <ul role='list' className='divide-y divide-gray-200'>
+              {positions && positions.map((position) => (
+                  <li key={nanoid()}>
+                      <a className='block hover:bg-gray-50'>
+                          <div className='flex items-center px-4 py-4 sm:px-6'>
+                              <div className='min-w-0 flex-1 sm:flex sm:items-center sm:justify-between'>
+                                  <div className='truncate'>
+                                      <div className='flex text-sm'>
+                                          <p className='truncate font-medium text-green-600'>{position?.subject}</p>
+                                          <p className='ml-1 flex-shrink-0 font-normal text-gray-500'>{position?.textMessage}</p>
+                                      </div>
+                                      <div className='mt-2 flex'>
+                                          <div className='flex items-center text-sm text-gray-500'>
+                                              <CalendarIcon className='mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400'
+                                                            aria-hidden='true'/>
+                                              <p>
 
-                            <FormattedMessage
-                                id="The date of an appointment"
-                                defaultMessage="Default error message"
-                            />
-                            <time dateTime={position.closeDate}>{position.closeDateFull}</time>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className='mt-4 flex-shrink-0 sm:mt-0 sm:ml-5'>
-                      <button
-                        type='button'
-                        className='rounded py-2 px-5 justify-around items-center px-2 py-1 border border-transparent text-base font-medium shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
-                        onClick={() => setShowModal(true)}
-                      >
-                        <FormattedMessage
-                            id="Remove"
-                            defaultMessage="Default error message"
-                        />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </a>
-            </li>
-          ))}
-        </ul>
+                                                  <FormattedMessage
+                                                      id="The date of an appointment"
+                                                      defaultMessage="Default error message"
+                                                  />
+                                                  <time
+                                                      dateTime={position?.dateAppointment}>{position?.dateAppointment} {position?.time}</time>
+                                              </p>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div className='mt-4 flex-shrink-0 sm:mt-0 sm:ml-5'>
+                                      <button
+                                          type='button'
+                                          id={position?.id}
+                                          className='rounded py-2 px-5 justify-around items-center px-2 py-1 border border-transparent text-base font-medium shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                                          onClick={handlerFirstRemove}
+                                      >
+                                          <FormattedMessage
+                                              id="Remove"
+                                              defaultMessage="Default error message"
+                                          />
+                                      </button>
+                                  </div>
+                              </div>
+                          </div>
+                      </a>
+                  </li>
+              ))}
+          </ul>}
       </div>
       {showModal && (
         <div className='fixed z-10 inset-0 overflow-y-auto'>
@@ -147,6 +183,7 @@ export function Note() {
           <div className='bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse'>
             <button
               type='button'
+              id={elementId || ''}
               className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm'
               onClick={handleDelete}
             >

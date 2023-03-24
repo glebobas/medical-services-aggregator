@@ -10,15 +10,17 @@ export function ShedulRecModal({props}) {
   const {
     showModalSheduleRec,
     setShowModalSheduleRec,
+    setShowModalMini,
+    setShowModalMiniText,
   } = useContext(AuthContext)
 
   const token = localStorage.getItem("jwtToken")
 
   const cancelButtonRef = useRef(null)
 
-  function handleClickModalShedule() {
-    console.log(idDoctor, sheduleIdOneBlock)
-    fetch('/user/shedule/visit', {
+const handleClickModalShedule = async () => {
+    // console.log(idDoctor, sheduleIdOneBlock)
+    const response = await fetch('/user/shedule/visit', {
       method: "PATCH",
       headers: {
         'Content-Type': 'application/json',
@@ -26,10 +28,19 @@ export function ShedulRecModal({props}) {
       },
       body: JSON.stringify({sheduleId: sheduleIdOneBlock.sheduleId, statusAppointment: 'pending'})
     })
-      .then(response => response.json())
-      .then(data => setStaff(data))
-      .catch(error => console.log(error));
+
+      const data = await response.json()
+
+
+  if (response.status === 200) {
+    setStaff(data)
     setShowModalSheduleRec(false)
+  }
+  if (response.status !== 200) {
+    setShowModalMini(true)
+    setShowModalMiniText(data)
+    setShowModalSheduleRec(false)
+  }
   }
 
   return (
