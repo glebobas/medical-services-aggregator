@@ -122,7 +122,6 @@ export function ClinicList({props}) {
                 />
                 <SortButtonDefault allClinicsData={allClinicsData} setAllClinicsData={setAllClinicsData}/>
               </th>
-
           </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">

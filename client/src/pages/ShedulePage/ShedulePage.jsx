@@ -3,6 +3,7 @@ import {nanoid} from "nanoid";
 import {motion} from "framer-motion"
 import SortButtonDefault from "../../components/SortButton/SortButtonDefault";
 import Rating from "../../components/Rating/Rating";
+import {FormattedMessage} from "react-intl";
 
 export function ShedulePage() {
 
@@ -32,14 +33,45 @@ export function ShedulePage() {
 
   return (
     <div className="head">
-      <div className="col-span-5 font-semibold text-xl mt-4 dark:text-white">Свободные блоки на сегодня</div>
-
+      <div className="col-span-5 font-semibold text-xl mt-4">
+        <FormattedMessage
+            id='Free schedule slots today'
+            defaultMessage="Default error message"
+        />
+      </div>
+      <SortButtonDefault shedule={shedule} setShedule={setShedule}/>
       <div className="grid grid-cols-5 mt-4">
-        <div className="bg-gray-200 py-2 px-4 rounded-l flex flex-row items-center">Доктор</div>
-        <div className="bg-gray-200 py-2 px-4 flex flex-row items-center">Специальность</div>
-        <div className="bg-gray-200 py-2 px-4 flex flex-row items-center">Клиника</div>
-        <div className="bg-gray-200 py-2 px-4 flex flex-row items-center">Телефон</div>
-        <div className="bg-gray-200 py-2 px-4 rounded-r flex flex-row items-center">Рейтинг <SortButtonDefault shedule={shedule} setShedule={setShedule}/></div>
+        <div className="bg-gray-200 py-2 px-4 rounded-l">
+          <FormattedMessage
+              id='Doctor'
+              defaultMessage="Default error message"
+          />
+        </div>
+        <div className="bg-gray-200 py-2 px-4">
+          <FormattedMessage
+              id='Speciality'
+              defaultMessage="Default error message"
+          />
+        </div>
+        <div className="bg-gray-200 py-2 px-4">
+          <FormattedMessage
+              id='Clinic'
+              defaultMessage="Default error message"
+          />
+        </div>
+        <div className="bg-gray-200 py-2 px-4">
+          <FormattedMessage
+              id='Phone number'
+              defaultMessage="Default error message"
+          />
+        </div>
+        <div className="bg-gray-200 py-2 px-4 rounded-r">
+          <FormattedMessage
+              id='Rating'
+              defaultMessage="Default error message"
+          />
+
+        </div>
       </div>
 
       {shedule?.map((doctor, i) => (
