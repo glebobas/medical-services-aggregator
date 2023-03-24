@@ -1,4 +1,5 @@
-const {Doctor, Clinic, Address, Speciality, Rating, Slot,Review, Shedule} = require("../../db/models");
+const {Doctor, Clinic, Address, Speciality, Rating, Slot, Review, Shedule, User} = require("../../db/models");
+const {mailer} = require("./mailer.Controller");
 
 exports.DeleteReview = async (req, res) => {
     try {
@@ -28,7 +29,7 @@ exports.EditReviewWithRating = async (req, res) => {
     try {
         const {reviewId, doctorId, clinicId, reviewText, rating} = req.body;
         const userId = res?.locals?.user?.id
- 
+
         //* апдейтим отзыв
 
         if (reviewText && clinicId) {
@@ -92,8 +93,7 @@ exports.EditReviewWithRating = async (req, res) => {
                 return res.status(404).json({message: 'Doctor\'s rating not found'});
             }
             return res.status(200).json({message: 'Update was successful'});
-        }
-        else return res.status(409).json({message: 'Fill necessary data'})
+        } else return res.status(409).json({message: 'Fill necessary data'})
 
 
     } catch (error) {
@@ -119,7 +119,7 @@ exports.NewReview = async (req, res) => {
                     return res.status(404).json({message: 'Error creating review for doctor'})
                 }
             }
-            if(review) {
+            if (review) {
                 return res.status(404).json({message: 'You have already added review for this doctor'})
             }
         }
@@ -137,8 +137,7 @@ exports.NewReview = async (req, res) => {
             if (review) {
                 return res.status(404).json({message: 'You have already added review for this clinic'})
             }
-        }
-        else return res.status(409).json({message: 'Fill necessary data'})
+        } else return res.status(409).json({message: 'Fill necessary data'})
     } catch (e) {
         console.error(e)
         res.status(500).json({message: 'Internal server error'});
@@ -149,7 +148,7 @@ exports.NewReview = async (req, res) => {
 exports.NewRating = async (req, res) => {
     const {doctorId, clinicId, clinicRating, doctorRating} = req.body;
     const userId = res?.locals?.user?.id
-    console.log('userId=====>', userId)
+    // console.log('userId=====>', userId)
     try {
         if (doctorId && doctorRating) {
             const rating = await Rating.findOne({where: {userId, doctorId}})
@@ -162,7 +161,7 @@ exports.NewRating = async (req, res) => {
                     return res.status(404).json({message: 'Error adding rating for doctor'})
                 }
             }
-            if(rating) {
+            if (rating) {
                 return res.status(404).json({message: 'You have already rate this doctor'})
             }
         }
@@ -180,8 +179,7 @@ exports.NewRating = async (req, res) => {
             if (rating) {
                 return res.status(404).json({message: 'You have already added rating for this clinic'})
             }
-        }
-        else return res.status(409).json({message: 'Fill necessary data'})
+        } else return res.status(409).json({message: 'Fill necessary data'})
     } catch (e) {
         console.error(e)
         res.status(500).json({message: 'Internal server error'});
@@ -197,18 +195,46 @@ exports.NewEntry = async (req, res) => {
 
     try {
 
+        const existingUser = await User.findOne({
+            where: {id: res.locals.user.id},
+            attributes: {exclude: ['password']},
+            raw: true,
+            nest: true
+        })
+
+        const email = existingUser.email
+
+
         const [nmbOfUpdatedShedule, updatedShedule] = await Shedule.update({statusAppointment, userId}, {
             where: {
                 id: Number(sheduleId),
             },
+            include: [{model: Doctor, include: [{model: Speciality}]}, {model: User}, {model: Slot}],
             returning: true,
             plain: true,
         })
-        if (nmbOfUpdatedShedule === 0) {
+
+
+        // console.log("-> existedShedule", existedShedule);
+
+
+        if (!updatedShedule) {
             return res.status(404).json({message: 'Error while updating shedule'});
         }
-
-        res.status(200).json({user: updatedShedule})
+        if (updatedShedule) {
+            const existedAppointmentInfo = await Shedule.findOne({
+                where: {
+                    id: Number(sheduleId),
+                },
+                include: [{model: Doctor, include: [{model: Speciality}]}, {model: User}, {model: Slot}],
+                returning: true,
+                plain: true,
+            })
+            const textToEmail = `Dear, ${existedAppointmentInfo.User.firstName}! You have been successful create an appointment with doctor ${existedAppointmentInfo.Doctor.firstName} ${existedAppointmentInfo.Doctor.lastName} (speciality: ${existedAppointmentInfo.Doctor.Speciality.name}) on ${existedAppointmentInfo.date}, ${existedAppointmentInfo.Slot.timeGap}`
+            const subject = 'Appointment at medical agregator'
+            mailer(email, subject, textToEmail)
+            return res.status(200).json({user: updatedShedule})
+        }
 
 
     } catch (err) {

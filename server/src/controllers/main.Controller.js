@@ -557,7 +557,7 @@ exports.DoctorsShedule = async (req, res) => { //* расписание всех
             const clinicName = doctor.Clinic.name;
             const timeGap = doctor.Shedules.Slot.timeGap
             const status = doctor.Shedules.statusAppointment;
-            const slotId = doctor.Shedules.Slot.id
+            const slotId = doctor.Shedules.Slot.id;
             const slots = [{timeGap, slotId, status}];
             const avatar = doctor.avatar
 
@@ -651,7 +651,7 @@ exports.DoctorsShedule = async (req, res) => { //* расписание всех
 
         if (!res?.locals?.user?.id) {
 
-
+console.log("-> unreg++++++++++++");
 
             readyDoctorList = groupedDoctors.map(
                 doctor => {
