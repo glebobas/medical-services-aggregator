@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {nanoid} from "nanoid";
 import {motion} from "framer-motion"
 import SortButtonDefault from "../../components/SortButton/SortButtonDefault";
+import Rating from "../../components/Rating/Rating";
 import {FormattedMessage} from "react-intl";
 
 export function ShedulePage() {
@@ -84,7 +85,7 @@ export function ShedulePage() {
           <div className="px-2 py-2"><span className="bg-green-100 px-2 py-1 rounded">{doctor.speciality}</span></div>
           <div className="px-2 py-2">{doctor.clinic}</div>
           <div className="px-2 py-2">{doctor.phone}</div>
-          <div className="px-2 py-2">{doctor.doctorRating}</div>
+          <div className="px-2 py-2"><Rating rat={doctor.doctorRating} /></div>
           <div className="flex flex-row gap-2 pl-2">
             {doctor.slots.map(date => (
               <div key={date.slotId}
