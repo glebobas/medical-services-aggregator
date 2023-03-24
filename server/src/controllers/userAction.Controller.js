@@ -1,5 +1,6 @@
-const {Doctor, Clinic, Address, Speciality, Rating, Slot, Review, Shedule, User} = require("../../db/models");
+const {Doctor, Message, Clinic, Address, Speciality, Rating, Slot, Review, Shedule, User} = require("../../db/models");
 const {mailer} = require("./mailer.Controller");
+const moment = require("moment/moment");
 
 exports.DeleteReview = async (req, res) => {
     try {
@@ -215,9 +216,6 @@ exports.NewEntry = async (req, res) => {
         })
 
 
-        // console.log("-> existedShedule", existedShedule);
-
-
         if (!updatedShedule) {
             return res.status(404).json({message: 'Error while updating shedule'});
         }
@@ -232,6 +230,7 @@ exports.NewEntry = async (req, res) => {
             })
             const textToEmail = `Dear, ${existedAppointmentInfo.User.firstName}! You have been successful create an appointment with doctor ${existedAppointmentInfo.Doctor.firstName} ${existedAppointmentInfo.Doctor.lastName} (speciality: ${existedAppointmentInfo.Doctor.Speciality.name}) on ${existedAppointmentInfo.date}, ${existedAppointmentInfo.Slot.timeGap}`
             const subject = 'Appointment at medical agregator'
+            const response = await fetch('/user/')
             mailer(email, subject, textToEmail)
             return res.status(200).json({user: updatedShedule})
         }
@@ -241,5 +240,44 @@ exports.NewEntry = async (req, res) => {
         console.error(err);
         res.status(500).json({message: 'Server error'});
     }
+}
+
+exports.NewUserMessage = async (req, res) => {
+    try {
+        const {
+            textMessage,
+            subject,
+            status,
+            clinicName,
+            doctorName,
+            dateAppointment,
+            time,
+            doctorSpeciality,
+            doctorId,
+            clinicId
+        } = req.body
+        const userId = res?.locals?.user?.id
+
+        const date = moment().format('YYYY-MM-DD HH:mm:ss.SSS Z');
+
+        const newMessage = await Message.create({
+            userId,
+            textMessage,
+            subject,
+            status,
+            clinicName,
+            doctorName,
+            dateAppointment,
+            time,
+            doctorSpeciality,
+            dateMessage: date,
+            doctorId,
+            clinicId
+        })
+        console.log("-> newMessage", newMessage);
+    } catch (e) {
+        console.error(e)
+    }
+
 
 }
