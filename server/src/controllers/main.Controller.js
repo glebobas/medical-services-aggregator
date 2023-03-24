@@ -537,14 +537,52 @@ exports.DoctorsShedule = async (req, res) => { //* расписание всех
                 },
                 {
                     model: Shedule, where: {
-                        date
-                    }
+                        date: "2023-03-25", //!  изменить на moment().format('YYYY-MM-DD HH:mm:ss.SSS Z'), разобраться с часовым поясом
+                        statusAppointment: 'vacant'
+                    }, include: [{model: Slot}]
                 }
             ],
             raw: true,
             nest: true
         });
-        // console.log("-> doctors", doctors);
+
+
+
+        const groupedDoctors = doctors.reduce((acc, doctor) => {
+            const { id, firstName, lastName, phone, adultPatients, childrenPatients } = doctor;
+            const doctorName = `${firstName} ${lastName}`;
+            const speciality = doctor.Speciality.name;
+            const { countryName, cityName, streetName } = doctor.Clinic.Address;
+            const address = `${countryName}, ${cityName}, ${streetName}`;
+            const clinicName = doctor.Clinic.name;
+            const timeGap = doctor.Shedules.Slot.timeGap
+            const status = doctor.Shedules.statusAppointment;
+            const slotId = doctor.Shedules.Slot.id
+            const slots = [{timeGap, slotId, status}];
+            const avatar = doctor.avatar
+
+            const existingDoctor = acc.find(d => d.doctorId === id);
+            if (existingDoctor) {
+                existingDoctor.slots = existingDoctor.slots.concat(slots);
+            } else {
+                acc.push({
+                    doctorName,
+                    phone,
+                    clinicName,
+                    doctorId: id,
+                    adultPatients,
+                    childrenPatients,
+                    speciality,
+                    address,
+                    slots,
+                    avatar
+                });
+            }
+
+            return acc;
+        }, []);
+
+
 
         const doctorRating = await Rating.findAll({attributes: ['doctorRating', 'doctorId']})
 
@@ -576,37 +614,35 @@ exports.DoctorsShedule = async (req, res) => { //* расписание всех
 
             const ratingToUser = await Rating.findAll({where: {userId: res.locals.user.id}})
 
-            readyDoctorList = doctors.map(
+            readyDoctorList = groupedDoctors.map(
                 doctor => {
-                    const fullname = `${doctor.firstName} ${doctor.lastName}`
-                    const fulladdress = `${doctor.Clinic.Address.countryName}, ${doctor.Clinic.Address.cityName}, ${doctor.Clinic.Address.streetName}`
+
                     let docRate;
                     arrDoc.forEach(el => {
-                        if (Number(el[0]) === doctor.id) {
+                        if (Number(el[0]) === doctor.doctorId) {
                             docRate = el[1]
                         }
                     })
                     let ownRatingUserDoc;
                     ratingToUser?.forEach(element => {
-                        if (element.userId === res.locals.user.id && doctor.id === element.doctorId) {
+                        if (element.userId === res.locals.user.id && doctor.doctorId === element.doctorId) {
                             ownRatingUserDoc = element.doctorRating
                         }
                     })
                     return {
                         doctorId: doctor.id,
-                        name: fullname,
+                        doctorName: doctor.doctorName,
                         phone: doctor.phone,
-                        address: fulladdress,
-                        speciality: doctor.Speciality.name,
-                        clinic: doctor.Clinic.name,
-                        email: doctor.email,
-                        generalTiming: doctor.generalTiming,
+                        address: doctor.address,
+                        speciality: doctor.speciality,
+                        clinic: doctor.clinicName,
                         adultPatients: doctor.adultPatients,
                         childrenPatients: doctor.childrenPatients,
-                        generalInfo: doctor.generalInfo,
                         doctorRating: docRate,
                         alreadyScoredPoints: ownRatingUserDoc,
                         avatar: doctor.avatar,
+                        slots: doctor.slots
+
                     }
                 }
             )
@@ -615,44 +651,40 @@ exports.DoctorsShedule = async (req, res) => { //* расписание всех
 
         if (!res?.locals?.user?.id) {
 
-            readyDoctorList = doctors.map(
+
+
+            readyDoctorList = groupedDoctors.map(
                 doctor => {
-                    const fullname = `${doctor.firstName} ${doctor.lastName}`
-                    const fulladdress = `${doctor.Clinic.Address.countryName}, ${doctor.Clinic.Address.cityName}, ${doctor.Clinic.Address.streetName}`
                     let docRate;
                     arrDoc.forEach(el => {
-                        if (Number(el[0]) === doctor.id) {
+                        if (Number(el[0]) === doctor.doctorId) {
                             docRate = el[1]
                         }
                     })
 
                     return {
                         doctorId: doctor.id,
-                        name: fullname,
+                        doctorName: doctor.doctorName,
                         phone: doctor.phone,
-                        address: fulladdress,
-                        speciality: doctor.Speciality.name,
-                        clinic: doctor.Clinic.name,
-                        email: doctor.email,
-                        generalTiming: doctor.generalTiming,
+                        address: doctor.address,
+                        speciality: doctor.speciality,
+                        clinic: doctor.clinicName,
                         adultPatients: doctor.adultPatients,
                         childrenPatients: doctor.childrenPatients,
-                        generalInfo: doctor.generalInfo,
                         doctorRating: docRate,
                         avatar: doctor.avatar,
+                        slots: doctor.slots
                     }
                 }
             )
 
         }
 
-        // if (!readyDoctorList.length) {
-        //     return res.status(409).json({error: "No doctors were found!"});
-        // }
+        if (!readyDoctorList.length) {
+            return res.status(409).json({error: "No doctors were found!"});
+        }
 
-
-        // res.json({readyDoctorList})
-        res.json({doctors})
+        res.json({readyDoctorList})
 
 
 

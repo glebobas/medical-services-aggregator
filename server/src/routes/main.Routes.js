@@ -23,7 +23,7 @@ router.get('/addresses', GetAllAddresses) //* получаем все адрес
 
 router.get("/somedoctors", tokenToLocals, DoctorsFromSearch); //* получаем список врачей после ввода необходимых данных в поиске
 
-router.get('/doctor/:doctorId', tokenToLocals, ExactDoctor); //* получаем доктора после выбора из поисковой выдачи, его расписание, включая приёмы юзера, если последний залогинен
+router.get('/doctor', tokenToLocals, ExactDoctor); //* получаем доктора после выбора из поисковой выдачи, его расписание, включая приёмы юзера, если последний залогинен
 
 router.get("/clinic", tokenToLocals, ExactClinic); //* получаем клинику после выбора из поисковой выдачи
 

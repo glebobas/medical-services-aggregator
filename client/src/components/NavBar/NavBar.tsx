@@ -29,17 +29,19 @@ function classNames(...classes: string[]) {
 }
 
 export function NavBar() {
-  const getUser = useSelector((store: any) => store?.login?.user?.username)
+  const username = useSelector((store: any) => store?.login?.user?.username)
+  const avatarGoogle = useSelector((store: any) => store?.login?.user?.avatarGoogle)
   const token = localStorage.getItem("jwtToken")
   const dispatch = useDispatch()
   const [user, setUser] = useState<string | undefined>('')
   const navigate = useNavigate();
-  const {locale, setLocale} = useContext<AuthContextType>(AuthContext)
+  // const {avatarGoogle} = useContext<AuthContextType>(AuthContext)
+
 
   useEffect(() => {
     // Обновляет информацию в хранилище после того как юзер залогинился
 
-    if (!getUser && token) {
+    if (!username && token) {
       (async () => {
         const response = await fetch('/auth/user', {
           method: 'POST',
@@ -49,11 +51,12 @@ export function NavBar() {
           },
         })
         const user = await response.json()
+        console.log("-> user", user);
         dispatch({type: Types.LOGIN_SUCCESS, payload: user});
       })()
     }
-    setUser(getUser)
-  }, [token, getUser, dispatch])
+    setUser(username)
+  }, [token, username, dispatch])
 
   const redir = (to: any) => {
     navigate(to);
@@ -277,7 +280,7 @@ export function NavBar() {
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
-                              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                              src={avatarGoogle || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"}
                               alt=""
                             />
                           </Menu.Button>

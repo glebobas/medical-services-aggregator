@@ -6,7 +6,7 @@ import {FormattedMessage} from "react-intl";
 
 export function ShedulRecModal({props}) {
   const {idDoctor, sheduleIdOneBlock, setStaff} = props
-  // console.log("-> idDoctor", shedule);
+  console.log("-> idDoctor", setStaff);
   const {
     showModalSheduleRec,
     setShowModalSheduleRec,
