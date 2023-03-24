@@ -71,7 +71,7 @@ const handlerFirstRemove = async (e) => {
 
   return (
     <div className='mt-4'>
-      <h3 className='font-sans font-semibold text-lg subpixel-antialiased not-italic text-center'>
+      <h3 className='font-sans font-semibold text-lg subpixel-antialiased not-italic pl-4 mt-6'>
 
         <FormattedMessage
             id="Incoming messages"
@@ -87,7 +87,7 @@ const handlerFirstRemove = async (e) => {
                               <div className='min-w-0 flex-1 sm:flex sm:items-center sm:justify-between'>
                                   <div className='truncate'>
                                       <div className='flex text-sm'>
-                                          <p className='truncate font-medium text-green-600'>{position?.subject}</p>
+                                          <p className='text-ellipsis font-medium text-green-600'>{position?.subject}</p>
                                           <p className='ml-1 flex-shrink-0 font-normal text-gray-500'>{position?.textMessage}</p>
                                       </div>
                                       <div className='mt-2 flex'>
@@ -100,7 +100,9 @@ const handlerFirstRemove = async (e) => {
                                                       id="The date of an appointment"
                                                       defaultMessage="Default error message"
                                                   />
+                                                {' '}
                                                   <time
+                                                    className="font-bold"
                                                       dateTime={position?.dateAppointment}>{position?.dateAppointment} {position?.time}</time>
                                               </p>
                                           </div>
