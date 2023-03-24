@@ -28,7 +28,7 @@ exports.EditReviewWithRating = async (req, res) => {
     try {
         const {reviewId, doctorId, clinicId, reviewText, rating} = req.body;
         const userId = res?.locals?.user?.id
-
+ 
         //* апдейтим отзыв
 
         if (reviewText && clinicId) {
@@ -149,7 +149,7 @@ exports.NewReview = async (req, res) => {
 exports.NewRating = async (req, res) => {
     const {doctorId, clinicId, clinicRating, doctorRating} = req.body;
     const userId = res?.locals?.user?.id
-
+    console.log('userId=====>', userId)
     try {
         if (doctorId && doctorRating) {
             const rating = await Rating.findOne({where: {userId, doctorId}})

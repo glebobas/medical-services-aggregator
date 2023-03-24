@@ -95,8 +95,8 @@ function AddReview(props) {
         body: JSON.stringify({clinicId: id, reviewText: dataForm.reviewText}),
     });
     responseOne.json().then((r) => console.log('responseOne==========>',r))
-    const responseTwo = await fetch('/profile/edit', {
-      method: 'PATCH',
+    const responseTwo = await fetch('/user/rating/new', {
+      method: 'POST',
       headers: {
           'Content-Type': 'application/json',
           'authorization': 'Bearer ' + token,

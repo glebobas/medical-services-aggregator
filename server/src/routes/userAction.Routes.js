@@ -12,7 +12,7 @@ router.post('/review/new', authenticate, NewReview) //* добавляем но�
 
 router.patch('/shedule/visit', authenticate, NewEntry); //* обновляем в расписании состояние с null на pending или cancelled
 
-router.patch('/rating/new', authenticate, NewRating) //* добавляем новый рейтинг
+router.post('/rating/new', authenticate, NewRating) //* добавляем новый рейтинг
 
 
 module.exports = router;
