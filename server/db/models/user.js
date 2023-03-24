@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Rating, { foreignKey: 'userId' });
       User.hasMany(models.Shedule, { foreignKey: 'userId' });
       User.hasMany(models.Review, { foreignKey: 'userId' });
+      User.hasMany(models.Message, { foreignKey: 'userId' });
       User.belongsToMany(models.Doctor, { through: 'UserDoctor', foreignKey: 'userId' });
       User.belongsToMany(models.Clinic, { through: 'UserClinic', foreignKey: 'userId' });
     }

@@ -9,6 +9,7 @@ const {
 const tokenToLocals = require("../middleware/reslocalsToken.middleware");
 const {DoctorsFromSearch, ExactDoctor, GetAllDoctors} = require("../controllers/doctor.Controller");
 const {ExactClinic} = require("../controllers/clinic.Controller");
+const {NewUserMessage} = require("../controllers/userAction.Controller");
 
 
 router.get("/alldata/:inputText", tokenToLocals, GetAllClinicAndDoctors); //* получаем все клиники и врачей ПОСЛЕ ввода в инпут поисковой строки
@@ -36,6 +37,9 @@ router.patch('/shedule/slots', ToCurrentTimeSlots); //* для эндпоинт�
 router.get('/random', RandomDocClinic) //* рандомайзер поиска врача или клиник
 
 router.get('/shedule', tokenToLocals, DoctorsShedule) //* расписание врачей на текущий день
+
+
+
 
 
 module.exports = router;

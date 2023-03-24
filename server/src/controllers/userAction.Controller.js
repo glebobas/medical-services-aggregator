@@ -1,5 +1,6 @@
-const {Doctor, Clinic, Address, Speciality, Rating, Slot, Review, Shedule, User} = require("../../db/models");
+const {Doctor, Message, Clinic, Address, Speciality, Rating, Slot, Review, Shedule, User} = require("../../db/models");
 const {mailer} = require("./mailer.Controller");
+const moment = require("moment/moment");
 
 exports.DeleteReview = async (req, res) => {
     try {
@@ -188,9 +189,10 @@ exports.NewRating = async (req, res) => {
 
 
 exports.NewEntry = async (req, res) => {
-    console.log("-> req", req);
+
 
     const {sheduleId, statusAppointment} = req.body
+
 
     const userId = res?.locals?.user?.id
 
@@ -198,43 +200,75 @@ exports.NewEntry = async (req, res) => {
     try {
 
         const existingUser = await User.findOne({
-            where: {id: res.locals.user.id},
+            where: {id: res?.locals?.user?.id},
             attributes: {exclude: ['password']},
             raw: true,
             nest: true
         })
+        console.log("-> existingUser", existingUser);
+        if (!userId) {
+            return res.status(400).json({error: 'You should login firstly'});
+        }
 
-        const email = existingUser.email
+        // const email = existingUser.email
+        const email = 'medical.app.work@gmail.com'
 
 
         const [nmbOfUpdatedShedule, updatedShedule] = await Shedule.update({statusAppointment, userId}, {
             where: {
                 id: Number(sheduleId),
             },
-            include: [{model: Doctor, include: [{model: Speciality}]}, {model: User}, {model: Slot}],
+            include: [{model: Doctor, include: [{model: Speciality},{model: Clinic, include:[{model: Address}]}]}, {model: User}, {model: Slot}],
             returning: true,
             plain: true,
         })
 
 
-        // console.log("-> existedShedule", existedShedule);
-
-
         if (!updatedShedule) {
-            return res.status(404).json({message: 'Error while updating shedule'});
+            return res.status(404).json({error: 'Error while updating shedule'});
         }
         if (updatedShedule) {
             const existedAppointmentInfo = await Shedule.findOne({
                 where: {
                     id: Number(sheduleId),
                 },
-                include: [{model: Doctor, include: [{model: Speciality}]}, {model: User}, {model: Slot}],
+                include: [{model: Doctor, include: [{model: Speciality},{model: Clinic, include:[{model: Address}]}]}, {model: User}, {model: Slot}],
                 returning: true,
                 plain: true,
             })
-            const textToEmail = `Dear, ${existedAppointmentInfo.User.firstName}! You have been successful create an appointment with doctor ${existedAppointmentInfo.Doctor.firstName} ${existedAppointmentInfo.Doctor.lastName} (speciality: ${existedAppointmentInfo.Doctor.Speciality.name}) on ${existedAppointmentInfo.date}, ${existedAppointmentInfo.Slot.timeGap}`
+            const clinicName = existedAppointmentInfo.Doctor.Clinic.name
+            const doctorName = `${existedAppointmentInfo.Doctor.firstName} ${existedAppointmentInfo.Doctor.lastName}`
+            const dateAppointment = existedAppointmentInfo.date;
+            const time = existedAppointmentInfo.Slot.timeGap;
+            const doctorSpeciality = existedAppointmentInfo.Doctor.Speciality.name;
+            const doctorId = existedAppointmentInfo.Doctor.id;
+            const clinicId = existedAppointmentInfo.Doctor.Clinic.id
+
+            const textToEmail = `Dear, ${existedAppointmentInfo.User.firstName}! You have been successful create an appointment with 
+            doctor ${existedAppointmentInfo.Doctor.firstName} ${existedAppointmentInfo.Doctor.lastName} 
+            (speciality: ${existedAppointmentInfo.Doctor.Speciality.name}) on ${existedAppointmentInfo.date}, ${existedAppointmentInfo.Slot.timeGap} 
+            at ${existedAppointmentInfo.Doctor.Clinic.name}. Phone number of the doctor ${existedAppointmentInfo.Doctor.phone}. 
+            Address - ${existedAppointmentInfo.Doctor.Clinic.Address.countryName}, ${existedAppointmentInfo.Doctor.Clinic.Address.cityName}, 
+            ${existedAppointmentInfo.Doctor.Clinic.Address.streetName}`
             const subject = 'Appointment at medical agregator'
-            mailer(email, subject, textToEmail)
+            const date = moment().format('YYYY-MM-DD HH:mm:ss.SSS Z');
+
+            const newMessage = await Message.create({
+                userId,
+                textMessage: textToEmail,
+                subject,
+                status: false,
+                clinicName,
+                doctorName,
+                dateAppointment,
+                time,
+                doctorSpeciality,
+                dateMessage: date,
+                doctorId,
+                clinicId
+            })
+
+            // mailer(email, subject, textToEmail)
             return res.status(200).json({user: updatedShedule})
         }
 
@@ -243,5 +277,42 @@ exports.NewEntry = async (req, res) => {
         console.error(err);
         res.status(500).json({message: 'Server error'});
     }
+}
+
+
+exports.GetUserMessage = async (req, res) => {
+    try {
+        const userId = res?.locals?.user?.id
+        const allMessagesNative = await Message.findAll({where: {userId}, raw: true, nest: true});
+
+        if (allMessagesNative.length) {
+            res.status(200).json(allMessagesNative);
+        }
+        if (allMessagesNative.length === 0) {
+            res.status(400).json({error: 'No messages found'});
+        }
+
+    } catch (e) {console.error(e);  res.status(500).json({message: 'Server error'});
+    }
+
+}
+
+exports.DeleteUserMessage = async (req, res) => {
+    try {
+        const {messageId} = req.body
+
+        const delMessage = await Message.destroy({where: {id: messageId}})
+
+        if (delMessage) {
+            res.status(200).json({message: 'Deleting was successful!'});
+        }
+        if (delMessage === 0) {
+            res.status(400).json({error: 'Error while deleting message!'});
+        }
+
+
+    } catch (e) { console.error(e);  res.status(500).json({message: 'Server error'});
+    }
+
 
 }

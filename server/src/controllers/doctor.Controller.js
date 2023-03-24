@@ -193,7 +193,6 @@ exports.DoctorsFromSearch = async (req, res) => {
 exports.ExactDoctor = async (req, res) => {
     try {
         const {doctorId} = req.query;
-        console.log("-> req.params", req.query);
 
         const reviewsNative = await Review.findAll({where: {doctorId}, include: [
                 {
