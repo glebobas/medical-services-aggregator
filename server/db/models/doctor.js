@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       Doctor.belongsToMany(models.User, { through: 'UserDoctor', foreignKey: 'doctorId' });
       Doctor.hasMany(models.Shedule, { foreignKey: 'doctorId' });
       Doctor.hasMany(models.Rating, { foreignKey: 'doctorId' });
+      Doctor.hasMany(models.Review, { foreignKey: 'doctorId' });
     }
   }
   Doctor.init({
@@ -32,7 +33,8 @@ module.exports = (sequelize, DataTypes) => {
     generalTiming: DataTypes.STRING,
     adultPatients: DataTypes.BOOLEAN,
     childrenPatients: DataTypes.BOOLEAN,
-    generalInfo: DataTypes.TEXT
+    generalInfo: DataTypes.TEXT,
+    avatar: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Doctor',

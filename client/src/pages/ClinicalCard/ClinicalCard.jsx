@@ -1,96 +1,180 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+
 import styles from "./clinical.css";
 import SelectMenus from "../../components/SelectMenus/SelectMenus";
-import DoctorsTable from "../../components/DoctorsTable/DoctorsTable";
+import { DoctorsTable } from "../../components/DoctorsTable";
 import YandexMap from "../../components/Map/Map";
 import Rating from "../../components/Rating/Rating";
+import { ContextAddReview } from "../../context/context";
+import { useParams } from "react-router-dom";
+import ReviewsMenu from "../../components/ReviewsMenu/ReviewsMenu";
+import {FormattedMessage} from "react-intl";
+
+const location = {
+  "Turkey":[39.920756, 32.854049],
+  "Australia":[-35.306907, 149.125531],
+ " Vietnam":[21.033999, 105.842113],
+}
 
 export default function ClinicalCard() {
-  const [clinic, setClinic] = useState({});
+  const { id } = useParams();
+  const [clinic, setClinic] = useState({ readyClinic: [], doctors: [] });
+  console.log("-> clinic", clinic);
+  const [reviews, setReviews] = useState();
+  const [dataRes, setDataRes] = useState();
+
   const data = { id: 1 };
+  const loc = clinic?.readyClinic[0]?.address.split(', ')[2]
+// console.log(loc)
+//   console.log(location[`${loc}`])
   useEffect(() => {
     (async () => {
-      const response = await fetch("/clinical", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      const res = await response.json();
-      setClinic(res);
+      const response = await fetch(`/main/clinic?clinicId=${id}`);
+
+      response.json().then((r) => {
+      setClinic(r);
+      })
+          // .catch((err) => {console.error(err)})
     })();
+
   }, []);
+
+
+  const handleClick2 = (e) => {
+    const profile = e.target.innerHTML;
+    if (profile.length < 20) {
+      // console.log(profile.length)
+      if (profile !== "All doctors") {
+        const fill = clinic?.readyDoctorList?.filter(
+          (el) => el.speciality === profile
+        );
+        console.log("-> clinic", clinic);
+        console.log("-> fill", fill);
+        setDataRes(fill);
+      } else if (profile === "All doctors") {
+        setDataRes(clinic?.readyDoctorList);
+      }
+    }
+  };
+
+
   return (
-    <>
-      <div className="bg-white">
-        <div className="pt-6">
-          {/* <!-- Image gallery --> */}
-          <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8 clinical">
-            <div className="aspect-w-4 aspect-h-5 sm:overflow-hidden sm:rounded-lg lg:aspect-w-3 lg:aspect-h-4">
-              <img
-                src="https://avatars.mds.yandex.net/get-altay/2767250/2a0000017497e0475cfffa14776f1aca2b34/XXL_height"
-                alt="Model wearing plain white basic tee."
-                className="h-full w-full object-cover object-center"
-              />
-            </div>
-            <div className="mx-auto max-w-2xl px-4 pt-10 pb-16 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pt-16 lg:pb-24">
-              <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-                <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-                  {clinic.name}
-                </h1>
-              </div>
-
-              {/* <!-- Options --> */}
-              <div className="mt-4 lg:row-span-3 lg:mt-0">
-                <h2 className="sr-only">Product information</h2>
-                <p className="text-3xl tracking-tight text-gray-600">
-                  {clinic.generalnfo}
-                </p>
-
-                {/* <!-- Reviews --> */}
-                <div className="mt-6">
-                  <h3 className="sr-only">Reviews</h3>
-                  <div className="flex items-center">
-                    <Rating rat={clinic.clinicRating} />
-                    <a
-                      href="#"
-                      className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                    >
-                      Отзывы клиентов
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pt-6 lg:pb-16 lg:pr-8">
-                {/* <!-- Description and details --> */}
-              </div>
-            </div>
-          </div>
-          <div className="space-y-6 infoClinic">
-            <p className="text-base text-gray-900">
-              Address: {clinic["Address.streetName"]},{" "}
-              {clinic["Address.cityName"]}, {clinic["Address.countryName"]}
-            </p>
-            <p className="text-base text-gray-900">Phone: {clinic.phone}</p>
-            <p className="text-base text-gray-900">Email: {clinic.email}</p>
+    <ContextAddReview.Provider value={{ setClinic }}>
+      <>
+        {/* <!-- Head block --> */}
+        <div className="flex flex-col justify-center px-6 py-6 mt-4 bg-white border rounded">
+          {/* <!-- Title --> */}
+          <div className="title">
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+              {clinic?.readyClinic[0]?.name}
+            </h1>
           </div>
 
-          {/* <!-- Product info --> */}
-        </div>
-        <div className="tableDoctors">
           <div>
+            <div className="doctor__card-row-1 flex flex-row justify-between">
+              <div className="row-1__column-left flex flex-col w-2/5 justify-between">
+                <table className="mt-4 w-full">
+                  <tbody>
+                    <tr className="border-b">
+                      <td className="text-gray-500">
+                        <FormattedMessage
+                            id='Address:'
+                            defaultMessage="Default error message"
+                        />
+                      </td>
+                      <td className="pl-4 font-semibold pt-2">
+                        {clinic?.readyClinic[0]?.address}
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="text-gray-500">
+                        <FormattedMessage
+                            id='Phone:'
+                            defaultMessage="Default error message"
+                        />
+                      </td>
+                      <td className="pl-4 font-semibold pt-2">
+                        {clinic?.readyClinic[0]?.phone}
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="text-gray-500">
+                        <FormattedMessage
+                            id='Email:'
+                            defaultMessage="Default error message"
+                        />
+                      </td>
+                      <td className="pl-4 font-semibold pt-2">
+                        {clinic?.readyClinic[0]?.email}
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="text-gray-500">
+                        <FormattedMessage
+                            id='Rewiews:'
+                            defaultMessage="Default error message"
+                        />
+                        </td>
+                      <td className="pl-4 font-semibold pt-2">
+                        <div className="flex items-center">
+                          <Rating
+                            rat={clinic?.readyClinic[0]?.averageClinicRating}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="row-1__column-right flex border w-[150px] h-[150px] rounded bg-blue-200 items-center justify-center">
+                <img
+                  src="https://source.unsplash.com/random/?clinic"
+                  alt="Model wearing plain white basic tee."
+                  className="h-full w-full object-cover object-center"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="options flex flex-row justify-between mt-4">
+            <div className="flex-col border-b">
+              <h2 className="text-gray-500">
+                <FormattedMessage
+                    id='Clinic information'
+                    defaultMessage="Default error message"
+                />
+              </h2>
+              <p className="text-3xs tracking-tight text-gray-600">
+                <FormattedMessage
+                    id={clinic?.readyClinic[0]?.generalInfo || ' '}
+                    defaultMessage="Default error message"
+                />
+              </p>
+            </div>
+            <div className="flex-col">
+               {/*// <!-- Reviews -->*/}
+              <div className="mt-6"></div>
+            </div>
+          </div>
+          <div onClick={handleClick2} className="mt-4">
+            {" "}
             <SelectMenus />
           </div>
-          <div>
-            <DoctorsTable />
+
+          {dataRes ? (
+            <>
+              <DoctorsTable data={dataRes} />
+            </>
+          ) : (
+            <></>
+          )}
+          <ReviewsMenu rev={clinic?.reviewsReady} />
+          <div className="ymaps w-full mt-4">
+            <div className="ymap">
+              <YandexMap geo={location[`${loc}`]}/>
+            </div>
           </div>
         </div>
-        <div className="ymaps">
-          <div className="ymap">
-            <YandexMap />
-          </div>
-        </div>
-      </div>
-    </>
+      </>
+    </ContextAddReview.Provider>
   );
 }

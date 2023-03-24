@@ -1,21 +1,54 @@
-import React from 'react'
+import React, {useState} from 'react'
+
+interface IModalText {
+    error: string,
+    message: string,
+    username: string
+}
+
+interface IPlaceholderText {
+    loginName: string,
+    password: string,
+    username: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    phoneNumber: string,
+    search: string
+}
 
 export interface AuthContextType {
+    avatarGoogle: string;
+    setAvatarGoogle: React.Dispatch<React.SetStateAction<string>>;
+    locale: string;
+    setLocale: React.Dispatch<React.SetStateAction<string>>;
     showModalLogin: boolean;
     setShowModalLogin: React.Dispatch<React.SetStateAction<boolean>>;
     showModalRegister: boolean;
     setShowModalRegister: React.Dispatch<React.SetStateAction<boolean>>;
     showModalMini: boolean;
     setShowModalMini: React.Dispatch<React.SetStateAction<boolean>>;
-    showModalMiniText: string;
-    setShowModalMiniText: React.Dispatch<React.SetStateAction<string>>
+    showModalMiniText: IModalText;
+    setShowModalMiniText: React.Dispatch<React.SetStateAction<IModalText>>;
+    errorAuth: string;
+    setErrorAuth: React.Dispatch<React.SetStateAction<string>>
+    showModalSheduleRec: boolean;
+    setShowModalSheduleRec: React.Dispatch<React.SetStateAction<boolean>>;
+    placeholderText: IPlaceholderText;
+    setPlaceholderText: React.Dispatch<React.SetStateAction<IPlaceholderText>>
 }
 
 interface AuthProviderProps {
     children: React.ReactNode;
+    locale: string;
+    setLocale: React.Dispatch<React.SetStateAction<string>>
 }
 
 export const AuthContext = React.createContext<AuthContextType>({
+    avatarGoogle: '',
+    setAvatarGoogle: () => {},
+    locale: 'en',
+    setLocale: () => {},
     showModalLogin: false,
     setShowModalLogin: () => {
     },
@@ -25,20 +58,66 @@ export const AuthContext = React.createContext<AuthContextType>({
     showModalMini: false,
     setShowModalMini: () => {
     },
-    showModalMiniText: '',
+    showModalMiniText: {error: '', message: '', username: ''},
     setShowModalMiniText: () => {
-
-    }
+    },
+    errorAuth: '',
+    setErrorAuth: () => {
+    },
+    showModalSheduleRec: false,
+    setShowModalSheduleRec: () => {
+    },
+    placeholderText: {
+        loginName: '',
+        password: '',
+        username: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
+        search: ''
+    },
+    setPlaceholderText: () => {
+    },
 });
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({children, locale, setLocale}) => {
     const [showModalLogin, setShowModalLogin] = React.useState(false);
     const [showModalRegister, setShowModalRegister] = React.useState(false);
     const [showModalMini, setShowModalMini] = React.useState(false)
-    const [showModalMiniText, setShowModalMiniText] = React.useState('')
+    const [showModalMiniText, setShowModalMiniText] = React.useState({error: '', message: '', username: ''})
+    const [errorAuth, setErrorAuth] = useState('');
+    const [showModalSheduleRec, setShowModalSheduleRec] = React.useState(false);
+    const [placeholderText, setPlaceholderText] = React.useState({
+        loginName: '',
+        password: '',
+        username: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
+        search: ''
+    });
+    const [avatarGoogle, setAvatarGoogle] = React.useState('')
 
     return (
-        <AuthContext.Provider value={{showModalLogin, setShowModalLogin, showModalRegister, setShowModalRegister, showModalMini, setShowModalMini: setShowModalMini, showModalMiniText, setShowModalMiniText: setShowModalMiniText}}>
+        <AuthContext.Provider value={{
+            avatarGoogle,
+            setAvatarGoogle,
+            locale,
+            setLocale,
+            showModalLogin,
+            setShowModalLogin,
+            showModalRegister,
+            setShowModalRegister,
+            showModalMini,
+            setShowModalMini,
+            showModalMiniText,
+            setShowModalMiniText,
+            errorAuth, setErrorAuth,
+            showModalSheduleRec,
+            setShowModalSheduleRec, placeholderText, setPlaceholderText
+        }}>
             {children}
         </AuthContext.Provider>
     );

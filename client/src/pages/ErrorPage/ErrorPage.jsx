@@ -1,7 +1,10 @@
 import React from "react";
 import styles from "./errorPage.css"
+import {FormattedMessage} from "react-intl";
+import {useNavigate} from "react-router-dom";
 
 export default function ErrorPage() {
+  const navigate = useNavigate()
   return (
     <>
       <div className="flex min-h-full flex-col bg-white lg:relative">
@@ -10,7 +13,6 @@ export default function ErrorPage() {
             <div className="mx-auto flex w-full max-w-7xl flex-grow flex-col px-4 sm:px-6 lg:px-8">
               <div className="flex-shrink-0 pt-10 sm:pt-16">
                 <a href="/" className="inline-flex">
-                  <span className="sr-only">Your Company</span>
                   <img
                     className="h-12 w-auto"
                     src="https://cdn-icons-png.flaticon.com/64/1052/1052784.png"
@@ -21,19 +23,36 @@ export default function ErrorPage() {
               <div className="my-auto flex-shrink-0 py-16 sm:py-32">
                 <p className="text-base font-semibold text-red-600">404</p>
                 <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-                  Page not found
+
+                  <FormattedMessage
+                      id="Page not found"
+                      defaultMessage="Default error message"
+                  />
                 </h1>
                 <p className="mt-2 text-base text-gray-500">
-                  Sorry, we couldn’t find the page you’re looking for.
+                  <FormattedMessage
+                      id="Sorry, we couldn’t find the page you’re looking for."
+                      defaultMessage="Default error message"
+                  />
                 </p>
                 <div className="mt-6">
-                  <a
-                    href="/"
-                    className="text-base font-medium text-red-600 hover:text-gray-500"
+
+                  <button
+                      id="homeBtn"
+                      className="text-base font-medium text-red-600 hover:text-gray-500"
+                      onClick={() => {
+                        navigate('/');
+                      }}
+                      color="inherit"
                   >
-                    Go back home
+
+                    <FormattedMessage
+                        id="Home"
+                        defaultMessage="Default error message"
+                    />
                     <span aria-hidden="true"> &rarr;</span>
-                  </a>
+                  </button>
+
                 </div>
               </div>
             </div>
@@ -45,18 +64,28 @@ export default function ErrorPage() {
                   href="#"
                   className="text-sm font-medium text-gray-500 hover:text-gray-600"
                 >
-                  Contact Support
+
                 </a>
+
+                <button
+                    id="homeSupport"
+                    className="text-sm font-medium text-gray-500 hover:text-gray-600"
+                    onClick={() => {
+                      navigate('/');
+                    }}
+                    color="inherit"
+                >
+                  <FormattedMessage
+                      id="Contact Support"
+                      defaultMessage="Default error message"
+                  />
+                  <span aria-hidden="true"> &rarr;</span>
+                </button>
+
                 <span
                   className="inline-block border-l border-gray-300"
                   aria-hidden="true"
                 />
-                <a
-                  href="#"
-                  className="text-sm font-medium text-gray-500 hover:text-gray-600"
-                >
-                  Twitter
-                </a>
               </nav>
             </div>
           </footer>

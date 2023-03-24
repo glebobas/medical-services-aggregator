@@ -1,36 +1,49 @@
+import React from "react";
 import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import styles from "./select.css";
+import styles from "./select.module.css";
+import {FormattedMessage} from "react-intl";
 
 const people = [
-  { id: 6, name: "Профиль" },
-  { id: 1, name: "Терапевт" },
-  { id: 2, name: "Хирург" },
-  { id: 3, name: "Дерматолог" },
-  { id: 4, name: "Отоларинголог" },
-  { id: 5, name: "Практолог" },
+  { id: 7, name: "Select profile" },
+  { id: 6, name: "All doctors" },
+  { id: 1, name: "Dentist" },
+  { id: 2, name: "Cardiologist" },
+  { id: 3, name: "Dermatologist" },
+  { id: 4, name: "Surgeon" },
+  { id: 5, name: "Therapist" },
 ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function SelectMenus() {
+function SelectMenus() {
+
   const [selected, setSelected] = useState(people[0]);
-  console.log(selected)
+
   return (
-    <div className="container">
-    <div className="select">
+    <div className={styles.container}>
+    <div className={styles.select }>
       <Listbox value={selected} onChange={setSelected} >
         {({ open }) => (
           <>
-            <Listbox.Label className="block text-sm font-medium text-gray-700">
-              Выбрать профиль
-            </Listbox.Label>
+            {/*<Listbox.Label className="block text-sm font-medium text-gray-700">*/}
+            {/*  <FormattedMessage*/}
+            {/*      id='Choose speciality'*/}
+            {/*      defaultMessage="Default error message"*/}
+            {/*  />*/}
+            {/*</Listbox.Label>*/}
             <div className="relative mt-1">
               <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
-                <span className="block truncate">{selected.name}</span>
+                <span className="block truncate">
+                  <FormattedMessage
+                      id={selected.name}
+                      defaultMessage="Default error message"
+                  />
+
+                </span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                   <ChevronUpDownIcon
                     className="h-5 w-5 text-gray-400"
@@ -52,7 +65,7 @@ export default function SelectMenus() {
                       key={person.id}
                       className={({ active }) =>
                         classNames(
-                          active ? "text-white bg-indigo-600" : "text-gray-900",
+                          active ? "text-white bg-green-600" : "text-gray-900",
                           "relative cursor-default select-none py-2 pl-3 pr-9"
                         )
                       }
@@ -66,13 +79,16 @@ export default function SelectMenus() {
                               "block truncate"
                             )}
                           >
-                            {person.name}
+                            <FormattedMessage
+                                id={person.name}
+                                defaultMessage="Default error message"
+                            />
                           </span>
 
                           {selected ? (
                             <span
                               className={classNames(
-                                active ? "text-white" : "text-indigo-600",
+                                active ? "text-white" : "text-gray-600",
                                 "absolute inset-y-0 right-0 flex items-center pr-4"
                               )}
                             >
@@ -96,3 +112,4 @@ export default function SelectMenus() {
     </div>
   );
 }
+export default React.memo(SelectMenus)

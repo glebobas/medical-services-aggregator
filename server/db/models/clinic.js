@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       Clinic.hasMany(models.Doctor, { foreignKey: 'clinicId' });
       Clinic.hasMany(models.Rating, { foreignKey: 'clinicId' });
       Clinic.belongsTo(models.Address, { foreignKey: 'addressId' });
+      Clinic.hasMany(models.Review, { foreignKey: 'clinicId' });
 
     }
   }
@@ -27,7 +28,8 @@ module.exports = (sequelize, DataTypes) => {
     addressId: DataTypes.INTEGER,
     phone: DataTypes.STRING,
     email: DataTypes.STRING,
-    generalnfo: DataTypes.TEXT
+    generalnfo: DataTypes.TEXT,
+    avatar: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Clinic',

@@ -1,28 +1,23 @@
-import { Dispatch } from 'redux';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { useDispatch, useSelector } from 'react-redux';
-import { UserActionTypes, Types, IGeneralState, IUser } from '../../../redux/types/types';
 import React, {Fragment, useContext, useRef, useState} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import {AuthContext, AuthContextType} from "../../../context";
+import {FormattedMessage} from "react-intl";
 
 
 
 
 export function MiniModal(): JSX.Element {
 
-
-    // const open = useContext(contextOnClick)
-    // const [open, setOpen] = useState(false)
-
     const {showModalMini, setShowModalMini, showModalMiniText} = useContext<AuthContextType>(AuthContext)
-
-
+    console.log("-> showModalMiniText", showModalMiniText);
 
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setShowModalMini(false)
     }
+    const regMessage = showModalMiniText?.message?.includes('Registration') ? 'Registration successful!' : '';
+    const loginMessage = showModalMiniText?.message?.includes('Welcome') ? `Welcome, {username}!` : '';
+    const editSuccessMsg = showModalMiniText?.message?.includes('You have successfully edited your profile!') ? 'You have successfully edited your profile!' : '';
 
     const cancelButtonRef = useRef(null)
 
@@ -58,7 +53,12 @@ export function MiniModal(): JSX.Element {
                                         <div className="flex flex-column justify-center align-items-center -mx-3 mb-6">
                                             <div className="flex flex-column justify-center align-items-center w-full px-3">
                                                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                                    {showModalMiniText}
+                                                    <FormattedMessage
+                                                        id={loginMessage || regMessage || showModalMiniText?.error || editSuccessMsg}
+                                                        defaultMessage="Default error message"
+                                                        values={{ username: showModalMiniText?.username }}
+                                                    />
+                                                    {/*{showModalMiniText.message || showModalMiniText.error}*/}
                                                 </label>
                                             </div>
                                         </div>
@@ -67,7 +67,11 @@ export function MiniModal(): JSX.Element {
 
                                         <div className='flex flex-column justify-center align-items-center'>
                                             <button type="submit"
-                                                className=' left-20 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5'>Okay
+                                                className={`left-20 focus:outline-none text-white ${showModalMiniText?.message ? 'bg-green-500 hover:bg-green-800 focus:ring-4 focus:ring-green-300' : 'bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300'} font-medium rounded-lg text-sm px-5 py-2.5`}>
+                                                <FormattedMessage
+                                                    id='OK'
+                                                    defaultMessage="Default error message"
+                                                />
                                             </button>
 
                                         </div>

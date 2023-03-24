@@ -1,0 +1,1 @@
+export {ShedulePage} from './ShedulePage';
