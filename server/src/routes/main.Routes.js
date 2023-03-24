@@ -35,7 +35,7 @@ router.patch('/shedule/slots', ToCurrentTimeSlots); //* для эндпоинт�
 
 router.get('/random', RandomDocClinic) //* рандомайзер поиска врача или клиник
 
-router.get('/shedule', DoctorsShedule) //* расписание врачей на текущий день
+router.get('/shedule', tokenToLocals, DoctorsShedule) //* расписание врачей на текущий день
 
 
 module.exports = router;

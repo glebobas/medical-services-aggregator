@@ -188,6 +188,8 @@ exports.NewRating = async (req, res) => {
 
 
 exports.NewEntry = async (req, res) => {
+    console.log("-> req", req);
+
     const {sheduleId, statusAppointment} = req.body
 
     const userId = res?.locals?.user?.id
